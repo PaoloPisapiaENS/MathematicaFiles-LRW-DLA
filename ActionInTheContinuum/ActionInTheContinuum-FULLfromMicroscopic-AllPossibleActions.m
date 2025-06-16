@@ -26,7 +26,7 @@ InitializationValue[$Initialization] = Hold[$HistoryLength = 2];
 
 (* ::Input::Initialization:: *)
 ClearAll[ToContinuum];
-Options[ToContinuum]={"print"->False,"justSmallestOrder"->False,"\[Gamma]gterms"->False,"CollectLaplacian"->True,"\[Kappa]Order"->6};
+Options[ToContinuum]={"print"->False,"justSmallestOrder"->False,"\[Gamma]gterms"->True,"CollectLaplacian"->True,"\[Delta]\[Psi]"->{\[Psi]s[a__]:>1/\[Kappa]+\[Delta]\[Psi]s[a]},"\[Kappa]Order"->6};
 
 ToContinuum[\[Mu]Action_,OptionsPattern[]]:=Module[{\[CapitalMu]Action,\[Kappa]order,purificationRule,purifiedAction,freeAction,gAction,\[Gamma]Action,\[Gamma]gAction},
 Clear[g];
@@ -40,6 +40,9 @@ If[OptionValue["print"],Print[Style["\t Extracting terms for point \!\(\*Subscri
 \[CapitalMu]Action=\[CapitalMu]Action//.F_[a_,Subscript[t, 1],c___]/;( FreeQ[a,x]):>\[Kappa] F[x+\[Delta]x,t,c]/2+\[Kappa] F[x-\[Delta]x,t,c]/2;
 \[CapitalMu]Action=\[CapitalMu]Action//.F_[a_,Subscript[t, 2],c___]/;( FreeQ[a,x]):>\[Kappa] F[x+\[Delta]x,t+\[Delta]t,c]/2+\[Kappa] F[x-\[Delta]x,t+\[Delta]t,c]/2;
 If[OptionValue["print"],Print[Style["\t Converting them to x,x+\[Delta]x,x-\[Delta]x,t,t+\[Delta]t and \[Kappa]:\n ",{Blue}], \[CapitalMu]Action,"\n"]];
+
+\[CapitalMu]Action=\[CapitalMu]Action/.OptionValue["\[Delta]\[Psi]"];
+If[OptionValue["print"],Print[Style["\t Expanding \[Psi]s with rule: ",{Blue}],Style[OptionValue["\[Delta]\[Psi]"],{Blue}],Style["\t S = ",{Blue}],Expand[\[CapitalMu]Action] ,"\n"]];
 
 \[CapitalMu]Action=Normal@Series[\[CapitalMu]Action,{\[Delta]t,0,1}];
 If[OptionValue["print"],Print[Style["\t Expanding first order in time:\n ",{Blue}], \[CapitalMu]Action,"\n"]];
@@ -56,14 +59,14 @@ If[OptionValue["print"],Print[Style["\t Action purified with the rule ",{Blue}],
 (* Free action *)
 freeAction= \[CapitalMu]Action/.{\[Kappa]^n_/;n>2:>0}//Expand;
 Print[Style["\t Free action \!\(\*SubscriptBox[\(S\), \(\(0\)\(\\\ \)\)]\)= ",{Blue,Bold}],freeAction];
-Print[Style["\t Mass terms \!\(\*SubscriptBox[\(S\), \(\(m\)\(\\\ \)\)]\)= ",{Blue,Bold}],(freeAction-(freeAction/.Subscript[\[Lambda], _]->0)),"\n"];
+Print[Style["\t Mass terms \!\(\*SubscriptBox[\(S\), \(\(m\)\(\\\ \)\)]\)= ",{Blue,Bold}],(freeAction-(freeAction/.Subscript[\[Lambda], _]->0/.\[CapitalLambda]->0)),"\n"];
 
 (* g-interaction action *)
 gAction=\[CapitalMu]Action/.{\[Kappa]^n_/;(n<=2 || If[OptionValue["justSmallestOrder"],n>=5,False]):>0,\[Gamma]->0}//Expand;
 
 gAction=Collect[gAction,{\[Kappa]^2,\[Kappa]^4,\[Kappa]^6}];
-If[OptionValue["print"],Print[Style["\t \[Gamma]=0, g-interaction action \!\(\*SubscriptBox[\(S\), \(\(g\)\(\\\ \)\)]\)= ",{Blue}],gAction/.\[Kappa]^4->\[Kappa]^4 g,"\n"]];
-Print[Style["\t \[Gamma]=0, g-interaction action after purification with ",{Blue,Bold}],Style[{\[Delta]t->0,\[Delta]x->0,Subscript[\[Lambda], _]->0},{Blue}],Style["\n \!\(\*SubscriptBox[\(S\), \(\(g\)\(\\\ \)\)]\)-> ",{Blue,Bold}],(gAction/.\[Kappa]^4->\[Kappa]^4 g)/.{\[Delta]t->0,\[Delta]x->0,Subscript[\[Lambda], _]->0},"\n"];
+If[OptionValue["print"],Print[Style["\t \[Gamma]=0, g-interaction action \!\(\*SubscriptBox[\(S\), \(\(g\)\(\\\ \)\)]\)= ",{Blue}],gAction/.{\[Kappa]^3->\[Kappa]^3 g,\[Kappa]^4->\[Kappa]^4 g},"\n"]];
+Print[Style["\t \[Gamma]=0, g-interaction action after purification with ",{Blue,Bold}],Style[{\[Delta]t->0,\[Delta]x->0,Subscript[\[Lambda], _]->0},{Blue}],Style["\n \!\(\*SubscriptBox[\(S\), \(\(g\)\(\\\ \)\)]\)-> ",{Blue,Bold}],(gAction/.{\[Kappa]^3->\[Kappa]^3 g,\[Kappa]^4->\[Kappa]^4 g})/.{\[Delta]t->0,\[Delta]x->0,Subscript[\[Lambda], _]->0},"\n"];
 {\[Delta]t->1,\[Delta]x->1,\[Kappa]->1};
 
 (* \[Gamma] branching action *)
@@ -117,7 +120,7 @@ TagBox[
 RowBox[{"(", 
 RowBox[{"1", ",", "0", ",", "0", ",", "0"}], ")"}],
 Derivative],
-MultilineFunction->None]\)[x,t,1,1]};\[Gamma]gAction=Collect[\[Gamma]gAction,{\[Gamma] \[Phi][x,t],\[Delta]x \[Delta]x,\[Phi]s[x,t]\[Chi]s[x,t,1,1],\[Chi][x,t,Subscript[i, 1],Subscript[\[Alpha], 1]] \[Chi]s[x,t,Subscript[i, 1],Subscript[\[Alpha], 1]],\[Psi]s[x,t]},FullSimplify];If[OptionValue["print"],Print[Style["\t \[Gamma]g-interaction action \!\(\*SubscriptBox[\(S\), \(\(\[Gamma]g\)\( \)\)]\)= ",{Blue}],g \[Gamma]gAction,"\n"]];Print[Style["\t \[Gamma]g-interaction action after purification with ",{Blue,Bold}],Style[{\[Delta]t->0,\[Delta]x->0},{Blue}],Style[" \!\(\*SubscriptBox[\(S\), \(\(\[Gamma]g\)\( \)\)]\)-> ",{Blue,Bold}],g \[Gamma]gAction/. {\[Delta]t->0,\[Delta]x->0},"\n"];
+MultilineFunction->None]\)[x,t,1,1]};\[Gamma]gAction=Collect[\[Gamma]gAction,{\[Gamma] \[Phi][x,t],\[Delta]x \[Delta]x,\[Phi]s[x,t]\[Chi]s[x,t,1,1],\[Chi][x,t,Subscript[i, 1],Subscript[\[Alpha], 1]] \[Chi]s[x,t,Subscript[i, 1],Subscript[\[Alpha], 1]],\[Psi]s[x,t]},FullSimplify];If[OptionValue["print"],Print[Style["\t \[Gamma]g-interaction action \!\(\*SubscriptBox[\(S\), \(\(\[Gamma]g\)\( \)\)]\)= ",{Blue}],g \[Gamma]gAction,"\n"]];Print[Style["\t \[Gamma]g-interaction action after purification with ",{Blue,Bold}],Style[{\[Delta]t->0,\[Delta]x->0},{Blue}],Style["\n \!\(\*SubscriptBox[\(S\), \(\(\[Gamma]g\)\( \)\)]\)-> ",{Blue,Bold}],g \[Gamma]gAction/. {\[Delta]t->0,\[Delta]x->0},"\n"];
 ];
 
 Return[\[CapitalMu]Action];
