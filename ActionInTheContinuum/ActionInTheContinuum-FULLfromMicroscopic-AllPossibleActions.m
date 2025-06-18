@@ -21,19 +21,19 @@
 
 SetOptions[$FrontEndSession,NotebookAutoSave->True]
 NotebookSave[]
-InitializationValue[$Initialization] = Hold[$HistoryLength = 2];
+InitializationValue[$Initialization] = Hold[$HistoryLength = 3];
 
 
 (* ::Input::Initialization:: *)
 ClearAll[ToContinuum];
-Options[ToContinuum]={"print"->False,"justSmallestOrder"->False,"\[Gamma]gterms"->True,"CollectLaplacian"->True,"\[Delta]\[Psi]"->{\[Psi]s[a__]:>1/\[Kappa]+\[Delta]\[Psi]s[a]},"\[Kappa]Order"->6};
+Options[ToContinuum]={"print"->False,"justSmallestOrder"->False,"\[Gamma]gterms"->True,"CollectLaplacian"->True,"\[Delta]\[Psi]"->{\[Psi]s[a__]:>1/\[Kappa]+\[Delta]\[Psi]s[a]},"\[Kappa]Order"->6, "rx"->{Subscript[r, a_]:>\[CapitalSigma]\[Beta]}};
 
 ToContinuum[\[Mu]Action_,OptionsPattern[]]:=Module[{\[CapitalMu]Action,\[Kappa]order,purificationRule,purifiedAction,freeAction,gAction,\[Gamma]Action,\[Gamma]gAction},
 Clear[g];
-\[CapitalMu]Action=V[E^(-\[Phi][1,Subscript[t, 1],Subscript[k, 1]] \[Phi]s[1,Subscript[t, 1],Subscript[k, 1]]-\[Psi][1,Subscript[t, 1],Subscript[ll, 1]]\[Psi]s[1,Subscript[t, 1],Subscript[ll, 1]]-2 \[Chi][1,Subscript[t, 1],Subscript[i, 1],Subscript[\[Alpha], 1]] \[Chi]s[1,Subscript[t, 1],Subscript[i, 1],Subscript[\[Alpha], 1]])]*\[Mu]Action/.{(*V[a_]/;(FreeQ[a,\[Phi][1,___]]&&FreeQ[a,\[Xi][1,___]]):>1,*)R[___]:>1,\[Phi][a__,b_]->\[Phi][a],\[Phi]s[a__,b_]->\[Phi]s[a],\[Psi][a__,b_]->\[Psi][a],\[Psi]s[a__,b_]->\[Psi]s[a],\[Xi][a__,b_]->\[Xi][a],\[Xi]s[a__,b_]->\[Xi]s[a]}/.V[a_]:>a//Expand;
-\[CapitalMu]Action=\[CapitalMu]Action/.{\[Chi]s[a___]:>\[Chi]s[a]/2}//Simplify;  (* TO TAKE CARE OF THE Subscript[r, x]*)
+\[CapitalMu]Action=V[E^(-\[Phi][1,Subscript[t, 1],Subscript[k, 1]] \[Phi]s[1,Subscript[t, 1],Subscript[k, 1]]-\[Psi][1,Subscript[t, 1],Subscript[ll, 1]]\[Psi]s[1,Subscript[t, 1],Subscript[ll, 1]]- Subscript[r, x] \[Chi][1,Subscript[t, 1],Subscript[i, 1],Subscript[\[Alpha], 1]] \[Chi]s[1,Subscript[t, 1],Subscript[i, 1],Subscript[\[Alpha], 1]])]*\[Mu]Action/.{(*V[a_]/;(FreeQ[a,\[Phi][1,___]]&&FreeQ[a,\[Xi][1,___]]):>1,*)R[___]:>1,\[Phi][a__,b_]->\[Phi][a],\[Phi]s[a__,b_]->\[Phi]s[a],\[Psi][a__,b_]->\[Psi][a],\[Psi]s[a__,b_]->\[Psi]s[a],\[Xi][a__,b_]->\[Xi][a],\[Xi]s[a__,b_]->\[Xi]s[a]}/.V[a_]:>a//Expand;
 If[OptionValue["print"],Print[Style["\t Extracting terms for point \!\(\*SubscriptBox[\(x\), \(1\)]\):\n ",{Blue}], \[CapitalMu]Action,"\n"]];
 
+(*\[CapitalMu]Action=\[CapitalMu]Action/.\[CapitalSigma]\[Beta][a_]/;( FreeQ[a,x]):>\[CapitalSigma]\[Beta][y];*)
 \[CapitalMu]Action=\[CapitalMu]Action//.F_[1,Subscript[t, 1],c___]:>\[Kappa] F[x,t,c];
 \[CapitalMu]Action=\[CapitalMu]Action//.F_[1,Subscript[t, 2],c___]:>\[Kappa] F[x,t+\[Delta]t,c];
 \[CapitalMu]Action=\[CapitalMu]Action//.F_[a_,Subscript[t, 2],c___]*G_[a_,Subscript[t, 1],d___]/;( FreeQ[a,x]):>\[Kappa]^2 F[x+\[Delta]x,t+\[Delta]t,c]*G[x+\[Delta]x,t,d]/2+\[Kappa]^2 F[x-\[Delta]x,t+\[Delta]t,c]*G[x-\[Delta]x,t,d]/2;
@@ -52,25 +52,33 @@ If[OptionValue["print"],Print[Style["\t Expanding first order in time:\n ",{Blue
 \[CapitalMu]Action=Normal@\[CapitalMu]Action(*/.{V[1]->1,V'[_]->1,V''[_]->1,V'''[_]->1}*);
 If[OptionValue["print"],Print[Style["\t Expanding order \[Kappa]= ",{Blue}],Style[\[Kappa]order,{Blue}],Style[" in the fields, first order in time and second order in space:\n \t S = ",{Blue}],Expand[\[CapitalMu]Action] ,"\n"]];(*Replace[Expand[\[CapitalMu]Action],a_/;(FreeQ[a,D[\[Phi][x,t],x]]):>0,1]*)
 
-purificationRule={\[Delta]t \[Delta]x->0,\[Delta]x \[Delta]x->0,Subscript[\[Lambda], _]->0};
+\[CapitalMu]Action=Expand[\[CapitalMu]Action]//.\[CapitalSigma]\[Beta] \[Delta]x \[Delta]x->\[Delta]x \[Delta]x;
+If[OptionValue["print"],Print[Style["\t Summing over \[Beta] ",{Blue}],Style["\n S = ",{Blue}],Expand[ReleaseHold[\[CapitalMu]Action]] ,"\n"]];
+  
+If[OptionValue["print"],Print[Style["\t Expressing \!\(\*SubscriptBox[\(r\), \(x\)]\) as ",{Blue}],Style[OptionValue["rx"],{Blue}],Style["\n S = ",{Blue}],Expand[
+ReleaseHold[\[CapitalMu]Action]/.OptionValue["rx"](*{\[Chi]s[a___]:>\[Chi]s[a]/2}*)//Simplify] ,"\n"]];
+
+purificationRule={\[Delta]t \[Delta]x->0,\[Delta]x \[Delta]x->0(*,Subscript[\[Lambda], _]->0*)};
 purifiedAction=Expand[\[CapitalMu]Action]/.purificationRule;
 If[OptionValue["print"],Print[Style["\t Action purified with the rule ",{Blue}],Style[purificationRule,{Blue}],Style["\n \t S = ",{Blue}], purifiedAction,"\n"]];
 
 (* Free action *)
-freeAction= \[CapitalMu]Action/.{\[Kappa]^n_/;n>2:>0}//Expand;
-Print[Style["\t Free action \!\(\*SubscriptBox[\(S\), \(\(0\)\(\\\ \)\)]\)= ",{Blue,Bold}],freeAction];
-Print[Style["\t Mass terms \!\(\*SubscriptBox[\(S\), \(\(m\)\(\\\ \)\)]\)= ",{Blue,Bold}],(freeAction-(freeAction/.Subscript[\[Lambda], _]->0/.\[CapitalLambda]->0)),"\n"];
+freeAction= Expand[\[CapitalMu]Action]/.{\[Kappa]^n_/;n>2:>0}//Expand;
+Print[Style["\t Free action \!\(\*SubscriptBox[\(S\), \(\(0\)\(\\\ \)\)]\)= ",{Blue,Bold}],freeAction/.OptionValue["rx"]//Expand];
+Print[Style["\t Mass terms \!\(\*SubscriptBox[\(S\), \(\(m\)\(\\\ \)\)]\)= ",{Blue,Bold}],Expand[ReleaseHold[((freeAction/.OptionValue["rx"])-(freeAction/.OptionValue["rx"]/.Subscript[\[Lambda], _]->0/.\[CapitalLambda]->0/.Subscript[m, _]->0))]],"\n"];
 
 (* g-interaction action *)
 gAction=\[CapitalMu]Action/.{\[Kappa]^n_/;(n<=2 || If[OptionValue["justSmallestOrder"],n>=5,False]):>0,\[Gamma]->0}//Expand;
 
+purificationRule={\[Delta]t->0,\[Delta]x \[Delta]x->0(*,Subscript[\[Lambda], _]->0*)};
 gAction=Collect[gAction,{\[Kappa]^2,\[Kappa]^4,\[Kappa]^6}];
 If[OptionValue["print"],Print[Style["\t \[Gamma]=0, g-interaction action \!\(\*SubscriptBox[\(S\), \(\(g\)\(\\\ \)\)]\)= ",{Blue}],gAction/.{\[Kappa]^3->\[Kappa]^3 g,\[Kappa]^4->\[Kappa]^4 g},"\n"]];
-Print[Style["\t \[Gamma]=0, g-interaction action after purification with ",{Blue,Bold}],Style[{\[Delta]t->0,\[Delta]x->0,Subscript[\[Lambda], _]->0},{Blue}],Style["\n \!\(\*SubscriptBox[\(S\), \(\(g\)\(\\\ \)\)]\)-> ",{Blue,Bold}],(gAction/.{\[Kappa]^3->\[Kappa]^3 g,\[Kappa]^4->\[Kappa]^4 g})/.{\[Delta]t->0,\[Delta]x->0,Subscript[\[Lambda], _]->0},"\n"];
+Print[Style["\t \[Gamma]=0, g-interaction action after purification with ",{Blue,Bold}],Style[purificationRule,{Blue}],Style["\n \!\(\*SubscriptBox[\(S\), \(\(g\)\(\\\ \)\)]\)-> ",{Blue,Bold}],(gAction/.{\[Kappa]^3->\[Kappa]^3 g,\[Kappa]^4->\[Kappa]^4 g})/.purificationRule,"\n"];
 {\[Delta]t->1,\[Delta]x->1,\[Kappa]->1};
 
 (* \[Gamma] branching action *)
 \[Gamma]Action=\[CapitalMu]Action-freeAction-gAction/.{\[Kappa]^5->0,\[Kappa]^6->0,\[Kappa]^7->0}//Expand;
+If[OptionValue["print"],Print[Style["\t Barnching action BEFORE collecting the Laplacian \n \!\(\*SubscriptBox[\(S\), \(\(\[Gamma]\)\(\\\ \)\)]\)= ",{Blue}],\[Gamma]Action,"\n"]];
 If[OptionValue["CollectLaplacian"],
 \[Gamma]Action=\[Gamma]Action/.{ \[Chi]s[x,t,1,1]  \!\(\*SuperscriptBox[\(\[Phi]s\), 
 TagBox[
@@ -95,7 +103,7 @@ Derivative],
 MultilineFunction->None]\)[x,t,1,1]}
 ];
 \[Gamma]Action=Collect[\[Gamma]Action,{\[Gamma] Subscript[\[Lambda], _],\[Gamma] \[Phi][x,t],\[Delta]x \[Delta]x},FullSimplify];
-If[OptionValue["print"],Print[Style["\t Barnching action \!\(\*SubscriptBox[\(S\), \(\(\[Gamma]\)\(\\\ \)\)]\)= ",{Blue}],\[Gamma]Action,"\n"]];
+If[OptionValue["print"],Print[Style["\t Barnching action AFTER collecting the Laplacian \n \!\(\*SubscriptBox[\(S\), \(\(\[Gamma]\)\(\\\ \)\)]\)= ",{Blue}],\[Gamma]Action,"\n"]];
 Print[Style["\t Barnching action after purification with ",{Blue,Bold}],Style[{\[Delta]t->0},{Blue}],Style["\n \!\(\*SubscriptBox[\(S\), \(\(\[Gamma]\)\(\\\ \)\)]\)-> ",{Blue,Bold}],\[Gamma]Action/.{\[Delta]t->0},"\n"];
 
 If[OptionValue["\[Gamma]gterms"],
