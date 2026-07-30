@@ -1,0 +1,2312 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 14.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     98328,       2304]
+NotebookOptionsPosition[     96936,       2272]
+NotebookOutlinePosition[     97376,       2289]
+CellTagsIndexPosition[     97333,       2286]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"BeginPackage", "[", "\"\<DrawGraph`\>\"", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.9734009942331676`*^9, 3.9734010226544056`*^9}, 
+   3.973401135403311*^9, {3.9734032383784695`*^9, 
+   3.9734032421961403`*^9}},ExpressionUUID->"1d00c822-5ed4-7446-96b7-\
+5545027a0a2b"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"$DrawGraphVersion", "::", "usage"}], "=", 
+   "\"\<$DrawGraphVersion is the current version of the DrawGraph \
+package.\>\""}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"$DrawGraphReleaseDate", "::", "usage"}], "=", 
+   "\"\<$DrawGraphReleaseDate is the release date of the current \
+version.\>\""}], ";", 
+  RowBox[{"$DrawGraphReleaseDate", "=", "\"\<2025-11-29\>\""}], ";", 
+  RowBox[{"$DrawGraphVersion", "=", 
+   RowBox[{"StringReplace", "[", 
+    RowBox[{
+     RowBox[{"FileBaseName", "[", "$Input", "]"}], ",", 
+     RowBox[{
+      RowBox[{"Except", "[", 
+       RowBox[{"\"\<p\>\"", "<>", "DigitCharacter"}], "]"}], "->", 
+      "\"\<.\>\""}]}], "]"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.973401100097521*^9, 3.973401172520027*^9}, {
+  3.9734013432268143`*^9, 3.973401345375746*^9}, {3.9734013850752583`*^9, 
+  3.9734014597348614`*^9}},ExpressionUUID->"c270b6ea-9bc1-fd43-8dc4-\
+8922b8cdaa27"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"$DrawGraphPrint", "::", "usage"}], "=", 
+   "\"\<$DrawGraphPrint=True turns on the debug printing of the \
+package.\>\""}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{"!", 
+     RowBox[{"ValueQ", "[", "$DrawGraphPrint", "]"}]}], ",", 
+    RowBox[{"$DrawGraphPrint", "=", "True"}]}], "]"}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.9734033416154423`*^9, 
+  3.973403391659828*^9}},ExpressionUUID->"ac7f43f4-d77f-9f41-a84c-\
+d0f70fe004c0"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DrawGraph`Private`MyPrint", "=", 
+   RowBox[{
+    RowBox[{"If", "[", 
+     RowBox[{"$DrawGraphPrint", ",", 
+      RowBox[{"Print", "[", "##", "]"}]}], "]"}], "&"}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.973403271663231*^9, 3.9734032798282986`*^9}, {
+  3.9734033127174034`*^9, 
+  3.973403337583811*^9}},ExpressionUUID->"98f4298c-1d26-1949-af88-\
+d4f5d1e345d3"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{"Style", "[", 
+    RowBox[{
+     RowBox[{"\"\<~~~~~~~~~~~~~~~~ DrawGraph v\>\"", "<>", 
+      RowBox[{"ToString", "[", "$DrawGraphVersion", "]"}], "<>", 
+      "\"\< ~~~~~~~~~~~~~~~~~~~~\\n\\\nAuthor: Paolo Pisapia.\\n\\\nRelease \
+Date: \>\"", "<>", "$DrawGraphReleaseDate", "<>", 
+      "\"\<\\n\\\nTimestamp: \>\"", "<>", 
+      RowBox[{"DateString", "[", 
+       RowBox[{"FileDate", "[", "$InputFileName", "]"}], "]"}], "<>", 
+      "\"\<\\nRead from:\>\"", "<>", "$InputFileName", "<>", 
+      "\"\< (CRC32:\>\"", "<>", 
+      RowBox[{"ToString", "[", 
+       RowBox[{"FileHash", "[", 
+        RowBox[{"$InputFileName", ",", "\"\<CRC32\>\""}], "]"}], "]"}], "<>", 
+      "\"\<,\>\"", "<>", 
+      RowBox[{"ToString", "[", 
+       RowBox[{"FileHash", "[", 
+        RowBox[{
+         RowBox[{"Select", "[", 
+          RowBox[{
+           RowBox[{"FileNames", "[", 
+            RowBox[{"$LiteRedHomeDirectory", "<>", "\"\<FermatCode/*\>\""}], 
+            "]"}], ",", 
+           RowBox[{"Not", "@*", "DirectoryQ"}]}], "]"}], ",", 
+         "\"\<CRC32\>\""}], "]"}], "]"}], "<>", 
+      "\"\<)\\n\\nLiteRed stands for \>\""}], ",", 
+     RowBox[{"Style", "[", 
+      RowBox[{"\"\<L\>\"", ",", 
+       RowBox[{"{", 
+        RowBox[{"Lighter", "@", "Red"}], "}"}]}], "]"}], ",", "\"\<oop \>\"", 
+     ",", 
+     RowBox[{"Style", "[", 
+      RowBox[{"\"\<i\>\"", ",", 
+       RowBox[{"{", 
+        RowBox[{"Lighter", "@", "Red"}], "}"}]}], "]"}], ",", "\"\<n\>\"", 
+     ",", 
+     RowBox[{"Style", "[", 
+      RowBox[{"\"\<te\>\"", ",", 
+       RowBox[{"{", 
+        RowBox[{"Lighter", "@", "Red"}], "}"}]}], "]"}], ",", 
+     "\"\<grals \>\"", ",", 
+     RowBox[{"Style", "[", 
+      RowBox[{"\"\<Red\>\"", ",", 
+       RowBox[{"{", 
+        RowBox[{"Lighter", "@", "Red"}], "}"}]}], "]"}], ",", 
+     "\"\<uction.\\n\\\nThe package is designed for drawing nice-looking \
+graphs. \\\nIt takes inspiration from Kay Wiese's implementation.\\n\\nSee \
+?DrawGraph`* for a list of functions. \>\"", ",", 
+     RowBox[{"{", 
+      RowBox[{"Bold", ",", 
+       RowBox[{"Lighter", "@", "Blue"}]}], "}"}]}], "]"}], "]"}], 
+  ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"98899310-b609-da48-bf34-d094fda5dae1"],
+
+Cell[BoxData[
+ RowBox[{"Begin", "[", "\"\<Private`\>\"", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.973403219865877*^9, 
+  3.973403248873501*^9}},ExpressionUUID->"6c25cca9-869e-eb40-b796-\
+5dd69512b10b"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"ClearAll", "[", 
+    RowBox[{"DrawGraph", ",", "x"}], "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"DrawGraph", "::", "usage"}], "=", 
+   RowBox[{"(*", 
+    StyleBox["MODIFY",
+     Background->RGBColor[1, 1, 0]], 
+    StyleBox[
+     StyleBox[
+      RowBox[{"*", ")"}]],
+     Background->RGBColor[1, 1, 0]]}], 
+   "\"\<DrawGraph[\\!\\*\nStyleBox[\\\"expr\\\", \\\"TI\\\"]] draw a graph \
+from tStyleBox[\\\"expr\\\", \\\"TI\\\"]. \\nOptions:\\n    \
+\\\"pointSize\\\"->0.015 - Set the point size,\\n    \
+\\\"ArrowHeadSize\\\"->0.05 - Set the Arrow Heads size,\\n    \
+\\\"print\\\"->False|True - Print for debug,\\n    \\\"ImageSize\\\"->Medium \
+- Set the Image size,\\n    \\\"export\\\"->False|True - Exports the \
+Graph,\\n    \\\"exportDirectory\\\"->\\\"myFile.pdf\\\" - Set the export \
+Directory,\\n    \\\"initialIndex\\\"->1 - Set the index to start the \
+counting of diagrams from.\>\""}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.973400798870941*^9, 3.973400856724676*^9}, {
+   3.973402169873495*^9, 3.973402180035303*^9}, {3.973402317573717*^9, 
+   3.97340232550358*^9}, {3.97340237540938*^9, 3.973402377740309*^9}, {
+   3.97340255540077*^9, 3.973402971531021*^9}, 3.973403414291355*^9, {
+   3.973403455331114*^9, 3.9734034554640503`*^9}, {3.973403490866194*^9, 
+   3.973403548203766*^9}, {3.973403629103712*^9, 3.9734036332679596`*^9}, {
+   3.973403674616104*^9, 3.973403765836029*^9}, {3.9734039541186485`*^9, 
+   3.9734039666692104`*^9}},ExpressionUUID->"dad8c8cb-b367-5647-9421-\
+0a2a9a7ec85a"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"DrawGraph", "::", "zero"}], "=", 
+    RowBox[{"Style", "[", 
+     RowBox[{"\"\<Your expression is zero.\\nAborting...\>\"", ",", "Red"}], 
+     "]"}]}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Options", "[", "DrawGraph", "]"}], "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"\"\<pointSize\>\"", "->", "0.015"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"\"\<ArrowHeadSize\>\"", "->", "0.05"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"\"\<print\>\"", "->", "False"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"\"\<ImageSize\>\"", "->", "Medium"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"\"\<export\>\"", "->", "False"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"\"\<exportDirectory\>\"", "->", "\"\<myFile.pdf\>\""}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"\"\<initialIndex\>\"", "->", "1"}]}], "}"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.973400798870941*^9, 3.973400856724676*^9}, {
+   3.973402169873495*^9, 3.973402180035303*^9}, {3.973402317573717*^9, 
+   3.97340232550358*^9}, {3.97340237540938*^9, 3.973402377740309*^9}, {
+   3.97340255540077*^9, 3.973402971531021*^9}, 3.973403414291355*^9, {
+   3.973403455331114*^9, 3.9734034554640503`*^9}, {3.973403490866194*^9, 
+   3.973403548203766*^9}, {3.973403629103712*^9, 3.9734036332679596`*^9}, {
+   3.973403674616104*^9, 3.973403765836029*^9}, {3.9734039541186485`*^9, 
+   3.9734040365210724`*^9}, {3.973404131978325*^9, 
+   3.9734041499753704`*^9}},ExpressionUUID->"8c5d4182-5fa0-6b45-8ff9-\
+a1f5166f3213"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"DrawGraph", "[", 
+     RowBox[{"exp_List", ",", 
+      RowBox[{"options", ":", 
+       RowBox[{"OptionsPattern", "[", "]"}]}]}], "]"}], ":=", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"DrawGraph", "[", 
+        RowBox[{"#", ",", "options"}], "]"}], "&"}], "@", 
+      RowBox[{"(", 
+       RowBox[{"Total", "@", "exp"}], ")"}]}], ")"}]}], ";"}], "\n"}], "\n", 
+ RowBox[{
+  RowBox[{"DrawGraph", "[", 
+   RowBox[{"exp_", ",", 
+    RowBox[{"OptionsPattern", "[", "]"}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "terms", ",", "i", ",", "pureProp", ",", " ", "weight", ",", " ", "dots",
+       ",", "plot"}], "}"}], ",", "\n", "\n", "\n", 
+    RowBox[{
+     RowBox[{"terms", "=", "exp"}], ";", "\n", "\n", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"terms", "==", "0"}], ",", 
+       RowBox[{
+        RowBox[{"Message", "[", 
+         RowBox[{"DrawGraph", "::", "zero"}], "]"}], ";", " ", 
+        RowBox[{"Abort", "[", "]"}]}]}], "]"}], ";", "\n", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"terms", "==", "0"}], ",", "\n", 
+         RowBox[{
+          RowBox[{"Print", "[", 
+           RowBox[{"Style", "[", 
+            RowBox[{"\"\<!!ZERO!!\>\"", ",", "Red"}], "]"}], "]"}], ";", " ", 
+          "\n", 
+          RowBox[{"Abort", "[", "]"}], ";"}]}], "\n", "]"}], ";"}], "*)"}], 
+     "\n", "\n", "\n", 
+     RowBox[{"terms", "=", 
+      RowBox[{
+       RowBox[{"List", " ", "@@", " ", 
+        RowBox[{"(", "terms", ")"}]}], "/.", 
+       RowBox[{"Times", "->", "List"}]}]}], ";", "\n", "\[IndentingNewLine]", 
+     "\n", 
+     RowBox[{"MyPrint", "[", 
+      RowBox[{"{", "terms", "}"}], "]"}], ";", "\n", "\n", 
+     RowBox[{"(*", " ", 
+      RowBox[{
+      "I", " ", "want", " ", "to", " ", "check", " ", "if", " ", "terms", " ",
+        "is", " ", "a", " ", "list", " ", "of", " ", "lists", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+         "which", " ", "means", " ", "that", " ", "exp", " ", "conatained", 
+          " ", "a", " ", "sum"}], ",", " ", 
+         RowBox[{
+          RowBox[{"i", ".", "e", ".", " ", "multiple"}], " ", "diagrams"}]}], 
+        ")"}]}], "*)"}], "\n", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"!", 
+        RowBox[{
+         RowBox[{"Head", "[", 
+          RowBox[{"terms", "[", 
+           RowBox[{"[", "1", "]"}], "]"}], "]"}], " ", "===", "List"}]}], ",",
+        "\n", 
+       RowBox[{"(*", " ", 
+        RowBox[{
+         RowBox[{"TRUE", ":", " ", 
+          RowBox[{
+          "if", " ", "it", " ", "is", " ", "not", " ", "a", " ", "List", " ", 
+           "of", " ", "lists"}]}], ",", " ", 
+         RowBox[{
+          RowBox[{"let", "'"}], "s", " ", "make", " ", "it", " ", "so"}]}], 
+        " ", "*)"}], "\n", "\n", 
+       RowBox[{
+        RowBox[{"terms", "=", 
+         RowBox[{"{", "terms", "}"}]}], ";"}]}], "\n", "\n", "]"}], 
+     RowBox[{"(*", 
+      RowBox[{"End", " ", "of", " ", "IF"}], "*)"}], ";", "\n", 
+     "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+      "Set", " ", "up", " ", "the", " ", "list", " ", "variable", " ", "to", 
+       " ", "store", " ", "the", " ", "plots"}], "*)"}], "\n", 
+     RowBox[{"plot", "=", 
+      RowBox[{"{", "}"}]}], ";", "\n", "\n", 
+     RowBox[{"For", "[", 
+      RowBox[{
+       RowBox[{"i", "=", "1"}], ",", 
+       RowBox[{"i", "<=", 
+        RowBox[{"Length", "[", "terms", "]"}]}], ",", 
+       RowBox[{"i", "++"}], ",", "\n", "\n", 
+       RowBox[{
+        RowBox[{"pureProp", "=", 
+         RowBox[{"DeleteElements", "[", 
+          RowBox[{
+           RowBox[{"terms", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"-", "1"}], ",", "b", ",", 
+             RowBox[{"b", "^", 
+              RowBox[{"n_", "?", "NumericQ"}]}], ",", "b2", ",", "g", ",", 
+             OverscriptBox["g", "~"], ",", 
+             RowBox[{"Subscript", "[", 
+              RowBox[{"g", ",", " ", "\[Gamma]"}], "]"}], ",", "\[Gamma]", 
+             ",", "\[Gamma]1", ",", "\[Gamma]2", ",", 
+             RowBox[{"-", "g"}], ",", 
+             RowBox[{"-", 
+              OverscriptBox["g", "~"]}], ",", 
+             RowBox[{"-", 
+              RowBox[{"Subscript", "[", 
+               RowBox[{"g", ",", " ", "\[Gamma]"}], "]"}]}], ",", 
+             RowBox[{"-", "\[Gamma]"}], ",", 
+             RowBox[{"-", "\[Gamma]1"}], ",", 
+             RowBox[{"-", "\[Gamma]2"}], ",", 
+             RowBox[{"g", "^", 
+              RowBox[{"n_", "?", "NumericQ"}]}], ",", 
+             RowBox[{
+              OverscriptBox["g", "~"], "^", 
+              RowBox[{"n_", "?", "NumericQ"}]}], ",", 
+             RowBox[{
+              RowBox[{"Subscript", "[", 
+               RowBox[{"g", ",", " ", "\[Gamma]"}], "]"}], "^", 
+              RowBox[{"n_", "?", "NumericQ"}]}], ",", 
+             RowBox[{"\[Gamma]", "^", 
+              RowBox[{"n_", "?", "NumericQ"}]}], ",", 
+             RowBox[{"\[Gamma]1", "^", 
+              RowBox[{"n_", "?", "NumericQ"}]}], ",", 
+             RowBox[{"\[Gamma]2", "^", 
+              RowBox[{"n_", "?", "NumericQ"}]}]}], "}"}]}], "]"}]}], ";", 
+        "\n", 
+        RowBox[{"pureProp", "=", 
+         RowBox[{"DeleteCases", "[", 
+          RowBox[{"pureProp", ",", 
+           RowBox[{"_", "?", "NumericQ"}]}], "]"}]}], ";", "\n", "\n", 
+        RowBox[{"weight", "=", 
+         RowBox[{"Times", "@@", 
+          RowBox[{"DeleteElements", "[", 
+           RowBox[{
+            RowBox[{"terms", "[", 
+             RowBox[{"[", "i", "]"}], "]"}], ",", "pureProp"}], "]"}]}]}], 
+        ";", "\n", "\n", 
+        RowBox[{"pureProp", "=", 
+         RowBox[{"pureProp", "/.", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"DD", "[", 
+              RowBox[{
+               RowBox[{"\[Phi]s", "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], " ", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"F_", ",", " ", "\[Chi]"}], "]"}], "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", "d_"}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", "b_"}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "e_"}], "]"}]}], "]"}]}], "]"}], ":>", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"\[CapitalDelta]", "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", 
+                   RowBox[{"b", "-", "0.1"}]}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", "b"}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "e"}], "]"}]}], "]"}], ",", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"F", ",", " ", "\[Chi]"}], "]"}], "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", "d"}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", 
+                   RowBox[{"b", "-", "0.1"}]}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "e"}], "]"}]}], "]"}], ",", 
+               RowBox[{"\[Phi]s", "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", 
+                   RowBox[{"a", "-", "0.1"}]}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "c"}], "]"}]}], "]"}]}], "}"}]}], 
+            ",", "\n", 
+            RowBox[{
+             RowBox[{"DD", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"F_", ",", " ", "\[Phi]"}], "]"}], "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", "b_"}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], 
+               RowBox[{"\[Chi]s", "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", "d_"}], "]"}], ",", "A___", ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "e_"}], "]"}]}], "]"}]}], "]"}], ":>", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"\[CapitalDelta]", "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", 
+                   RowBox[{"b", "-", "0.1"}]}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", "b"}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", 
+                   RowBox[{"c", "-", "1"}]}], "]"}]}], "]"}], ",", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"F", ",", " ", "\[Phi]"}], "]"}], "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", "a"}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", 
+                   RowBox[{"b", "-", "0.1"}]}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "c"}], "]"}]}], "]"}], ",", 
+               RowBox[{"\[Chi]s", "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", 
+                   RowBox[{"d", "-", "0.1"}]}], "]"}], ",", "A", ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "e"}], "]"}]}], "]"}]}], "}"}]}], 
+            ",", "\n", "\n", 
+            RowBox[{
+             RowBox[{"DD", "[", 
+              RowBox[{"\[Chi]s", "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", "A___", ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], "]"}], ":>", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"\[CapitalDelta]", "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", 
+                   RowBox[{"a", "-", "0.1"}]}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", "a"}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "c"}], "]"}]}], "]"}], ",", 
+               RowBox[{"\[Chi]s", "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", 
+                   RowBox[{"a", "-", "0.1"}]}], "]"}], ",", "A", ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "c"}], "]"}]}], "]"}]}], "}"}]}], 
+            ",", "\n", 
+            RowBox[{
+             RowBox[{"DD", "[", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"\[Delta]\[Chi]s", "[", 
+                 RowBox[{
+                  RowBox[{"Subscript", "[", 
+                   RowBox[{"x", ",", " ", "a_"}], "]"}], ",", "A___", ",", 
+                  RowBox[{"Subscript", "[", 
+                   RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ",", 
+                RowBox[{"\[Delta]\[Chi]s", "[", 
+                 RowBox[{
+                  RowBox[{"Subscript", "[", 
+                   RowBox[{"x", ",", " ", "a_"}], "]"}], ",", "B___", ",", 
+                  RowBox[{"Subscript", "[", 
+                   RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}]}], "}"}], 
+              "]"}], ":>", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"\[CapitalDelta]", "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", 
+                   RowBox[{"a", "-", "0.1"}]}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", "a"}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "c"}], "]"}]}], "]"}], ",", 
+               RowBox[{
+                RowBox[{"\[Delta]\[Chi]s", "[", 
+                 RowBox[{
+                  RowBox[{"Subscript", "[", 
+                   RowBox[{"x", ",", " ", 
+                    RowBox[{"a", "-", "0.1"}]}], "]"}], ",", "A", ",", 
+                  RowBox[{"Subscript", "[", 
+                   RowBox[{"t", ",", " ", "c"}], "]"}]}], "]"}], 
+                RowBox[{"\[Delta]\[Chi]s", "[", 
+                 RowBox[{
+                  RowBox[{"Subscript", "[", 
+                   RowBox[{"x", ",", " ", 
+                    RowBox[{"a", "-", "0.1"}]}], "]"}], ",", "B", ",", 
+                  RowBox[{"Subscript", "[", 
+                   RowBox[{"t", ",", " ", "c"}], "]"}]}], "]"}]}]}], "}"}]}], 
+            ",", "\n", 
+            RowBox[{
+             RowBox[{"DD", "[", 
+              RowBox[{"\[Delta]\[Chi]s", "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", "A___", ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], "]"}], ":>", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"\[CapitalDelta]", "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", 
+                   RowBox[{"a", "-", "0.1"}]}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", "a"}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "c"}], "]"}]}], "]"}], ",", 
+               RowBox[{"\[Delta]\[Chi]s", "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", 
+                   RowBox[{"a", "-", "0.1"}]}], "]"}], ",", "A", ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "c"}], "]"}]}], "]"}]}], "}"}]}], 
+            ",", "\n", "\n", 
+            RowBox[{
+             RowBox[{"DD", "[", 
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"F_", ",", " ", "\[Phi]"}], "]"}], "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "b_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], "]"}], ":>", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"\[CapitalDelta]", "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", 
+                   RowBox[{"a", "+", "0.2"}]}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", "a"}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "c"}], "]"}]}], "]"}], ",", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"F", ",", " ", "\[Phi]"}], "]"}], "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", 
+                   RowBox[{"a", "+", "0.2"}]}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", "b"}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "c"}], "]"}]}], "]"}]}], "}"}]}], 
+            ",", 
+            RowBox[{"(*", " ", 
+             RowBox[{"If", " ", "DD", " ", "acts", " ", "of", " ", 
+              RowBox[{"Subscript", "[", 
+               RowBox[{"G", ",", " ", "\[Phi]"}], "]"}], " ", "it", " ", 
+              "means", " ", "that", " ", 
+              RowBox[{"it", "'"}], "s", " ", "acting", " ", "on", " ", "the", 
+              " ", "past", " ", "line"}], "*)"}], "\n", 
+            RowBox[{
+             RowBox[{"DD", "[", 
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"F_", ",", " ", "\[Chi]"}], "]"}], "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "b_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], "]"}], ":>", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"\[CapitalDelta]", "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", 
+                   RowBox[{"b", "-", "0.2"}]}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", "b"}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "c"}], "]"}]}], "]"}], ",", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"F", ",", " ", "\[Chi]"}], "]"}], "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", "a"}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", 
+                   RowBox[{"b", "-", "0.2"}]}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "c"}], "]"}]}], "]"}]}], "}"}]}]}], 
+           "}"}]}]}], ";", "\n", "\n", 
+        RowBox[{"pureProp", "=", 
+         RowBox[{"Flatten", "@", 
+          RowBox[{"(", 
+           RowBox[{"pureProp", "/.", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"\[Delta]\[Chi]s", "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", "a_"}], "]"}], ",", "___", ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+               RowBox[{"\[Delta]\[Chi]s", "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", "a"}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "c"}], "]"}]}], "]"}]}], ",", "\n", 
+              RowBox[{
+               RowBox[{"\[Chi]s", "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", "a_"}], "]"}], ",", "___", ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+               RowBox[{"\[Chi]s", "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", "a"}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "c"}], "]"}]}], "]"}]}], ",", "\n", 
+              RowBox[{
+               RowBox[{"\[Chi]", "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", "a_"}], "]"}], ",", "___", ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+               RowBox[{"\[Chi]", "[", 
+                RowBox[{
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"x", ",", " ", "a"}], "]"}], ",", 
+                 RowBox[{"Subscript", "[", 
+                  RowBox[{"t", ",", " ", "c"}], "]"}]}], "]"}]}]}], "}"}]}], 
+           ")"}]}]}], ";", "\n", "\n", 
+        RowBox[{"MyPrint", "[", 
+         RowBox[{"{", 
+          RowBox[{"\"\<The propagators are\\n \>\"", ",", "pureProp"}], "}"}],
+          "]"}], ";", "\n", "\n", 
+        RowBox[{"(*", 
+         RowBox[{
+          RowBox[{"Print", "[", "pureProp", "]"}], ";"}], "*)"}], "\n", "\n", 
+        RowBox[{"dots", "=", 
+         RowBox[{"Flatten", "[", 
+          RowBox[{"pureProp", "//.", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"F_", ",", " ", "\[Chi]"}], "]"}], "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"a", "+", "0.54"}], ",", "c"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "White", ",", 
+                  RowBox[{"EdgeForm", "[", "None", "]"}]}], "]"}], ",", 
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "c"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "Black"}], "]"}]}], "}"}]}], ",", "\n", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"F_", ",", " ", "\[Chi]"}], "]"}], "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "b_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "c"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "Black"}], "]"}], ",", 
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"b", ",", "c"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "Black"}], "]"}]}], "}"}]}], ",", "\n", "\n", 
+             RowBox[{
+              RowBox[{"\[Chi]", "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", "___", ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"a", "+", "0.54"}], ",", "c"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "White", ",", 
+                  RowBox[{"EdgeForm", "[", "None", "]"}]}], "]"}], ",", 
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "c"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "Black"}], "]"}]}], "}"}]}], ",", "\n", "\n", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"F_", ",", " ", "\[Chi]"}], "]"}], "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", "0"}], "]"}], ":>", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"a", "+", "0.54"}], ",", "1"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "White", ",", 
+                  RowBox[{"EdgeForm", "[", "None", "]"}]}], "]"}], ",", 
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "1"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "Black"}], "]"}]}], "}"}]}], ",", "\n", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"F_", ",", " ", "\[Chi]"}], "]"}], "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "b_"}], "]"}], ",", "0"}], "]"}], ":>", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "1"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "Black"}], "]"}], ",", 
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"b", ",", "1"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "Black"}], "]"}], ",", 
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "1.5"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "White", ",", 
+                  RowBox[{"EdgeForm", "[", "None", "]"}]}], "]"}], ",", 
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "0.7"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "White", ",", 
+                  RowBox[{"EdgeForm", "[", "None", "]"}]}], "]"}]}], "}"}]}], 
+             ",", "\n", "\n", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"F_", ",", " ", "\[Phi]"}], "]"}], "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "0"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+              RowBox[{"{", 
+               RowBox[{"Style", "[", 
+                RowBox[{
+                 RowBox[{"{", 
+                  RowBox[{"a", ",", "c"}], "}"}], ",", 
+                 RowBox[{"Disk", "[", 
+                  RowBox[{
+                   RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                  "Black"}], "]"}], "}"}]}], ",", "\n", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"F_", ",", " ", "\[Phi]"}], "]"}], "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "c"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "Black"}], "]"}], ",", 
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", 
+                    RowBox[{"IntegerPart", "[", 
+                    RowBox[{"c", "-", "0.5"}], "]"}]}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "Black"}], "]"}], ",", 
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"a", "+", "0.3"}], ",", 
+                    RowBox[{"c", "-", "0.5"}]}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "White", ",", 
+                  RowBox[{"EdgeForm", "[", "None", "]"}]}], "]"}]}], "}"}]}], 
+             ",", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"F_", ",", " ", "\[Phi]"}], "]"}], "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "b_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "c"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "Black"}], "]"}], ",", 
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"b", ",", 
+                    RowBox[{"IntegerPart", "[", 
+                    RowBox[{"c", "-", "0.5"}], "]"}]}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "Black"}], "]"}]}], "}"}]}], ",", "\n", "\n", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"F_", ",", " ", "\[Phi]"}], "]"}], "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", "0"}], "]"}], ":>", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"a", "+", "0.54"}], ",", "1"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "White", ",", 
+                  RowBox[{"EdgeForm", "[", "None", "]"}]}], "]"}], ",", 
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "1"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "Black"}], "]"}]}], "}"}]}], ",", "\n", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"F_", ",", " ", "\[Phi]"}], "]"}], "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "b_"}], "]"}], ",", "0"}], "]"}], ":>", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "1"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "Black"}], "]"}], ",", 
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"b", ",", "1"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "Black"}], "]"}], ",", 
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "1.5"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "White", ",", 
+                  RowBox[{"EdgeForm", "[", "None", "]"}]}], "]"}], ",", 
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "0.7"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "White", ",", 
+                  RowBox[{"EdgeForm", "[", "None", "]"}]}], "]"}]}], "}"}]}], 
+             ",", "\n", "\n", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"F_", ",", " ", "\[Phi]"}], "]"}], "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", "0"}], "]"}], ":>", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "1"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "Black"}], "]"}], ",", 
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "1"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "Black"}], "]"}], ",", 
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"a", "+", "0.3"}], ",", 
+                    RowBox[{"1", "-", "0.5"}]}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "White", ",", 
+                  RowBox[{"EdgeForm", "[", "None", "]"}]}], "]"}]}], "}"}]}], 
+             ",", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"F_", ",", " ", "\[Phi]"}], "]"}], "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "b_"}], "]"}], ",", "0"}], "]"}], ":>", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "1"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "Black"}], "]"}], ",", 
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"b", ",", "1"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "Black"}], "]"}]}], "}"}]}], ",", "\n", "\n", 
+             RowBox[{
+              RowBox[{"\[CapitalDelta]", "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "b_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "c"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "Black"}], "]"}], ",", 
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"b", ",", "c"}], "}"}], ",", 
+                  RowBox[{"Disk", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                   "Black"}], "]"}]}], "}"}]}], ",", 
+             RowBox[{
+              RowBox[{"\[Psi]s", "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+              RowBox[{"{", 
+               RowBox[{"Style", "[", 
+                RowBox[{
+                 RowBox[{"{", 
+                  RowBox[{
+                   RowBox[{"a", "-", "0.1"}], ",", 
+                   RowBox[{"c", "-", "0.8"}]}], "}"}], ",", 
+                 RowBox[{"Disk", "[", 
+                  RowBox[{
+                   RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                  "White", ",", 
+                 RowBox[{"EdgeForm", "[", "None", "]"}]}], "]"}], "}"}]}]}], 
+            "}"}]}], "]"}]}], ";", "\n", "\n", 
+        RowBox[{"pureProp", "=", 
+         RowBox[{"pureProp", "/.", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{
+             RowBox[{
+              RowBox[{"Subscript", "[", 
+               RowBox[{"F_", ",", " ", "\[Chi]"}], "]"}], "^", 
+              RowBox[{"n_", "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "b_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}]}], ":>", 
+             RowBox[{"Style", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"FindArc", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"b", ",", "c"}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "c"}], "}"}], ",", "n", ",", 
+                  RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                   RowBox[{
+                   "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                 "]"}], "[", 
+                RowBox[{"[", "1", "]"}], "]"}], ",", 
+               RowBox[{
+                RowBox[{"FindArc", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"b", ",", "c"}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "c"}], "}"}], ",", "n", ",", 
+                  RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                   RowBox[{
+                   "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                 "]"}], "[", 
+                RowBox[{"[", "2", "]"}], "]"}], ",", 
+               RowBox[{"Darker", "[", "Green", "]"}]}], "]"}]}], ",", "\n", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Subscript", "[", 
+               RowBox[{"F_", ",", " ", "\[Chi]"}], "]"}], "[", 
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"Style", "[", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"FindArc", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"a", "+", "0.5"}], ",", "c"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"a", ",", "c"}], "}"}], ",", "4", ",", 
+                    RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                    RowBox[{
+                    "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                   "]"}], "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], ",", 
+                 RowBox[{
+                  RowBox[{"FindArc", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"a", "+", "0.5"}], ",", "c"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"a", ",", "c"}], "}"}], ",", "4", ",", 
+                    RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                    RowBox[{
+                    "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                   "]"}], "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], ",", 
+                 RowBox[{"Darker", "[", "Green", "]"}]}], "]"}], ",", 
+               RowBox[{"Style", "[", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"FindArc", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"a", "+", "0.5"}], ",", "c"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"a", ",", "c"}], "}"}], ",", 
+                    RowBox[{"-", "4"}], ",", 
+                    RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                    RowBox[{
+                    "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                   "]"}], "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], ",", 
+                 RowBox[{
+                  RowBox[{"FindArc", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"a", "+", "0.5"}], ",", "c"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"a", ",", "c"}], "}"}], ",", 
+                    RowBox[{"-", "4"}], ",", 
+                    RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                    RowBox[{
+                    "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                   "]"}], "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], ",", 
+                 RowBox[{"Darker", "[", "Green", "]"}]}], "]"}]}], "}"}]}], 
+            ",", "\n", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Subscript", "[", 
+               RowBox[{"F_", ",", " ", "\[Chi]"}], "]"}], "[", 
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "b_"}], "]"}], ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+             RowBox[{"Style", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"FindArc", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"b", ",", "c"}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "c"}], "}"}], ",", 
+                  RowBox[{"(", 
+                   RowBox[{"b", "-", "a", "-", 
+                    RowBox[{"0.2", "*", 
+                    RowBox[{"HeavisideTheta", "[", 
+                    RowBox[{"a", "-", "b"}], "]"}]}]}], ")"}], ",", 
+                  RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                   RowBox[{
+                   "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                 "]"}], "[", 
+                RowBox[{"[", "1", "]"}], "]"}], ",", 
+               RowBox[{
+                RowBox[{"FindArc", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"b", ",", "c"}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "c"}], "}"}], ",", 
+                  RowBox[{"(", 
+                   RowBox[{"b", "-", "a", "-", 
+                    RowBox[{"0.2", "*", 
+                    RowBox[{"HeavisideTheta", "[", 
+                    RowBox[{"a", "-", "b"}], "]"}]}]}], ")"}], ",", 
+                  RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                   RowBox[{
+                   "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                 "]"}], "[", 
+                RowBox[{"[", "2", "]"}], "]"}], ",", 
+               RowBox[{"Darker", "[", "Green", "]"}]}], "]"}]}], ",", "\n", 
+            "\n", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Subscript", "[", 
+               RowBox[{"F_", ",", " ", "\[Chi]"}], "]"}], "[", 
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "a_"}], "]"}], ",", "0"}], "]"}], ":>", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"Style", "[", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"FindArc", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"a", "+", "0.5"}], ",", "1"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"a", ",", "1"}], "}"}], ",", "2", ",", 
+                    RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                    RowBox[{
+                    "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                   "]"}], "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], ",", 
+                 RowBox[{
+                  RowBox[{"FindArc", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"a", "+", "0.5"}], ",", "1"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"a", ",", "1"}], "}"}], ",", "2", ",", 
+                    RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                    RowBox[{
+                    "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                   "]"}], "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], ",", 
+                 RowBox[{"Darker", "[", "Green", "]"}]}], "]"}], ",", 
+               RowBox[{"Style", "[", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"FindArc", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"a", "+", "0.5"}], ",", "1"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"a", ",", "1"}], "}"}], ",", 
+                    RowBox[{"-", "2"}], ",", 
+                    RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                    RowBox[{
+                    "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                   "]"}], "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], ",", 
+                 RowBox[{
+                  RowBox[{"FindArc", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"a", "+", "0.5"}], ",", "1"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"a", ",", "1"}], "}"}], ",", 
+                    RowBox[{"-", "2"}], ",", 
+                    RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                    RowBox[{
+                    "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                   "]"}], "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], ",", 
+                 RowBox[{"Darker", "[", "Green", "]"}]}], "]"}]}], "}"}]}], 
+            ",", "\n", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Subscript", "[", 
+               RowBox[{"F_", ",", " ", "\[Chi]"}], "]"}], "[", 
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "b_"}], "]"}], ",", "0"}], "]"}], ":>", 
+             RowBox[{"Style", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"FindArc", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"b", ",", "1"}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "1"}], "}"}], ",", 
+                  RowBox[{"1.1", 
+                   RowBox[{"(", 
+                    RowBox[{"b", "-", "a"}], ")"}]}], ",", 
+                  RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                   RowBox[{
+                   "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                 "]"}], "[", 
+                RowBox[{"[", "1", "]"}], "]"}], ",", 
+               RowBox[{
+                RowBox[{"FindArc", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"b", ",", "1"}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "1"}], "}"}], ",", 
+                  RowBox[{"1.1", 
+                   RowBox[{"(", 
+                    RowBox[{"b", "-", "a"}], ")"}]}], ",", 
+                  RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                   RowBox[{
+                   "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                 "]"}], "[", 
+                RowBox[{"[", "2", "]"}], "]"}], ",", 
+               RowBox[{"Darker", "[", "Green", "]"}]}], "]"}]}], ",", "\n", 
+            "\n", 
+            RowBox[{
+             RowBox[{
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"F_", ",", " ", "\[Phi]"}], "]"}], "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "b_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], "^", "n_"}], ":>", 
+             RowBox[{"Style", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"FindArc", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"b", ",", 
+                    RowBox[{"IntegerPart", "[", 
+                    RowBox[{"c", "-", "0.5"}], "]"}]}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "c"}], "}"}], ",", "n", ",", 
+                  RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                   RowBox[{
+                   "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                 "]"}], "[", 
+                RowBox[{"[", "1", "]"}], "]"}], ",", 
+               RowBox[{
+                RowBox[{"FindArc", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"b", ",", 
+                    RowBox[{"IntegerPart", "[", 
+                    RowBox[{"c", "-", "0.5"}], "]"}]}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "c"}], "}"}], ",", "n", ",", 
+                  RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                   RowBox[{
+                   "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                 "]"}], "[", 
+                RowBox[{"[", "2", "]"}], "]"}], ",", "Red"}], "]"}]}], ",", 
+            "\n", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Subscript", "[", 
+               RowBox[{"F_", ",", " ", "\[Phi]"}], "]"}], "[", 
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "0"}], "]"}], ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+             RowBox[{"Style", "[", 
+              RowBox[{
+               RowBox[{"Line", "[", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"a", "-", "0.13"}], ",", 
+                    RowBox[{"c", "-", "0.13"}]}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "c"}], "}"}]}], "}"}], "]"}], ",", 
+               RowBox[{"Arrowheads", "[", 
+                RowBox[{"{", 
+                 RowBox[{"0", ",", ".03"}], "}"}], "]"}], ",", "Red"}], 
+              "]"}]}], ",", "\n", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Subscript", "[", 
+               RowBox[{"F_", ",", " ", "\[Phi]"}], "]"}], "[", 
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+             RowBox[{"{", 
+              RowBox[{"Style", "[", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{"FindArc", "[", 
+                  RowBox[{
+                   RowBox[{"{", 
+                    RowBox[{"a", ",", 
+                    RowBox[{"IntegerPart", "[", 
+                    RowBox[{"c", "-", "0.5"}], "]"}]}], "}"}], ",", 
+                   RowBox[{"{", 
+                    RowBox[{"a", ",", "c"}], "}"}], ",", "2", ",", 
+                   RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                    RowBox[{
+                    "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                  "]"}], "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], ",", 
+                RowBox[{
+                 RowBox[{"FindArc", "[", 
+                  RowBox[{
+                   RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"a", "+", "0.5"}], ",", 
+                    RowBox[{"IntegerPart", "[", 
+                    RowBox[{"c", "-", "0.5"}], "]"}]}], "}"}], ",", 
+                   RowBox[{"{", 
+                    RowBox[{"a", ",", "c"}], "}"}], ",", "2", ",", 
+                   RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                    RowBox[{
+                    "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                  "]"}], "[", 
+                 RowBox[{"[", "2", "]"}], "]"}], ",", "Red"}], "]"}], "}"}]}],
+             ",", "\n", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Subscript", "[", 
+               RowBox[{"F_", ",", " ", "\[Phi]"}], "]"}], "[", 
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "b_"}], "]"}], ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+             RowBox[{"Style", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"FindArc", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"b", ",", 
+                    RowBox[{"IntegerPart", "[", 
+                    RowBox[{"c", "-", "0.5"}], "]"}]}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "c"}], "}"}], ",", "1", ",", 
+                  RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                   RowBox[{
+                   "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                 "]"}], "[", 
+                RowBox[{"[", "1", "]"}], "]"}], ",", 
+               RowBox[{
+                RowBox[{"FindArc", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"b", ",", 
+                    RowBox[{"IntegerPart", "[", 
+                    RowBox[{"c", "-", "0.5"}], "]"}]}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "c"}], "}"}], ",", "1", ",", 
+                  RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                   RowBox[{
+                   "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                 "]"}], "[", 
+                RowBox[{"[", "2", "]"}], "]"}], ",", "Red"}], "]"}]}], ",", 
+            "\n", "\n", 
+            RowBox[{
+             RowBox[{
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"F_", ",", " ", "\[Phi]"}], "]"}], "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "b_"}], "]"}], ",", "0"}], "]"}], "^",
+               "n_"}], ":>", 
+             RowBox[{"Table", "[", 
+              RowBox[{
+               RowBox[{"Style", "[", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"FindArc", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"b", ",", "1"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"a", ",", "1"}], "}"}], ",", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{"b", "-", "a", "+", "0.9"}], ")"}], 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{"-", "1"}], ")"}], "^", "j"}]}], ",", 
+                    RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                    RowBox[{
+                    "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                   "]"}], "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], ",", 
+                 RowBox[{
+                  RowBox[{"FindArc", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"b", ",", "1"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"a", ",", "1"}], "}"}], ",", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{"b", "-", "a", "+", "0.9"}], ")"}], 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{"-", "1"}], ")"}], "^", "j"}]}], ",", 
+                    RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                    RowBox[{
+                    "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                   "]"}], "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], ",", "Red"}], "]"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"j", ",", "1", ",", "n"}], "}"}]}], "]"}]}], ",", 
+            "\n", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Subscript", "[", 
+               RowBox[{"F_", ",", " ", "\[Phi]"}], "]"}], "[", 
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "a_"}], "]"}], ",", "0"}], "]"}], ":>", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"Style", "[", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"FindArc", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"a", "+", "0.5"}], ",", "1"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"a", ",", "1"}], "}"}], ",", "2", ",", 
+                    RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                    RowBox[{
+                    "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                   "]"}], "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], ",", 
+                 RowBox[{
+                  RowBox[{"FindArc", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"a", "+", "0.5"}], ",", "1"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"a", ",", "1"}], "}"}], ",", "2", ",", 
+                    RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                    RowBox[{
+                    "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                   "]"}], "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], ",", "Red"}], "]"}], ",", 
+               RowBox[{"Style", "[", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"FindArc", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"a", "+", "0.5"}], ",", "1"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"a", ",", "1"}], "}"}], ",", 
+                    RowBox[{"-", "2"}], ",", 
+                    RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                    RowBox[{
+                    "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                   "]"}], "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], ",", 
+                 RowBox[{
+                  RowBox[{"FindArc", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"a", "+", "0.5"}], ",", "1"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"a", ",", "1"}], "}"}], ",", 
+                    RowBox[{"-", "2"}], ",", 
+                    RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                    RowBox[{
+                    "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                   "]"}], "[", 
+                  RowBox[{"[", "2", "]"}], "]"}], ",", "Red"}], "]"}]}], 
+              "}"}]}], ",", "\n", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Subscript", "[", 
+               RowBox[{"F_", ",", " ", "\[Phi]"}], "]"}], "[", 
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "b_"}], "]"}], ",", "0"}], "]"}], ":>", 
+             RowBox[{"Style", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"FindArc", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"b", ",", "1"}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "1"}], "}"}], ",", 
+                  RowBox[{"(", 
+                   RowBox[{"b", "-", "a", "+", "0.9"}], ")"}], ",", 
+                  RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                   RowBox[{
+                   "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                 "]"}], "[", 
+                RowBox[{"[", "1", "]"}], "]"}], ",", 
+               RowBox[{
+                RowBox[{"FindArc", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"b", ",", "1"}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "1"}], "}"}], ",", 
+                  RowBox[{"(", 
+                   RowBox[{"b", "-", "a", "+", "0.9"}], ")"}], ",", 
+                  RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                   RowBox[{
+                   "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                 "]"}], "[", 
+                RowBox[{"[", "2", "]"}], "]"}], ",", "Red"}], "]"}]}], ",", 
+            "\n", "\n", "\n", 
+            RowBox[{
+             RowBox[{
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"F_", ",", " ", "\[Psi]"}], "]"}], "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "b_"}], "]"}], ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], "^", "n_"}], ":>", 
+             RowBox[{"Style", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"FindArc", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", 
+                    RowBox[{"c", "-", "1"}]}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "c"}], "}"}], ",", "1", ",", 
+                  RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                   RowBox[{
+                   "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                 "]"}], "[", 
+                RowBox[{"[", "1", "]"}], "]"}], ",", 
+               RowBox[{
+                RowBox[{"FindArc", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", 
+                    RowBox[{"c", "-", "1"}]}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "c"}], "}"}], ",", "1", ",", 
+                  RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                   RowBox[{
+                   "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                 "]"}], "[", 
+                RowBox[{"[", "2", "]"}], "]"}], ",", "Blue"}], "]"}]}], ",", 
+            "\n", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Subscript", "[", 
+               RowBox[{"F_", ",", " ", "\[Psi]"}], "]"}], "[", 
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "b_"}], "]"}], ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+             RowBox[{"Style", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"FindArc", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"b", ",", 
+                    RowBox[{"c", "-", "1"}]}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"b", ",", "c"}], "}"}], ",", "1", ",", 
+                  RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                   RowBox[{
+                   "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                 "]"}], "[", 
+                RowBox[{"[", "1", "]"}], "]"}], ",", 
+               RowBox[{
+                RowBox[{"FindArc", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"b", ",", 
+                    RowBox[{"c", "-", "1"}]}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"b", ",", "c"}], "}"}], ",", "1", ",", 
+                  RowBox[{"\"\<ArrowHeadSize\>\"", "->", 
+                   RowBox[{
+                   "OptionValue", "[", "\"\<ArrowHeadSize\>\"", "]"}]}]}], 
+                 "]"}], "[", 
+                RowBox[{"[", "2", "]"}], "]"}], ",", "Blue"}], "]"}]}], ",", 
+            "\n", "\n", 
+            RowBox[{
+             RowBox[{"\[CapitalDelta]", "[", 
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "b_"}], "]"}], ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+             RowBox[{"Style", "[", 
+              RowBox[{
+               RowBox[{"Line", "[", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"b", ",", "c"}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "c"}], "}"}]}], "}"}], "]"}], ",", 
+               "Black", ",", "Dashed"}], "]"}]}], ",", "\n", "\n", "\n", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"\[Chi]s", "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", "___", ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], "^", "n_"}], ":>", 
+             RowBox[{"Table", "[", 
+              RowBox[{
+               RowBox[{"Style", "[", 
+                RowBox[{
+                 RowBox[{"Arrow", "[", 
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"a", ",", "c"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"a", "-", "0.2"}], ",", 
+                    RowBox[{"c", "+", 
+                    RowBox[{"0.1", "*", 
+                    RowBox[{"Sin", "[", 
+                    RowBox[{"\[Pi]", " ", 
+                    RowBox[{"ii", "/", "n"}]}], "]"}]}]}]}], "}"}]}], "}"}], 
+                  "]"}], ",", 
+                 RowBox[{"Arrowheads", "[", 
+                  RowBox[{"{", 
+                   RowBox[{"0", ",", ".03"}], "}"}], "]"}], ",", 
+                 RowBox[{"Darker", "[", "Green", "]"}]}], "]"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"ii", ",", "1", ",", "n"}], "}"}]}], "]"}]}], ",", 
+            "\n", 
+            RowBox[{
+             RowBox[{"\[Chi]s", "[", 
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "a_"}], "]"}], ",", "___", ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+             RowBox[{"Style", "[", 
+              RowBox[{
+               RowBox[{"Arrow", "[", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "c"}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"a", "-", "0.2"}], ",", "c"}], "}"}]}], "}"}], 
+                "]"}], ",", 
+               RowBox[{"Arrowheads", "[", 
+                RowBox[{"{", 
+                 RowBox[{"0", ",", ".03"}], "}"}], "]"}], ",", 
+               RowBox[{"Darker", "[", "Green", "]"}]}], "]"}]}], ",", "\n", 
+            RowBox[{
+             RowBox[{"\[Delta]\[Chi]s", "[", 
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "a_"}], "]"}], ",", "___", ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+             RowBox[{"Style", "[", 
+              RowBox[{
+               RowBox[{"Arrow", "[", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "c"}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"a", "-", "0.2"}], ",", "c"}], "}"}]}], "}"}], 
+                "]"}], ",", 
+               RowBox[{"Arrowheads", "[", 
+                RowBox[{"{", 
+                 RowBox[{"0", ",", ".03"}], "}"}], "]"}], ",", 
+               RowBox[{"Darker", "[", "Green", "]"}], ",", "Dashed"}], 
+              "]"}]}], ",", "\n", "\n", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"\[Delta]\[Chi]s", "[", 
+               RowBox[{
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"x", ",", " ", "a_"}], "]"}], ",", "___", ",", 
+                RowBox[{"Subscript", "[", 
+                 RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], "^", "n_"}], ":>", 
+             RowBox[{"Table", "[", 
+              RowBox[{
+               RowBox[{"Style", "[", 
+                RowBox[{
+                 RowBox[{"Arrow", "[", 
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"a", ",", "c"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"a", "-", "0.2"}], ",", 
+                    RowBox[{"c", "+", 
+                    RowBox[{"0.1", "*", 
+                    RowBox[{"Sin", "[", 
+                    RowBox[{"\[Pi]", " ", 
+                    RowBox[{"ii", "/", "n"}]}], "]"}]}]}]}], "}"}]}], "}"}], 
+                  "]"}], ",", 
+                 RowBox[{"Arrowheads", "[", 
+                  RowBox[{"{", 
+                   RowBox[{"0", ",", ".03"}], "}"}], "]"}], ",", 
+                 RowBox[{"Darker", "[", "Green", "]"}], ",", "Dashed"}], 
+                "]"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"ii", ",", "1", ",", "n"}], "}"}]}], "]"}]}], ",", 
+            "\n", 
+            RowBox[{
+             RowBox[{"\[Chi]", "[", 
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "a_"}], "]"}], ",", "___", ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+             RowBox[{"Style", "[", 
+              RowBox[{
+               RowBox[{"Arrow", "[", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"a", "+", "0.2"}], ",", "c"}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", "c"}], "}"}]}], "}"}], "]"}], ",", 
+               RowBox[{"Arrowheads", "[", 
+                RowBox[{"{", 
+                 RowBox[{"0", ",", "0.03", ",", "0"}], "}"}], "]"}], ",", 
+               RowBox[{"Darker", "[", "Green", "]"}]}], "]"}]}], ",", "\n", 
+            "\n", 
+            RowBox[{
+             RowBox[{"\[Phi]s", "[", 
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+             RowBox[{"Style", "[", 
+              RowBox[{
+               RowBox[{"Arrow", "[", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", 
+                    RowBox[{"c", "-", "1"}]}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"a", "-", "0.2"}], ",", 
+                    RowBox[{"c", "-", "1", "+", "0.2"}]}], "}"}]}], "}"}], 
+                "]"}], ",", 
+               RowBox[{"Arrowheads", "[", 
+                RowBox[{"{", 
+                 RowBox[{"0", ",", ".03"}], "}"}], "]"}], ",", "Red"}], 
+              "]"}]}], ",", "\n", 
+            RowBox[{
+             RowBox[{"\[Psi]s", "[", 
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+             RowBox[{"Style", "[", 
+              RowBox[{
+               RowBox[{"Arrow", "[", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", 
+                    RowBox[{"IntegerPart", "[", 
+                    RowBox[{"c", "-", "1"}], "]"}]}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", 
+                    RowBox[{
+                    RowBox[{"IntegerPart", "[", 
+                    RowBox[{"c", "-", "1"}], "]"}], "+", 
+                    RowBox[{
+                    "OptionValue", "[", "\"\<\[Psi]sLength\>\"", "]"}]}]}], 
+                   "}"}]}], "}"}], "]"}], ",", 
+               RowBox[{"Arrowheads", "[", 
+                RowBox[{"{", 
+                 RowBox[{"0", ",", ".03"}], "}"}], "]"}], ",", "Blue"}], 
+              "]"}]}], ",", "\n", 
+            RowBox[{
+             RowBox[{"\[Delta]\[Psi]s", "[", 
+              RowBox[{
+               RowBox[{"Subscript", "[", 
+                RowBox[{"x", ",", " ", "a_"}], "]"}], ",", 
+               RowBox[{"Subscript", "[", 
+                RowBox[{"t", ",", " ", "c_"}], "]"}]}], "]"}], ":>", 
+             RowBox[{"Style", "[", 
+              RowBox[{
+               RowBox[{"Arrow", "[", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", 
+                    RowBox[{"c", "-", "1"}]}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"a", ",", 
+                    RowBox[{"c", "-", "0.7"}]}], "}"}]}], "}"}], "]"}], ",", 
+               RowBox[{"Arrowheads", "[", 
+                RowBox[{"{", 
+                 RowBox[{"0", ",", ".03"}], "}"}], "]"}], ",", "Blue", ",", 
+               "Dashed"}], "]"}]}]}], "}"}]}]}], ";", "\n", "\n", 
+        RowBox[{"pureProp", "=", 
+         RowBox[{"Flatten", "[", "pureProp", "]"}]}], ";", "\n", "\n", "\n", 
+        RowBox[{"MyPrint", "[", 
+         RowBox[{"{", 
+          RowBox[{"\"\<They will be drawn as\\n \>\"", ",", "pureProp"}], 
+          "}"}], "]"}], ";", "\n", "\t", 
+        RowBox[{"(*", 
+         RowBox[{
+          RowBox[{"dots", "=", 
+           RowBox[{"Flatten", "[", 
+            RowBox[{"pureProp", "//.", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+                RowBox[{
+                 RowBox[{"Style", "[", 
+                  RowBox[{
+                   RowBox[{"Arrow", "[", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"a_", ",", "c_"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"b_", ",", "d_"}], "}"}]}], "}"}], "]"}], ",", 
+                   "___", ",", "color_"}], "]"}], "/;", 
+                 RowBox[{"(", 
+                  RowBox[{
+                   RowBox[{"IntegerQ", "[", 
+                    RowBox[{"a", "*", "b", "*", "c", "*", "d"}], "]"}], "&&", 
+                   RowBox[{"color", "=!=", "Blue"}]}], ")"}]}], ":>", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"Style", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"a", ",", "c"}], "}"}], ",", 
+                    RowBox[{"Disk", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                     "Black"}], "]"}], ",", 
+                  RowBox[{"Style", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"b", ",", "d"}], "}"}], ",", 
+                    RowBox[{"Disk", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                     "Black"}], "]"}]}], "}"}]}], ",", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{"Style", "[", 
+                  RowBox[{
+                   RowBox[{"Arrow", "[", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"a_", ",", "c_"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"b_", ",", "d_"}], "}"}]}], "}"}], "]"}], ",", 
+                   "___"}], "]"}], "/;", 
+                 RowBox[{"(", 
+                  RowBox[{"!", 
+                   RowBox[{"IntegerQ", "[", 
+                    RowBox[{"a", "*", "b", "*", "c", "*", "d"}], "]"}]}], 
+                  ")"}]}], ":>", 
+                RowBox[{"{", 
+                 RowBox[{"Style", "[", 
+                  RowBox[{
+                   RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"b", "-", "0.1"}], ",", "d"}], "}"}], ",", 
+                   RowBox[{"Disk", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                    "White", ",", 
+                   RowBox[{"EdgeForm", "[", "None", "]"}]}], "]"}], "}"}]}], 
+               ",", "\n", 
+               RowBox[{
+                RowBox[{"Style", "[", 
+                 RowBox[{
+                  RowBox[{"Line", "[", 
+                   RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"a_", ",", "c_"}], "}"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"b_", ",", "c_"}], "}"}]}], "}"}], "]"}], ",", 
+                  "Black", ",", "Dashed"}], "]"}], ":>", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"Style", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"a", ",", "c"}], "}"}], ",", 
+                    RowBox[{"Disk", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                     "Black"}], "]"}], ",", 
+                  RowBox[{"Style", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"b", ",", "c"}], "}"}], ",", 
+                    RowBox[{"Disk", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"0", ",", "0"}], "}"}], ",", "0.05"}], "]"}], ",",
+                     "Black"}], "]"}]}], "}"}]}]}], "}"}]}], "]"}]}], ";"}], 
+         "*)"}], "\n", "\n", 
+        RowBox[{"AppendTo", "[", 
+         RowBox[{"plot", ",", 
+          RowBox[{"ListPlot", "[", 
+           RowBox[{"dots", ",", "\n", 
+            RowBox[{"PlotLabel", "->", " ", 
+             RowBox[{"Row", "[", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{"ToString", "[", 
+                  RowBox[{"i", "+", 
+                   RowBox[{"OptionValue", "[", "\"\<initialIndex\>\"", "]"}], 
+                   "-", "1"}], "]"}], "<>", "\"\<: \>\""}], ",", "weight"}], 
+               "}"}], "]"}]}], ",", "\n", 
+            RowBox[{"Axes", "->", "False"}], ",", "\n", 
+            RowBox[{"Frame", "->", "False"}], ",", "\n", 
+            RowBox[{"Mesh", "->", "Full"}], ",", "\n", 
+            RowBox[{"AxesOrigin", "->", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"1", ",", "1"}], "}"}], "-", "0.2"}]}], ",", "\n", 
+            RowBox[{"PlotStyle", "->", 
+             RowBox[{"{", 
+              RowBox[{"PointSize", "[", 
+               RowBox[{"OptionValue", "[", "\"\<pointSize\>\"", "]"}], "]"}], 
+              "}"}]}], ",", "\n", 
+            RowBox[{"Prolog", "->", "pureProp"}], ",", "\n", 
+            RowBox[{"ImagePadding", "->", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"10", ",", "10"}], "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"10", ",", "10"}], "}"}]}], "}"}]}], ",", "\n", 
+            RowBox[{"PlotRangeClipping", "->", "False"}], ",", "\n", 
+            RowBox[{"ImageSize", "->", 
+             RowBox[{"OptionValue", "[", "\"\<ImageSize\>\"", "]"}]}]}], 
+           "]"}]}], "\n", "]"}], ";"}]}], "\n", "\n", "]"}], ";", 
+     RowBox[{"(*", 
+      RowBox[{"End", " ", "of", " ", "Loop"}], "*)"}], "\n", "\n", "\n", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"OptionValue", "[", "\"\<export\>\"", "]"}], ",", "\n", 
+       RowBox[{
+        RowBox[{"Export", "[", 
+         RowBox[{
+          RowBox[{"OptionValue", "[", "\"\<exportDirectory\>\"", "]"}], ",", 
+          "plot"}], 
+         RowBox[{"(*", 
+          RowBox[{"Row", "[", 
+           RowBox[{"plot", ",", "\"\<\\n\>\""}], "]"}], "*)"}], "]"}], 
+        ";"}]}], "\n", "]"}], ";", "\n", "\n", 
+     RowBox[{"Return", "[", 
+      RowBox[{"Row", "[", "plot", "]"}], "]"}], ";"}]}], "\n", 
+   "]"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.973400798870941*^9, 3.973400856724676*^9}, {
+   3.973402169873495*^9, 3.973402180035303*^9}, {3.973402317573717*^9, 
+   3.97340232550358*^9}, {3.97340237540938*^9, 3.973402377740309*^9}, {
+   3.97340255540077*^9, 3.973402971531021*^9}, 3.973403414291355*^9, {
+   3.973403455331114*^9, 3.9734034554640503`*^9}, {3.973403490866194*^9, 
+   3.973403548203766*^9}, {3.973403629103712*^9, 3.9734036332679596`*^9}, {
+   3.973403674616104*^9, 3.973403765836029*^9}, {3.9734039541186485`*^9, 
+   3.973403977614975*^9}, {3.9734040491820316`*^9, 3.97340406145969*^9}, {
+   3.9734040977104588`*^9, 3.9734041123369026`*^9}, {3.97340417204356*^9, 
+   3.9734042240867786`*^9}},ExpressionUUID->"2ea24e1e-be1b-9948-8d51-\
+5e1583b77322"]
+},
+WindowSize->{1152, 579.6},
+WindowMargins->{{
+  Automatic, -5.399999999999864}, {-5.399999999999977, Automatic}},
+FrontEndVersion->"14.0 for Microsoft Windows (64-bit) (December 12, 2023)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"2ee4c5fd-a616-334f-9485-3f658dbd5161"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 316, 6, 44, "Input",ExpressionUUID->"1d00c822-5ed4-7446-96b7-5545027a0a2b",
+ InitializationCell->True],
+Cell[877, 28, 986, 24, 102, "Input",ExpressionUUID->"c270b6ea-9bc1-fd43-8dc4-8922b8cdaa27",
+ InitializationCell->True],
+Cell[1866, 54, 537, 15, 64, "Input",ExpressionUUID->"ac7f43f4-d77f-9f41-a84c-d0f70fe004c0",
+ InitializationCell->True],
+Cell[2406, 71, 424, 11, 44, "Input",ExpressionUUID->"98f4298c-1d26-1949-af88-d4f5d1e345d3",
+ InitializationCell->True],
+Cell[2833, 84, 2278, 56, 216, "Input",ExpressionUUID->"98899310-b609-da48-bf34-d094fda5dae1",
+ InitializationCell->True],
+Cell[5114, 142, 226, 5, 44, "Input",ExpressionUUID->"6c25cca9-869e-eb40-b796-5dd69512b10b",
+ InitializationCell->True],
+Cell[5343, 149, 1638, 34, 178, "Input",ExpressionUUID->"dad8c8cb-b367-5647-9421-0a2a9a7ec85a",
+ InitializationCell->True],
+Cell[6984, 185, 1637, 33, 197, "Input",ExpressionUUID->"8c5d4182-5fa0-6b45-8ff9-a1f5166f3213",
+ InitializationCell->True],
+Cell[8624, 220, 88308, 2050, 3961, "Input",ExpressionUUID->"2ea24e1e-be1b-9948-8d51-5e1583b77322",
+ InitializationCell->True]
+}
+]
+*)
+

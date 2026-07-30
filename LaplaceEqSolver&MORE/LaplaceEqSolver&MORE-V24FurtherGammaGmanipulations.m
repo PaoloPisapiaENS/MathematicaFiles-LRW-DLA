@@ -22,6 +22,9 @@
 SetOptions[$FrontEndSession,NotebookAutoSave->True]
 NotebookSave[]
 InitializationValue[$Initialization] = Hold[$HistoryLength = 2];
+<<"D:\\Offline_Documents\\University\\PhD_Paris\\PhD_work\\Simulations\\Kay-initialization.m"
+"Directory for read/write is \"D:\\Offline_Documents\\University\\PhD_Paris\\PhD_work\\Simulations\\MathematicaFiles-LRW-DLA-bLRW\\LaplaceEqSolver&MORE\\\""
+Quiet[<<"D:\Offline_Documents\University\PhD_Paris\PhD_work\Simulations\MathematicaFiles-LRW-DLA-bLRW\LRW-initialization.m"]
 
 
 (* ::Input::Initialization:: *)
@@ -661,6 +664,42 @@ expLERWrealInteraction2=ExpectationValueBlock[Z % ,"endTime"->endTime,"fields"->
 Replace[expLERWrealInteraction2,a_/;(!NumericQ[a]):>a/(Znorm[a,"graph"->g,"\[Beta]rule"->{\[Beta][__]->1},"fieldsToExclude"->{\[Psi]s}]),1];
 
 expLERWrealInteraction3=ExpectationValueBlock[Z % ,"endTime"->endTime,"fields"->fields,"draw"->False,"Rrule"->{R[__,Blue]->1},"external\[Delta]"->True,"graph"->g]/.Subscript[t, a_]->Subscript[t, a-1]/.\[Gamma]->"\!\(\*SubscriptBox[\(\[Gamma]\), \(3\)]\)"//Expand
+
+
+(* ::Input::Initialization:: *)
+Clear[FinalDynamicDLAaction];
+Options[FinalDynamicDLAaction]={"sourceBC"->1,"excludedVertices"->{},"graph"->g,"endTime"->10};
+
+FinalDynamicDLAaction[OptionsPattern[]]:=Module[{locGraph,locEndTime,locSource,locRoot,locWeights,totWeights,locVertices,actionTimeSlice,action},
+Clear[i,k,j,\[Gamma]];
+
+locGraph=OptionValue["graph"];
+locEndTime =OptionValue["endTime"];
+
+locWeights=WeightedAdjacencyMatrix[locGraph]//Normal;
+totWeights =Total[locWeights,{2}];
+
+locVertices=VertexList@locGraph;
+
+locRoot = 
+ Select[(List@@@PropertyValue[locGraph,VertexLabels])[[2;;]],StringMatchQ[#[[2]],___~~"ROOT"]&][[All,1]][[1]];
+locSource = 
+ Select[(List@@@PropertyValue[locGraph,VertexLabels])[[2;;]],StringMatchQ[#[[2]],___~~"SOURCE"]&][[All,1]][[1]];
+
+
+actionTimeSlice [T_]:= Product[
+If[totWeights[[x]]===0  || MemberQ[OptionValue["excludedVertices"],x],1,
+(*FALSE*)V[(1+\[Gamma] Sum[locWeights[[x,y]](R[x,y,Red]\[Phi]s[y,Subscript[t, T+1],Subscript[k, y]]-1)\[Phi]s[x,Subscript[t, T+1],Subscript[k, x]]\[Phi][x,Subscript[t, T],Subscript[k, x]]\[Chi]s[y,Subscript[t, T],1],{y,Length[locVertices]}]+
+Sum[locWeights[[x,y]]/totWeights[[x]] R[x,y,Blue]\[Chi]s[y,Subscript[t, T],Subscript[i, x]]\[Chi][x,Subscript[t, T],Subscript[i, x]],{y,Length[locVertices]}]+ \[Phi]s[x,Subscript[t, T+1],Subscript[k, x]]\[Phi][x,Subscript[t, T],Subscript[k, x]]) ]
+],{x,Length[locVertices]}]
+V[(1+ \[Phi]s[locSource,Subscript[t, T+1],Subscript[k, locSource]]\[Phi][locSource,Subscript[t, T],Subscript[k, locSource]]+ \[Chi][locSource,Subscript[t, T],1])]
+(*V[(1+ OptionValue["sourceBC"] \[Chi][locSource,Subscript[t, T],1])]*);
+
+action=Product[actionTimeSlice[T],{T,locEndTime}](*Product[V[(1+\[Phi][x,Subscript[t, locEndTime+1],Subscript[k, x]])(*This allows the path tracker to be absorbed at the end*) ]V[(1+\[Phi][x,Subscript[t, locEndTime+1],0])(*This allows the path to end after "endTime" steps*)],{x,Length[locVertices]}]*);
+
+Return[action]
+
+]
 
 
 

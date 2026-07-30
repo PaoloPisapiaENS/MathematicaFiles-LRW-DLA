@@ -1,0 +1,11 @@
+# 1. Ignore ALL files in the root/folders
+*
+
+# 2. Re-include folders and any file with a dot/extension
+!*/
+!*.*
+
+# 3. Ignore specific file types
+*.mx
+*.pdf
+LRW-Diagrams/

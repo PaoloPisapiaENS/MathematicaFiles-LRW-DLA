@@ -1,0 +1,399 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 14.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     14296,        391]
+NotebookOptionsPosition[     12495,        356]
+NotebookOutlinePosition[     12935,        373]
+CellTagsIndexPosition[     12892,        370]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{
+   "Import", "[", 
+    "\"\<https://raw.githubusercontent.com/FeynCalc/feyncalc/master/install.m\
+\>\"", "]"}], ";"}], "\n"}], "\[IndentingNewLine]", 
+ RowBox[{"InstallFeynCalc", "[", "]"}], "\n"}], "Input",
+ CellChangeTimes->{{3.9696962505470715`*^9, 3.969696250547476*^9}},
+ CellLabel->"In[1]:=",ExpressionUUID->"f64ea3f8-7d57-e941-9af9-2d1adea0fde0"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"Welcome to the automatic FeynCalc installer brought to you \
+by the FeynCalc developer team!\"\>"], "Print",
+ CellChangeTimes->{3.969696256878952*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"83e72045-725b-1141-8e75-8965dbdae983"],
+
+Cell[BoxData["\<\" \[Bullet] To install the current stable version of \
+FeynCalc (recommended for productive use), please evaluate\"\>"], "Print",
+ CellChangeTimes->{3.9696962568996964`*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"4c28eae0-f2b1-1940-9df1-7179f04564ac"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"\\t\"\>", "\[InvisibleSpace]", 
+   InterpretationBox[Cell[
+    "InstallFeynCalc[]", "Code",ExpressionUUID->
+     "137999f6-e44d-2346-8f68-3648de315686"],
+    TextCell["InstallFeynCalc[]", "Code"]]}],
+  SequenceForm["\t", 
+   TextCell["InstallFeynCalc[]", "Code"]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9696962569444847`*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"b7f0eab0-bd35-684e-8d62-8edd6590135e"],
+
+Cell[BoxData["\<\" \[Bullet] To install the development version of FeynCalc \
+(only for experts or beta testers), please evaluate \"\>"], "Print",
+ CellChangeTimes->{3.9696962570116844`*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"51aab317-d006-3f4a-a1ed-5d18884b07d3"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"\\t\"\>", "\[InvisibleSpace]", 
+   InterpretationBox[Cell[
+    "InstallFeynCalc[InstallFeynCalcDevelopmentVersion->True]", "Code",
+     ExpressionUUID->"1c4e07b3-13ec-0d4b-8785-c23c6ae3d920"],
+    TextCell[
+    "InstallFeynCalc[InstallFeynCalcDevelopmentVersion->True]", "Code"]]}],
+  SequenceForm["\t", 
+   TextCell[
+   "InstallFeynCalc[InstallFeynCalcDevelopmentVersion->True]", "Code"]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.9696962570639057`*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"f70ef6a0-336c-8e47-92d9-1a85ed922037"],
+
+Cell["\<\
+Downloading FeynCalc from \
+https://github.com/FeynCalc/feyncalc/archive/hotfix-stable.zip ...done! 
+FeynCalc zip file was saved to \
+C:\\Users\\paolo\\AppData\\Local\\Temp\\m-a6a8ed8d-b5a1-428f-9002-d521a6737e1d.
+Extracting FeynCalc zip file to \
+C:\\Users\\paolo\\AppData\\Local\\Temp\\m-a6a8ed8d-b5a1-428f-9002-\
+d521a6737e1d.dir ...done! 
+Checking the directory structure...done! 
+Copying FeynCalc to \
+C:\\Users\\paolo\\AppData\\Roaming\\Mathematica\\Applications\\FeynCalc \
+...done! 
+Setting up the format type of new output cells ... done! 
+Creating the configuration file ... done! 
+Downloading FeynArts from \
+https://github.com/FeynCalc/feynarts-mirror/archive/master.zip ...done! 
+FeynArts zip file was saved to \
+C:\\Users\\paolo\\AppData\\Local\\Temp\\m-e0c533fe-6810-4383-91ba-494822825638.
+Extracting FeynArts zip file to \
+C:\\Users\\paolo\\AppData\\Roaming\\Mathematica\\Applications\\FeynCalc\\\
+FeynArts ...done! 
+Copying FeynArts to \
+C:\\Users\\paolo\\AppData\\Roaming\\Mathematica\\Applications\\FeynCalc\\\
+FeynArts ...done! 
+
+Installation complete! Loading FeynCalc ... 
+Successfully patched FeynArts.\
+\>", "Print",
+ CellChangeTimes->{3.969696257162178*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"ef3aa4ee-e897-3a4c-a2d3-6970589ab817"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+   StyleBox["\<\"FeynCalc \"\>", "Text",
+    StripOnInput->False,
+    FontWeight->Bold], "\[InvisibleSpace]", 
+   StyleBox["\<\"10.1.0 (stable version). For help, use the \"\>", "Text",
+    StripOnInput->False], "\[InvisibleSpace]", 
+   StyleBox[
+    TagBox[
+     ButtonBox[
+      RowBox[{
+       RowBox[{"online", " ", "documentation"}], ","}],
+      BaseStyle->"Hyperlink",
+      ButtonData:>{
+        URL["https://feyncalc.github.io/referenceDev"], None},
+      ButtonNote->"https://feyncalc.github.io/referenceDev"],
+     DisplayForm], "Text",
+    StripOnInput->False], "\[InvisibleSpace]", 
+   StyleBox["\<\" visit the \"\>", "Text",
+    StripOnInput->False], "\[InvisibleSpace]", 
+   StyleBox[
+    TagBox[
+     ButtonBox["forum",
+      BaseStyle->"Hyperlink",
+      ButtonData:>{
+        URL["https://github.com/FeynCalc/feyncalc/discussions"], None},
+      ButtonNote->"https://github.com/FeynCalc/feyncalc/discussions/"],
+     DisplayForm], "Text",
+    StripOnInput->False], "\[InvisibleSpace]", 
+   StyleBox["\<\" and have a look at the supplied \"\>", "Text",
+    StripOnInput->False], "\[InvisibleSpace]", 
+   StyleBox[
+    TagBox[
+     ButtonBox[
+      RowBox[{"examples", "."}],
+      BaseStyle->"Hyperlink",
+      ButtonFunction:>SystemOpen[
+        FileNameJoin[{FeynCalc`$FeynCalcDirectory, "Examples"}]],
+      Evaluator->Automatic,
+      Method->"Preemptive"],
+     DisplayForm], "Text",
+    StripOnInput->False], "\[InvisibleSpace]", 
+   StyleBox["\<\" The PDF-version of the manual can be downloaded \"\>", 
+    "Text",
+    StripOnInput->False], "\[InvisibleSpace]", 
+   StyleBox[
+    TagBox[
+     ButtonBox[
+      RowBox[{"here", "."}],
+      BaseStyle->"Hyperlink",
+      ButtonData:>{
+        URL[
+        "https://github.com/FeynCalc/feyncalc-manual/releases/download/dev-\
+manual/FeynCalcManual.pdf"], None},
+      ButtonNote->
+       "https://github.com/FeynCalc/feyncalc-manual/releases/download/dev-\
+manual/FeynCalcManual.pdf"],
+     DisplayForm], "Text",
+    StripOnInput->False]}],
+  SequenceForm[
+   Style["FeynCalc ", "Text", Bold], 
+   Style["10.1.0 (stable version). For help, use the ", "Text"], 
+   Style[
+    DisplayForm[
+     ButtonBox["online documentation,", ButtonData :> {
+        URL["https://feyncalc.github.io/referenceDev"], None}, BaseStyle -> 
+      "Hyperlink", ButtonNote -> "https://feyncalc.github.io/referenceDev"]], 
+    "Text"], 
+   Style[" visit the ", "Text"], 
+   Style[
+    DisplayForm[
+     ButtonBox["forum", ButtonData :> {
+        URL["https://github.com/FeynCalc/feyncalc/discussions"], None}, 
+      BaseStyle -> "Hyperlink", ButtonNote -> 
+      "https://github.com/FeynCalc/feyncalc/discussions/"]], "Text"], 
+   Style[" and have a look at the supplied ", "Text"], 
+   Style[
+    DisplayForm[
+     ButtonBox[
+     "examples.", BaseStyle -> "Hyperlink", ButtonFunction :> SystemOpen[
+        FileNameJoin[{FeynCalc`$FeynCalcDirectory, "Examples"}]], Evaluator -> 
+      Automatic, Method -> "Preemptive"]], "Text"], 
+   Style[" The PDF-version of the manual can be downloaded ", "Text"], 
+   Style[
+    DisplayForm[
+     ButtonBox["here.", ButtonData :> {
+        URL[
+        "https://github.com/FeynCalc/feyncalc-manual/releases/download/dev-\
+manual/FeynCalcManual.pdf"], None}, BaseStyle -> "Hyperlink", ButtonNote -> 
+      "https://github.com/FeynCalc/feyncalc-manual/releases/download/dev-\
+manual/FeynCalcManual.pdf"]], "Text"]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.969696355367794*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"461793c9-7b5e-6d44-b82b-f906a59197d5"],
+
+Cell[BoxData[
+ StyleBox["\<\"If you use FeynCalc in your research, please evaluate \
+FeynCalcHowToCite[] to learn how to cite this software.\"\>", "Text",
+  StripOnInput->False]], "Print",
+ CellChangeTimes->{3.9696963554470024`*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"5cf8a92d-cebf-6543-b8f2-9d64278f93f1"],
+
+Cell[BoxData[
+ StyleBox["\<\"Please keep in mind that the proper academic attribution of \
+our work is crucial to ensure the future development of this package!\"\>", 
+  "Text",
+  StripOnInput->False,
+  FontSlant->Italic]], "Print",
+ CellChangeTimes->{3.9696963555227356`*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"8cbc5f11-eabf-704f-9d94-74a8b6478f92"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+   StyleBox["\<\"FeynArts \"\>", "Text",
+    StripOnInput->False,
+    FontWeight->Bold], "\[InvisibleSpace]", 
+   StyleBox["\<\"3.12 (27 Mar 2025) patched for use with FeynCalc, for \
+documentation see the \"\>", "Text",
+    StripOnInput->False], "\[InvisibleSpace]", 
+   StyleBox[
+    TagBox[
+     ButtonBox["manual",
+      BaseStyle->"Hyperlink",
+      ButtonFunction:>SystemOpen[
+        First[
+         FileNames[{"*.pdf", "*.PDF"}, 
+          FileNameJoin[{FeynCalc`$FeynArtsDirectory, "manual"}]]]],
+      Evaluator->Automatic,
+      Method->"Preemptive"],
+     DisplayForm], "Text",
+    StripOnInput->False], "\[InvisibleSpace]", 
+   StyleBox["\<\" or visit \"\>", "Text",
+    StripOnInput->False], "\[InvisibleSpace]", 
+   StyleBox[
+    TagBox[
+     ButtonBox[
+      RowBox[{"www", ".", "feynarts", ".", "de", "."}],
+      BaseStyle->"Hyperlink",
+      ButtonData:>{
+        URL["http://www.feynarts.de/"], None},
+      ButtonNote->"www.feynarts.de/"],
+     DisplayForm], "Text",
+    StripOnInput->False]}],
+  SequenceForm[
+   Style["FeynArts ", "Text", Bold], 
+   Style["3.12 (27 Mar 2025) patched for use with FeynCalc, for documentation \
+see the ", "Text"], 
+   Style[
+    DisplayForm[
+     ButtonBox[
+     "manual", BaseStyle -> "Hyperlink", ButtonFunction :> SystemOpen[
+        First[
+         FileNames[{"*.pdf", "*.PDF"}, 
+          FileNameJoin[{FeynCalc`$FeynArtsDirectory, "manual"}]]]], Evaluator -> 
+      Automatic, Method -> "Preemptive"]], "Text"], 
+   Style[" or visit ", "Text"], 
+   Style[
+    DisplayForm[
+     ButtonBox["www.feynarts.de.", ButtonData :> {
+        URL["http://www.feynarts.de/"], None}, BaseStyle -> "Hyperlink", 
+      ButtonNote -> "www.feynarts.de/"]], "Text"]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.969696356933264*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"47855293-a10e-1c4e-a961-bd11b0197b1c"],
+
+Cell[BoxData[
+ StyleBox["\<\"If you use FeynArts in your research, please cite\"\>", "Text",
+  StripOnInput->False]], "Print",
+ CellChangeTimes->{3.9696963570501785`*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"8e8c067f-dc55-a147-811c-6077a5d408cb"],
+
+Cell[BoxData[
+ StyleBox["\<\" \[Bullet] T. Hahn, Comput. Phys. Commun., 140, 418-431, 2001, \
+arXiv:hep-ph/0012260\"\>", "Text",
+  StripOnInput->False]], "Print",
+ CellChangeTimes->{3.9696963571495037`*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"96eeca34-5096-164a-89d3-37c6c7310754"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TBIExpand", "[", 
+   RowBox[{"C0", "[", 
+    RowBox[{
+     RowBox[{"p1", "^", "2"}], ",", 
+     RowBox[{"p2", "^", "2"}], ",", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"p1", "+", "p2"}], ")"}], "^", "2"}], ",", "0", ",", "0", ",", 
+     "0"}], "]"}], "]"}], "\n"}]], "Input",
+ CellChangeTimes->{{3.9696966267236633`*^9, 3.9696966459877987`*^9}, {
+  3.969696827028412*^9, 3.969696828589781*^9}, {3.969696936808153*^9, 
+  3.9696969402414227`*^9}},
+ CellLabel->"In[11]:=",ExpressionUUID->"22d6cd3e-5771-9141-a3f8-a7c36446aa3a"],
+
+Cell[BoxData[
+ FormBox[
+  RowBox[{"TBIExpand", "(", 
+   FormBox[
+    TagBox[
+     FormBox[
+      RowBox[{
+       SubscriptBox["\<\"C\"\>", "\<\"0\"\>"], "(", 
+       RowBox[{
+        SuperscriptBox["p1", "2"], ",", 
+        SuperscriptBox["p2", "2"], ",", 
+        SuperscriptBox[
+         RowBox[{"(", 
+          RowBox[{"p1", "+", "p2"}], ")"}], "2"], ",", "0", ",", "0", ",", 
+        "0"}], ")"}],
+      TraditionalForm],
+     HoldForm],
+    TraditionalForm], ")"}], TraditionalForm]], "Output",
+ CellChangeTimes->{{3.9696966338266582`*^9, 3.969696646425335*^9}, 
+   3.9696968290427704`*^9, 3.9696969409084187`*^9},
+ CellLabel->"Out[11]=",ExpressionUUID->"0209d980-ad31-2341-bfc0-651c0ad3d227"]
+}, Open  ]]
+},
+WindowSize->{1152, 579.6},
+WindowMargins->{{
+  Automatic, -5.399999999999864}, {-5.399999999999977, Automatic}},
+FrontEndVersion->"14.0 for Microsoft Windows (64-bit) (December 12, 2023)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"e5875d89-b6d0-4f40-87e1-b90d301c7f88"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 401, 9, 86, "Input",ExpressionUUID->"f64ea3f8-7d57-e941-9af9-2d1adea0fde0"],
+Cell[CellGroupData[{
+Cell[1006, 35, 272, 5, 22, "Print",ExpressionUUID->"83e72045-725b-1141-8e75-8965dbdae983"],
+Cell[1281, 42, 294, 5, 22, "Print",ExpressionUUID->"4c28eae0-f2b1-1940-9df1-7179f04564ac"],
+Cell[1578, 49, 491, 13, 26, "Print",ExpressionUUID->"b7f0eab0-bd35-684e-8d62-8edd6590135e"],
+Cell[2072, 64, 294, 5, 22, "Print",ExpressionUUID->"51aab317-d006-3f4a-a1ed-5d18884b07d3"],
+Cell[2369, 71, 617, 15, 26, "Print",ExpressionUUID->"f70ef6a0-336c-8e47-92d9-1a85ed922037"],
+Cell[2989, 88, 1297, 31, 245, "Print",ExpressionUUID->"ef3aa4ee-e897-3a4c-a2d3-6970589ab817"],
+Cell[4289, 121, 3625, 96, 55, "Print",ExpressionUUID->"461793c9-7b5e-6d44-b82b-f906a59197d5"],
+Cell[7917, 219, 336, 7, 26, "Print",ExpressionUUID->"5cf8a92d-cebf-6543-b8f2-9d64278f93f1"],
+Cell[8256, 228, 380, 9, 26, "Print",ExpressionUUID->"8cbc5f11-eabf-704f-9d94-74a8b6478f92"],
+Cell[8639, 239, 1932, 55, 30, "Print",ExpressionUUID->"47855293-a10e-1c4e-a961-bd11b0197b1c"],
+Cell[10574, 296, 274, 6, 26, "Print",ExpressionUUID->"8e8c067f-dc55-a147-811c-6077a5d408cb"],
+Cell[10851, 304, 310, 7, 26, "Print",ExpressionUUID->"96eeca34-5096-164a-89d3-37c6c7310754"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[11210, 317, 568, 14, 48, "Input",ExpressionUUID->"22d6cd3e-5771-9141-a3f8-a7c36446aa3a"],
+Cell[11781, 333, 698, 20, 34, "Output",ExpressionUUID->"0209d980-ad31-2341-bfc0-651c0ad3d227"]
+}, Open  ]]
+}
+]
+*)
+

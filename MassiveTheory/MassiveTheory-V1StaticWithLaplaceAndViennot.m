@@ -635,8 +635,7 @@ For[ii=1,ii<=Length[path],ii++,
 Z=VertexAssignment[graph, "excludedVertices"->locBC[[2]]];
 
 If[OptionValue["print"],
-Print["############################################\*
-StyleBox[\(##\)]####"];
+Print["##################################################"];
 Print["#####  Previous uncontracted partition function  #####"];
 Print[Z]
 ];

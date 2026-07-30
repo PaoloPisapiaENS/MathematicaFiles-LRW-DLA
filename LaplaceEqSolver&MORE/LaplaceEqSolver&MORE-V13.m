@@ -19,8 +19,10 @@
 
 
 
-SetOptions[$FrontEndSession,NotebookAutoSave->True]
-NotebookSave[]
+InitializationValue[$Initialization] = Hold[$HistoryLength = 2];
+<<"D:\\Offline_Documents\\University\\PhD_Paris\\PhD_work\\Simulations\\Kay-initialization.m"
+"Directory for read/write is \"D:\\Offline_Documents\\University\\PhD_Paris\\PhD_work\\Simulations\\MathematicaFiles-LRW-DLA-bLRW\\LaplaceEqSolver&MORE\\\""
+Quiet[<<"D:\Offline_Documents\University\PhD_Paris\PhD_work\Simulations\MathematicaFiles-LRW-DLA-bLRW\LRW-initialization.m"]
 
 
 (* ::Input::Initialization:: *)
@@ -550,7 +552,8 @@ locSource =
 actionTimeSlice [T_]:= Product[
 If[totWeights[[x]]===0  || MemberQ[OptionValue["excludedVertices"],x],1,
 (*FALSE*)V[(1+\[Gamma] Sum[locWeights[[x,y]](R[x,y,Red]\[Phi]s[y,Subscript[t, T+1],Subscript[k, x]]-1)\[Phi]s[x,Subscript[t, T+1],Subscript[k, x]]\[Phi][x,Subscript[t, T],Subscript[k, x]]\[Chi]s[y,Subscript[t, T],1],{y,Length[locVertices]}]+
-Sum[locWeights[[x,y]]/totWeights[[x]] R[x,y,Blue]\[Chi]s[y,Subscript[t, T],Subscript[i, x]]\[Chi][x,Subscript[t, T],Subscript[i, x]],{y,Length[locVertices]}]+ \[Phi]s[x,Subscript[t, T+1],Subscript[k, x]]\[Phi][x,Subscript[t, T],Subscript[k, x]]) ]
+Sum[locWeights[[x,y]]/totWeights[[x]] R[x,y,Blue]\[Chi]s[y,Subscript[t, T],Subscript[i, x]]\[Chi][x,Subscript[t, T],Subscript[i, x]],{y,Length[locVertices]}]+
+\[Phi]s[x,Subscript[t, T+1],Subscript[k, x]]\[Phi][x,Subscript[t, T],Subscript[k, x]]) ]
 ],{x,Length[locVertices]}]
 V[(1+ \[Phi]s[locSource,Subscript[t, T+1],Subscript[k, locSource]]\[Phi][locSource,Subscript[t, T],Subscript[k, locSource]]+OptionValue["sourceBC"] \[Chi][locSource,Subscript[t, T],1])]
 (*V[(1+ OptionValue["sourceBC"] \[Chi][locSource,Subscript[t, T],1])]*);
@@ -581,7 +584,7 @@ expDLAcorrectNorm=ExpectationValueBlock[Z %,"endTime"->endTime,"fields"->fields,
 (* ::Input::Initialization:: *)
 expDLAcorrectNorm/.\[Phi]s[b_,Subscript[t, a_],c_]->\[Phi]s[b,Subscript[t, a-1],Subscript[k, b]];
 Replace[%,a_/;(!NumericQ[a]):>a/(Znorm[a,"graph"->g,"fields"->fields,"\[Beta]rule"->{\[Beta][__]->1}]),1];
-expDLAcorrectNorm2=ExpectationValueBlock[Z %,"endTime"->endTime,"fields"->fields,"draw"->False,"Rrule"->{R[__,Blue]->1},"graph"->g]/.\[Gamma]->"\!\(\*SubscriptBox[\(\[Gamma]\), \(2\)]\)"/.\[Phi]s[b_,Subscript[t, a_],c_]->\[Phi]s[b,Subscript[t, a-1],Subscript[k, b]];
+expDLAcorrectNorm2=ExpectationValueBlock[Z %,"endTime"->endTime,"fields"->fields,"draw"->False,"Rrule"->{R[__,Blue]->1},"graph"->g]/.\[Gamma]->"\!\(\*SubscriptBox[\(\[Gamma]\), \(2\)]\)"/.\[Phi]s[b_,Subscript[t, a_],c_]->\[Phi]s[b,Subscript[t, a-1],Subscript[k, b]]
 
 
 (* ::Input::Initialization:: *)
