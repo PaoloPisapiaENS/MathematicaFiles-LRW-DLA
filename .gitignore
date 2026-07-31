@@ -9,3 +9,6 @@
 *.mx
 *.pdf
 LRW-Diagrams/
+
+# UPDATES ONLY THE .wl and .m
+*.nb
