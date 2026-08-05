@@ -273,7 +273,7 @@ Module[{locBC={{},{}},i,\[Phi]sol},
 If[Head[locSource]==List,
 For[i=1,i<=Length[locSource],i++,
 AppendTo[locBC[[1]],\[CapitalPhi][locSource[[i]]]== With[{x=Floor[(locSource[[i]]-1)/n]-Floor[n/2],y=Mod[(locSource[[i]]-1),n] -(Floor[n/2])},
-(Log[x^2+y^2 +1](*/Log[x^2+y^2 ]*)//N)]];
+(Log[x^2+y^2 ](*/Log[x^2+y^2 ]*)//N)]];
 AppendTo[locBC[[2]],locSource[[i]]];
 ]
 ,(*FALSE*)
