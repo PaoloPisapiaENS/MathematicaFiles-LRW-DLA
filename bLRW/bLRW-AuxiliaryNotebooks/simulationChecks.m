@@ -93,13 +93,14 @@ Reverse[SortBy[First[currentTallies],Last]]
 
 (* ::Input::Initialization:: *)
 Clear[LaplaceEqSolver];
-Options[LaplaceEqSolver]={"BC"->{{},{}} , "selectSolution"->0,"drawSolution"->False};
+Options[LaplaceEqSolver]={"BC"->{{},{}} , "selectSolution"->0,"drawSolution"->False,"print"->False};
 
-LaplaceEqSolver[graph_,OptionsPattern[]]:=Module[{locVertices,locWeights,totWeights,locRoot,locSource,locBC,equations,variables={},x,solution,solutionLabels,i,n},
+LaplaceEqSolver[graph_,OptionsPattern[]]:=Module[{locVertices,locIndices,locWeights,totWeights,locRoot,locSource,locBC,equations,variables={},x,solution,solutionLabels,i,n},
 Clear[\[CapitalPhi]];
 
 
 locVertices = VertexList@graph;
+locIndices=Table[i,{i,Length[locVertices]}];
 locWeights=WeightedAdjacencyMatrix[graph]//Normal;
 totWeights =Total[locWeights,{2}];
 
@@ -122,12 +123,17 @@ locSource=Flatten[Map[#[[1]]*n+#[[2]]&,locSource],1];
 
 If[Head[locSource]==List,
 For[i=1,i<=Length[locSource],i++,
+
+If[MemberQ[locBC[[2]],locSource[[i]]],Continue[]];
 AppendTo[locBC[[1]],\[CapitalPhi][locSource[[i]]]== 1];
 AppendTo[locBC[[2]],locSource[[i]]];
+
 ]
 ,(*FALSE*)
+If[MemberQ[locBC[[2]],locSource],Continue[]];
 AppendTo[locBC[[1]],\[CapitalPhi][locSource]== 1];
 AppendTo[locBC[[2]],locSource];
+
 ];
 
 AppendTo[locBC[[1]],\[CapitalPhi][locRoot]==0];
@@ -137,14 +143,16 @@ equations =locBC[[1]] ;
 
 
 Do[
-AppendTo[variables,\[CapitalPhi][x]];
-If[MemberQ[locBC[[2]],x],Continue[]];
-AppendTo[equations, \[CapitalPhi][x]==FullSimplify[Sum[locWeights[[x,y]]/totWeights[[x]] \[CapitalPhi][y],{y,Length[locVertices]}]]]
-,{x,locVertices}];
+AppendTo[variables,\[CapitalPhi][locVertices[[x]]]];
+If[MemberQ[locBC[[2]],locVertices[[x]]],Continue[]];
+AppendTo[equations, \[CapitalPhi][locVertices[[x]]]==FullSimplify[Sum[locWeights[[x,y]]/totWeights[[x]] \[CapitalPhi][locVertices[[y]]],{y,Length[locIndices]}]]]
+,{x,locIndices}];
 
-(*
-Print[equations];
-Print[variables];*)
+If[OptionValue["print"],
+Print[" ##### Equations to be solved: \n",equations];
+Print[" ##### Equations to be solved: \n",variables];
+];
+
 solution=Flatten@Solve[equations,{}(*variables*)];
 
 solutionLabels=N[solution]/.\[CapitalPhi][a_]->Floor[a];
@@ -165,12 +173,17 @@ Return[solution]
 
 
 (* ::Input::Initialization:: *)
-Clear[bLaplacianRW];
-Options[bLaplacianRW]={"draw"->False};
-bLaplacianRW[graph_,path__,b_:1,OptionsPattern[]]:=Module[{locSource,locRoot,locWeights,locVertices,denominator,prob=1},
+ClearAll[bLaplacianRW];
+Options[bLaplacianRW]={"draw"->False,"print"->tTrue};
+
+
+bLaplacianRW[graph_,path__,OptionsPattern[],b_:1,n_:n]:=Module[{locSource,locRoot,locWeights,locVertices,
+locIndices,denominator,tempProb,prob=1},
 
 locWeights=WeightedAdjacencyMatrix[graph]/.\[Beta][__]->1//Normal;
 locVertices=VertexList@graph;
+
+locIndices=Table[i,{i,Length[locVertices]}];
 
 (*Print[locVertices];*)
 
@@ -192,33 +205,120 @@ AppendTo[locBC[[2]],locSource[[i]]];
 AppendTo[locBC[[1]],\[CapitalPhi][locSource]== 1];
 AppendTo[locBC[[2]],locSource];
 ];
+
 For[i=1,i<=Length[path],i++,
 AppendTo[locBC[[1]],\[CapitalPhi][path[[i,1]]]==0];
 AppendTo[locBC[[2]],path[[i,1]]];
 
-(*Print["locBC=",locBC];*)
-
+If[OptionValue["print"],
+Print["locBC=",Sort/@locBC];
+];
 
 
 \[Phi]sol=LaplaceEqSolver[graph,"BC"->locBC(*,\[Phi]*)];
 
-(*Print[\[Phi]sol];*)
+If[OptionValue["print"],
+Print["#####  Laplace solution for transition "<>ToString[path[[i,1]]]<>" to "<>ToString[path[[i,2]]]<>"  #####"];
+Print[\[Phi]sol];
+];
+(*Return[\[Phi]sol];*)
 (*Return["good up to LaplaceEqSolver"];*)
 
-denominator=Sum[locWeights[[path[[i,1]],y]]*(Select[\[Phi]sol,#[[1]]==\[CapitalPhi][y] &][[1,2]])^b,{y,Length[locVertices]}];
+denominator=Sum[locWeights[[Position[locVertices,path[[i,1]]][[1,1]],y]]*(Select[\[Phi]sol,#[[1]]==\[CapitalPhi][locVertices[[y]]] &][[1,2]])^b,{y,Length[locIndices]}];
 (*Print[denominator];*)
 
+tempProb=1/denominatorlocWeights[[Position[locVertices,path[[i,1]]][[1,1]],Position[locVertices,path[[i,2]]][[1,1]]]]*(Select[\[Phi]sol,#[[1]]==\[CapitalPhi][path[[i,2]]] &][[1,2]])^b//FullSimplify;
 
+If[OptionValue["print"],
 Print["#####  Transition probability "<>ToString[path[[i,1]]]<>" to "<>ToString[path[[i,2]]]<>"  #####"];
-Print[(locWeights[[path[[i,1]],path[[i,2]]]]*(Select[\[Phi]sol,#[[1]]==\[CapitalPhi][path[[i,2]]] &][[1,2]])^b)/denominator/.\[Beta][_,_]->1//FullSimplify];
+Print[tempProb];
+];
 
-prob*=(locWeights[[path[[i,1]],path[[i,2]]]]*(Select[\[Phi]sol,#[[1]]==\[CapitalPhi][path[[i,2]]] &][[1,2]])^b)/denominator//FullSimplify;
+prob*=tempProb;
 Clear[\[Phi]sol];
 ]
 ];
 (*If[OptionValue["draw"],Print[DrawOnGraph[graph,path]]];*)
 Return[prob]
 ]
+
+(*
+bLaplacianRW[graph_,path__,options:OptionsPattern[]]:=bLaplacianRW[graph,path,options,1];*)
+
+
+(* ::Input::Initialization:: *)
+ClearAll[bLaplacianRWlogBC];
+Options[bLaplacianRWlogBC]={"draw"->False,"print"->tTrue};
+
+
+bLaplacianRWlogBC[graph_,path__,OptionsPattern[],b_:1,n_:n]:=Module[{locSource,locRoot,locWeights,locVertices,
+locIndices,denominator,tempProb,prob=1},
+
+locWeights=WeightedAdjacencyMatrix[graph]/.\[Beta][__]->1//Normal;
+locVertices=VertexList@graph;
+
+locIndices=Table[i,{i,Length[locVertices]}];
+
+(*Print[locVertices];*)
+
+locRoot = 
+ Select[(List@@@PropertyValue[graph,VertexLabels])[[2;;]],StringMatchQ[#[[2]],___~~"ROOT"]&][[All,1]][[1]];
+locSource = 
+ Select[(List@@@PropertyValue[graph,VertexLabels])[[2;;]],StringMatchQ[#[[2]],___~~"SOURCE"]&][[All,1]];
+
+If[locRoot =!= path[[1,1]], Print[Style["####  WRONG ROOT  ####",RGBColor[1, 0, 0]]]; Return[NULL]];
+If[!MemberQ[locSource,path[[-1,2]]], Print[Style["####  WRONG SOURCE  ####",RGBColor[1, 0, 0]]];Return[NULL]];
+
+Module[{locBC={{},{}},i,\[Phi]sol},
+If[Head[locSource]==List,
+For[i=1,i<=Length[locSource],i++,
+AppendTo[locBC[[1]],\[CapitalPhi][locSource[[i]]]== With[{x=Floor[(locSource[[i]]-1)/n]-Floor[n/2],y=Mod[(locSource[[i]]-1),n] -(Floor[n/2])},
+(Log[x^2+y^2 +1](*/Log[x^2+y^2 ]*)//N)]];
+AppendTo[locBC[[2]],locSource[[i]]];
+]
+,(*FALSE*)
+AppendTo[locBC[[1]],\[CapitalPhi][locSource]== 1];
+AppendTo[locBC[[2]],locSource];
+];
+
+For[i=1,i<=Length[path],i++,
+AppendTo[locBC[[1]],\[CapitalPhi][path[[i,1]]]==0];
+AppendTo[locBC[[2]],path[[i,1]]];
+
+If[OptionValue["print"],
+Print["locBC=",Sort/@locBC];
+];
+
+
+\[Phi]sol=LaplaceEqSolver[graph,"BC"->locBC(*,\[Phi]*)];
+
+If[OptionValue["print"],
+Print["#####  Laplace solution for transition "<>ToString[path[[i,1]]]<>" to "<>ToString[path[[i,2]]]<>"  #####"];
+Print[\[Phi]sol];
+];
+(*Return[\[Phi]sol];*)
+(*Return["good up to LaplaceEqSolver"];*)
+
+denominator=Sum[locWeights[[Position[locVertices,path[[i,1]]][[1,1]],y]]*(Select[\[Phi]sol,#[[1]]==\[CapitalPhi][locVertices[[y]]] &][[1,2]])^b,{y,Length[locIndices]}];
+(*Print[denominator];*)
+
+tempProb=1/denominatorlocWeights[[Position[locVertices,path[[i,1]]][[1,1]],Position[locVertices,path[[i,2]]][[1,1]]]]*(Select[\[Phi]sol,#[[1]]==\[CapitalPhi][path[[i,2]]] &][[1,2]])^b//FullSimplify;
+
+If[OptionValue["print"],
+Print["#####  Transition probability "<>ToString[path[[i,1]]]<>" to "<>ToString[path[[i,2]]]<>"  #####"];
+Print[tempProb];
+];
+
+prob*=tempProb;
+Clear[\[Phi]sol];
+]
+];
+(*If[OptionValue["draw"],Print[DrawOnGraph[graph,path]]];*)
+Return[prob]
+]
+
+(*
+bLaplacianRW[graph_,path__,options:OptionsPattern[]]:=bLaplacianRW[graph,path,options,1];*)
 
 
 (* ::Input::Initialization:: *)
