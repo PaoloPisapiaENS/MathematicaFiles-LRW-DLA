@@ -1963,7 +1963,7 @@ Reverse[SortBy[First[currentTallies],Last]]
 
 
 (* ::Section::Closed:: *)
-(*L=4 (n=9, active is 4) path Lengths histograms (b=1_LRW-2d-square-lattice-data-9_repeat-1000000_tol-1e-10-LogSpacing.csv (x2))*)
+(*L=4 (n=9, active is 4) path Lengths histograms (b=1_LRW-2d-square-lattice-data-9_repeat-1000000_tol-1e-10-LogSpacing.csv (x2))		NOT OK?*)
 
 
 (* ::Input:: *)
@@ -2004,7 +2004,7 @@ Reverse[SortBy[First[currentTallies],Last]]
 (*Compared to the analytical result below, (3->16.79%,4->38.1154%) we are a little off *)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*L=4 (n=9, active is 4) path Lengths histograms (b=1_LRW-2d-square-lattice-data-9_repeat-1000000_tol-1e-10-LogSpacing-FullUpdatesOnly.csv (x2))	OK*)
 
 
@@ -2048,10 +2048,10 @@ Reverse[SortBy[First[currentTallies],Last]]
 
 
 (* ::Text:: *)
-(*Compared to the analytical result below, (3->16.79%,4->33.672%) we are a little off, but it's nice!! (gets better with increasing data)*)
+(*Compared to the analytical result below, (3->17.7312%,4->33.672%) we are a little off, but it's nice!! (gets better with increasing data)*)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*L=4 (n=9, active is 4) path Lengths histograms (b=1_LRW-2d-square-lattice-data-9_repeat-500000_tol-1e-10-LogSpacing-FullUpdatesEvery3.csv)		OK*)
 
 
@@ -2095,7 +2095,148 @@ Reverse[SortBy[First[currentTallies],Last]]
 
 
 (* ::Text:: *)
-(*Compared to the analytical result below, (3->16.79%,4->33.672%) we are a little off, but it's nice!! (gets better with increasing data)*)
+(*Compared to the analytical result below, (3->17.7312%,4->33.672%) we are a little off, but it's nice!! (gets better with increasing data)*)
+
+
+(* ::Section::Closed:: *)
+(*L=4 (n=9, active is 4) path Lengths histograms (b=1_LRW-2d-square-lattice-data-9_repeat-1000000_tol-1e-10-LogSpacing-LogBC.csv)		NOT OK?? *)
+
+
+(* ::Input:: *)
+(*n=9;*)
+(*(*1. Read as text and split by double carriage returns/newlines*)rawBlocks=Import["D:\\Offline_Documents\\University\\PhD_Paris\\PhD_work\\Simulations\\bLRW\\b-LRWdata\\2d\\b=1_LRW-2d-square-lattice-data-9_repeat-1000000_tol-1e-10-LogSpacing-LogBC.csv","CSV"];*)
+(*(*2. Convert each separate text block cleanly into an array of coordinate pairs*)*)
+(*paths=Developer`ToPackedArray[rawBlocks];*)
+(*paths[[1;;10]]*)
+(*pathDistr=paths[[All,2]];*)
+(*Length@pathDistr*)
+
+
+(* ::Input:: *)
+(*Histogram[#,Length[#],"PDF",PlotRange->All]&@pathDistr*)
+
+
+(* ::Input:: *)
+(*(*1. Calculate relative frequencies ("probabilities")*)*)
+(*Sort@Tally[pathDistr]*)
+(*{pathDistr2,symmetricCounts}=Transpose[%]*)
+
+
+(* ::Input:: *)
+(*pathDistr2==Sort@DeleteDuplicates@pathDistr*)
+
+
+(* ::Input:: *)
+(*Mean[pathDistr]//N *)
+(*4.718431`(*WITH 100000*)*)
+
+
+(* ::Input:: *)
+(*totalPaths=Length[pathDistr];*)
+(*symmetricProbabilities=symmetricCounts/totalPaths;*)
+(**)
+
+
+(* ::Input:: *)
+(*(*3. Generate the BarChart with values on top and unique symmetry families on the bottom*)BarChart[symmetricProbabilities[[#]],ChartLabels->Placed[pathDistr2,Axis],LabelingFunction->(Placed[Row[{NumberForm[100.*#1,{5,2}],"%"}],Above]&),Frame->True,FrameLabel->{"Unique Paths (Symmetry Families Included)","Relative Occurrence (Probability)"},PlotLabel->"Symmetric Path Distribution",ChartStyle->RGBColor[0.87,0.71,0.34],ImageSize->900(*,PlotRange->{All,{0,Max[symmetricProbabilities]*1.15}}*)]&@Span[All]*)
+
+
+(* ::Text:: *)
+(*Compared to the analytical result below, (3->16.7157%,4->33.2657%) we are a little off*)
+
+
+(* ::Section:: *)
+(*L=4 (n=9, active is 4) path Lengths histograms (b=1_LRW-2d-square-lattice-data-9_repeat-3000000_tol-1e-10-LogSpacing-LogBC.csv I changed the apply_BC by imposing a static_cast<double>)		PERFECT*)
+
+
+(* ::Input:: *)
+(*n=9;*)
+(*(*1. Read as text and split by double carriage returns/newlines*)rawBlocks=Import["D:\\Offline_Documents\\University\\PhD_Paris\\PhD_work\\Simulations\\bLRW\\b-LRWdata\\2d\\b=1_LRW-2d-square-lattice-data-9_repeat-3000000_tol-1e-10-LogSpacing-LogBC.csv","CSV"];*)
+(*(*2. Convert each separate text block cleanly into an array of coordinate pairs*)*)
+(*paths=Developer`ToPackedArray[rawBlocks];*)
+(*paths[[1;;10]]*)
+(*pathDistr=paths[[All,2]];*)
+(*Length@pathDistr*)
+
+
+(* ::Input:: *)
+(*Histogram[#,Length[#],"PDF",PlotRange->All]&@pathDistr*)
+
+
+(* ::Input:: *)
+(*(*1. Calculate relative frequencies ("probabilities")*)*)
+(*Sort@Tally[pathDistr]*)
+(*{pathDistr2,symmetricCounts}=Transpose[%]*)
+
+
+(* ::Input:: *)
+(*pathDistr2==Sort@DeleteDuplicates@pathDistr*)
+
+
+(* ::Input:: *)
+(*Mean[pathDistr]//N *)
+(*4.718431`(*WITH 100000*)*)
+
+
+(* ::Input:: *)
+(*totalPaths=Length[pathDistr];*)
+(*symmetricProbabilities=symmetricCounts/totalPaths;*)
+(**)
+
+
+(* ::Input:: *)
+(*(*3. Generate the BarChart with values on top and unique symmetry families on the bottom*)BarChart[symmetricProbabilities[[#]],ChartLabels->Placed[pathDistr2,Axis],LabelingFunction->(Placed[Row[{NumberForm[100.*#1,{5,2}],"%"}],Above]&),Frame->True,FrameLabel->{"Unique Paths (Symmetry Families Included)","Relative Occurrence (Probability)"},PlotLabel->"Symmetric Path Distribution",ChartStyle->RGBColor[0.87,0.71,0.34],ImageSize->900(*,PlotRange->{All,{0,Max[symmetricProbabilities]*1.15}}*)]&@Span[All]*)
+
+
+(* ::Text:: *)
+(*Compared to the analytical result below, (3->16.7157%,4->33.2657%) we are perfect here*)
+
+
+(* ::Section::Closed:: *)
+(*L=4 (n=9, active is 4) path Lengths histograms (b=1_LRW-2d-square-lattice-data-9_repeat-1000000_tol-1e-10-SquareBC-LogSpacing.csv)		Not ok*)
+
+
+(* ::Input:: *)
+(*n=9;*)
+(*(*1. Read as text and split by double carriage returns/newlines*)rawBlocks=Import["D:\\Offline_Documents\\University\\PhD_Paris\\PhD_work\\Simulations\\bLRW\\b-LRWdata\\2d\\b=1_LRW-2d-square-lattice-data-9_repeat-1000000_tol-1e-10-SquareBC-LogSpacing.csv","CSV"];*)
+(*(*2. Convert each separate text block cleanly into an array of coordinate pairs*)*)
+(*paths=Developer`ToPackedArray[rawBlocks];*)
+(*paths[[1;;10]]*)
+(*pathDistr=paths[[All,2]];*)
+(*Length@pathDistr*)
+
+
+(* ::Input:: *)
+(*Histogram[#,Length[#],"PDF",PlotRange->All]&@pathDistr*)
+
+
+(* ::Input:: *)
+(*(*1. Calculate relative frequencies ("probabilities")*)*)
+(*Sort@Tally[pathDistr]*)
+(*{pathDistr2,symmetricCounts}=Transpose[%]*)
+
+
+(* ::Input:: *)
+(*pathDistr2==Sort@DeleteDuplicates@pathDistr*)
+
+
+(* ::Input:: *)
+(*Mean[pathDistr]//N *)
+(*4.718431`(*WITH 100000*)*)
+
+
+(* ::Input:: *)
+(*totalPaths=Length[pathDistr];*)
+(*symmetricProbabilities=symmetricCounts/totalPaths;*)
+(**)
+
+
+(* ::Input:: *)
+(*(*3. Generate the BarChart with values on top and unique symmetry families on the bottom*)BarChart[symmetricProbabilities[[#]],ChartLabels->Placed[pathDistr2,Axis],LabelingFunction->(Placed[Row[{NumberForm[100.*#1,{5,2}],"%"}],Above]&),Frame->True,FrameLabel->{"Unique Paths (Symmetry Families Included)","Relative Occurrence (Probability)"},PlotLabel->"Symmetric Path Distribution",ChartStyle->RGBColor[0.87,0.71,0.34],ImageSize->900(*,PlotRange->{All,{0,Max[symmetricProbabilities]*1.15}}*)]&@Span[All]*)
+
+
+(* ::Text:: *)
+(*Compared to the analytical result below, (3->16.7157%,4->33.2657%) we are *)
 
 
 (* ::Section::Closed:: *)
@@ -3537,7 +3678,7 @@ Reverse[SortBy[First[currentTallies],Last]]
 (*Compared to the analytical result below, (6->1.04258%) we are a little off *)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*L=7 (n=15, active is 8) path Lengths histograms (b=1_LRW-2d-square-lattice-data-15_repeat-100000_tol-1e-10-SquareBC-LogSpacing.csv (x2) )*)
 
 
@@ -4300,7 +4441,7 @@ Return[solution]
 (*LaplaceEqSolver[g,"BC"->{{\[CapitalPhi][112]==0,\[CapitalPhi][98]==0,\[CapitalPhi][99]==0},{112,98,99}},"drawSolution"->True]//N*)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*bLaplacianRW[]*)
 
 
@@ -4627,7 +4768,7 @@ Module[{locBC={{},{}},i,\[Phi]sol},
 If[Head[locSource]==List,
 For[i=1,i<=Length[locSource],i++,
 AppendTo[locBC[[1]],\[CapitalPhi][locSource[[i]]]== With[{x=Floor[(locSource[[i]]-1)/n]-Floor[n/2],y=Mod[(locSource[[i]]-1),n] -(Floor[n/2])},
-(Log[x^2+y^2 +1](*/Log[x^2+y^2 ]*)//N)]];
+(Log[x^2+y^2 ](*/Log[x^2+y^2 ]*)//N)]];
 AppendTo[locBC[[2]],locSource[[i]]];
 ]
 ,(*FALSE*)
@@ -4874,7 +5015,7 @@ bLaplacianRW[graph_,path__,options:OptionsPattern[]]:=bLaplacianRW[graph,path,op
 (*g=Graph[vertices,properEdges,VertexLabels->myLabels]*)
 
 
-(* ::Subsubsection:: *)
+(* ::Subsubsection::Closed:: *)
 (*Linear path: {{Root,12,Source}}*)
 
 
@@ -4963,7 +5104,7 @@ bLaplacianRW[graph_,path__,options:OptionsPattern[]]:=bLaplacianRW[graph,path,op
 (*g=Graph[vertices,properEdges,VertexLabels->myLabels,ImageSize->Large]*)
 
 
-(* ::Subsubsection:: *)
+(* ::Subsubsection::Closed:: *)
 (*Linear path (length=2) with bLaplacianRWlogBC[]*)
 
 
@@ -4981,7 +5122,7 @@ bLaplacianRW[graph_,path__,options:OptionsPattern[]]:=bLaplacianRW[graph,path,op
 (*Compared to Symmetric paths: 43.3036% from the BC=1 everywhere!!!!!*)
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*n=4*)
 
 
@@ -5031,7 +5172,7 @@ bLaplacianRW[graph_,path__,options:OptionsPattern[]]:=bLaplacianRW[graph,path,op
 (*g=Graph[vertices,properEdges,VertexLabels->myLabels]*)
 
 
-(* ::Subsubsection::Closed:: *)
+(* ::Subsubsection:: *)
 (*b=1*)
 
 
@@ -5046,7 +5187,7 @@ bLaplacianRW[graph_,path__,options:OptionsPattern[]]:=bLaplacianRW[graph,path,op
 
 
 (* ::Item::Closed:: *)
-(*LittleL path: {{25,26,27,20,Source}} (IF (Floor[n/2] - 0.6) )*)
+(*LittleL path: {{25,26,27,20,Source}} (IF (Floor[n/2] - 0.6) ) BS NO NOT USE*)
 
 
 (* ::Input:: *)
@@ -5193,6 +5334,109 @@ bLaplacianRW[graph_,path__,options:OptionsPattern[]]:=bLaplacianRW[graph,path,op
 (*Row[{"Symmetric paths: ",N[%%]*100*4*2,"%"}]*)
 
 
+(* ::Subsubsection:: *)
+(*To be used with LogBC*)
+
+
+(* ::Input:: *)
+(*n=4;*)
+(*n=2*n-1;*)
+(*(**)
+(*edges = Flatten[Table[Table[{{{x,y},{x,y+1}},{{x,y},{x+1,y}}},{x,-Floor[n/2],Floor[n/2]}],{y,-Floor[n/2],Floor[n/2]}],2];*)
+(**)*)
+(* Flatten[*)
+(*Table[*)
+(*Table[*)
+(*With[{i=x*n+y+1},*)
+(*{If[Mod[i-1,n]==n-1,{},{i,i+1}],{i,i+n}}]*)
+(*,{x,0,n-1}]*)
+(*,{y,0,n-1}]*)
+(*,2];*)
+(*DeleteCases[%,{}];*)
+(**)
+(*edges =Sort@Select[%,#[[1]]<n*n+1&&#[[2]]<n*n+1&];*)
+(*(**)
+(*properEdges=Flatten[edges/.{{a__},{b__}}->{{a}<->{b}},1];*)*)
+(*properEdges=Sort[Flatten[edges/.{a_,b_}:>{a<->b},1]];*)
+(*vertices=Sort[DeleteDuplicates[Flatten[edges,1]]];*)
+(*(*sourceEdges=Select[vertices,Abs[#[[1]]]==Floor[n/2]||Abs[#[[2]]]==Floor[n/2]&];*)*)
+(*(*sourceEdges=Select[vertices,*)
+(*Abs[#]<=n*)
+(*||n*(n-1)<=Abs[#]<=n*n*)
+(*||Mod[Abs[#],n]==0*)
+(*||Mod[Abs[#],n]==n-1&];*)
+(**)*)
+(**)
+(*threshold=(Floor[n/2]+2);*)
+(*sourceThreshold=(Floor[n/2]-0.);*)
+(**)
+(*excludeVertices=Sort@Select[vertices,With[{x=Floor[(#-1)/n]-Floor[n/2],y=Mod[(#-1),n] -(Floor[n/2])},*)
+(*(Sqrt[x^2+y^2 ]>threshold)]&];*)
+(**)
+(*vertices=Sort@Select[vertices,With[{x=Floor[(#-1)/n]-Floor[n/2],y=Mod[(#-1),n] -(Floor[n/2])},*)
+(*(Sqrt[x^2+y^2 ]<=threshold)]&];*)
+(**)
+(*properEdges=Sort@Select[properEdges,!MemberQ[excludeVertices,#[[1]]]&&!MemberQ[excludeVertices,#[[2]]]&];*)
+(*sourceEdges=Sort[Select[vertices,*)
+(*With[{x=Floor[(#-1)/n]-Floor[n/2],y=Mod[(#-1),n] -(Floor[n/2])},*)
+(*(sourceThreshold<=Sqrt[x^2+y^2 ]<=threshold)]&]];*)
+(*(*myLabels=Flatten[{Map[#->"SOURCE"&,sourceEdges],{0,0}->"ROOT","Name"},1];*)
+(**)*)
+(*myLabels=Flatten[{Map[#->"SOURCE"&,sourceEdges],(Floor[n/2]*(n))+Floor[n/2]+1->"ROOT","Name"},1];*)
+(*Graph[vertices,properEdges,VertexLabels->"Name"]*)
+(*g=Graph[vertices,properEdges,VertexLabels->myLabels,ImageSize->Large]*)
+
+
+(* ::Subsubsection:: *)
+(*Linear path (length=3) with bLaplacianRWlogBC[]*)
+
+
+(* ::Input:: *)
+(*{{25,26,27,28}};*)
+(*%//.{d___,{a_,b_,c___}}:>{d,{a,b},{b,c}};*)
+(*path=Most[%](*{{113,114},{114,115},{115,116},{116,117},{117,118},{118,119},{119,120}};*)*)
+(*bLaplacianRWlogBC[g,path]*)
+(*Row[{"Single path",path,": ",N[%]*100,"%"}]*)
+(**)
+(*Row[{"Symmetric paths: ",N[%%]*100*4,"%"}]*)
+
+
+(* ::Text:: *)
+(*Compared to Symmetric paths: 17.73% from the BC=1 everywhere!!!!!*)
+
+
+(* ::Item:: *)
+(*LittleL path: {{25,26,27,20,Source}}*)
+
+
+(* ::Input:: *)
+(*{{25,26,27,20,21}};*)
+(*%//.{d___,{a_,b_,c___}}:>{d,{a,b},{b,c}};*)
+(*path=Most[%]*)
+(*(bLaplacianRWlogBC[g,path]//N)*100*)
+(*Print[Row[{"Accounting for symmetry: ",l4p1=%*4*2,"%"}]]*)
+
+
+(* ::Input:: *)
+(*{{25,26,19,20,21}};*)
+(*%//.{d___,{a_,b_,c___}}:>{d,{a,b},{b,c}};*)
+(*path=Most[%]*)
+(*(bLaplacianRWlogBC[g,path]//N)*100*)
+(*Print[Row[{"Accounting for symmetry: ",l4p2=%*4*2,"%"}]]*)
+
+
+(* ::Input:: *)
+(*{{25,26,19,12,5}};*)
+(*%//.{d___,{a_,b_,c___}}:>{d,{a,b},{b,c}};*)
+(*path=Most[%]*)
+(*(bLaplacianRWlogBC[g,path]//N)*100*)
+(*Print[Row[{"Accounting for symmetry: ",l4p3=%*4*2,"%"}]]*)
+
+
+(* ::Input:: *)
+(*l4p1+l4p2+l4p3*)
+
+
 (* ::Subsection::Closed:: *)
 (*n=7*)
 
@@ -5331,7 +5575,7 @@ bLaplacianRW[graph_,path__,options:OptionsPattern[]]:=bLaplacianRW[graph,path,op
 (*l7p1+l7p2+l7p3+l7p4+l7p5+l7p6*)
 
 
-(* ::Subsection:: *)
+(* ::Subsection::Closed:: *)
 (*n=8*)
 
 
@@ -5339,7 +5583,7 @@ bLaplacianRW[graph_,path__,options:OptionsPattern[]]:=bLaplacianRW[graph,path,op
 (*Graph[vertices,properEdges,VertexLabels->"Name",ImageSize->Large]*)
 
 
-(* ::Subsubsection:: *)
+(* ::Subsubsection::Closed:: *)
 (*Graph def*)
 
 
@@ -5392,7 +5636,7 @@ bLaplacianRW[graph_,path__,options:OptionsPattern[]]:=bLaplacianRW[graph,path,op
 (*g=Graph[vertices,properEdges,VertexLabels->myLabels,ImageSize->Large]*)
 
 
-(* ::Subsubsection:: *)
+(* ::Subsubsection::Closed:: *)
 (*Linear path (length=7) with bLaplacianRW[]*)
 
 
@@ -5403,10 +5647,20 @@ bLaplacianRW[graph_,path__,options:OptionsPattern[]]:=bLaplacianRW[graph,path,op
 (*bLaplacianRW[g,path]*)
 (*Row[{"Single path",path,": ",N[%]*100,"%"}]*)
 (**)
-(*Row[{"Symmetric paths: ",N[%%]*100*4*3,"%"}]*)
+(*Row[{"Symmetric paths: ",N[%%]*100*4,"%"}]*)
 
 
-(* ::Subsubsection:: *)
+(* ::Input:: *)
+(*{{113,114,115,116,117,118,119,104}};*)
+(*%//.{d___,{a_,b_,c___}}:>{d,{a,b},{b,c}};*)
+(*path=Most[%](*{{113,114},{114,115},{115,116},{116,117},{117,118},{118,119},{119,120}};*)*)
+(*bLaplacianRW[g,path]*)
+(*Row[{"Single path",path,": ",N[%]*100,"%"}]*)
+(**)
+(*Row[{"Symmetric paths: ",N[%%]*100*4,"%"}]*)
+
+
+(* ::Subsubsection::Closed:: *)
 (*Linear path (length=7) with bLaplacianRWlogBC[]*)
 
 
@@ -5417,7 +5671,27 @@ bLaplacianRW[graph_,path__,options:OptionsPattern[]]:=bLaplacianRW[graph,path,op
 (*bLaplacianRWlogBC[g,path]*)
 (*Row[{"Single path",path,": ",N[%]*100,"%"}]*)
 (**)
-(*Row[{"Symmetric paths: ",N[%%]*100*4*3,"%"}]*)
+(*Row[{"Symmetric paths: ",N[%%]*100*4,"%"}]*)
+
+
+(* ::Input:: *)
+(*{{113,114,115,116,117,118,119,104}};*)
+(*%//.{d___,{a_,b_,c___}}:>{d,{a,b},{b,c}};*)
+(*path=Most[%](*{{113,114},{114,115},{115,116},{116,117},{117,118},{118,119},{119,120}};*)*)
+(*bLaplacianRWlogBC[g,path]*)
+(*Row[{"Single path",path,": ",N[%]*100,"%"}]*)
+(**)
+(*Row[{"Symmetric paths: ",N[%%]*100*4,"%"}]*)
+
+
+(* ::Input:: *)
+(*{{113,114,115,116,117,118,119,134}};*)
+(*%//.{d___,{a_,b_,c___}}:>{d,{a,b},{b,c}};*)
+(*path=Most[%](*{{113,114},{114,115},{115,116},{116,117},{117,118},{118,119},{119,120}};*)*)
+(*bLaplacianRWlogBC[g,path]*)
+(*Row[{"Single path",path,": ",N[%]*100,"%"}]*)
+(**)
+(*Row[{"Symmetric paths: ",N[%%]*100*4,"%"}]*)
 
 
 (* ::Subsubsection::Closed:: *)
