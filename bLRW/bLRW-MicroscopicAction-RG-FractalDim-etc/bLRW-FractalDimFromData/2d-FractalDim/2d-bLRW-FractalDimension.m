@@ -29,4 +29,9 @@ Show[{plotSLE},PlotRange->{1,2},AxesLabel->{b,Subscript[d, f]},PlotLabel->"Lawer
 
 
 
+(* ::Input::Initialization:: *)
+fitFuncs=Table[x^(-i),{i,-1,3}]
+fitFuncs={x,1,Exp[-x]}
+
+
 

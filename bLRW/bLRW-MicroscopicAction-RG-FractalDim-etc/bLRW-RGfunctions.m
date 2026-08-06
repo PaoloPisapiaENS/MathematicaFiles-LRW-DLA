@@ -24,6 +24,7 @@
 (*With[{nb=EvaluationNotebook[]},RunScheduledTask[If["ModifiedInMemory"/. NotebookInformation[nb],NotebookSave[nb]],300]]
 NotebookSave[]*)
 FS=FullSimplify;
+<<"D:\\Offline_Documents\\University\\PhD_Paris\\PhD_work\\Simulations\\Kay-initialization.m"
 
 
 (* ::Input::Initialization:: *)

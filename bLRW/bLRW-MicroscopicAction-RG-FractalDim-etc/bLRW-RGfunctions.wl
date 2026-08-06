@@ -9,6 +9,7 @@
 (*With[{nb=EvaluationNotebook[]},RunScheduledTask[If["ModifiedInMemory"/. NotebookInformation[nb],NotebookSave[nb]],300]]
 NotebookSave[]*)
 FS=FullSimplify;
+<<"D:\\Offline_Documents\\University\\PhD_Paris\\PhD_work\\Simulations\\Kay-initialization.m"
 
 
 (* ::Input:: *)
@@ -1310,8 +1311,9 @@ twoLoopZ\[Gamma]=(b(b-1))/2 ( sunset + (hat+1/2 (banana)^2(* From \[CapitalGamma
 (*\[Section]\[Section]\[Section] After splitting the contributions: b=1*)
 
 
-(* ::Item::Closed:: *)
+(* ::Item:: *)
 (*Here I just replace Z_gt by Z_g*Z_\[Gamma]1, but this should be the wrong way to compute \[Beta]... However the result is correct*)
+(*I FINALLY MADE UP MY MIND AND CONVINCED MYSELF THAT THIS IS CORRECT*)
 
 
 (* ::Input:: *)
@@ -1319,11 +1321,13 @@ twoLoopZ\[Gamma]=(b(b-1))/2 ( sunset + (hat+1/2 (banana)^2(* From \[CapitalGamma
 (**)
 (*Z\[Gamma]1=1+ g 1/\[Epsilon]-g^2 (-2/\[Epsilon]^2+1/(2\[Epsilon]));*)
 (**)
-(*Zgt=Zg Z\[Gamma]1 /.z[_]->1;*)
-(*Series[Zgt,{g,0,2}]//FS//Normal*)
-(*Series[%,{\[Epsilon],0,0}]//FS//Normal*)
+(*loopOrder=1;*)
 (**)
-(*\[Beta]FunctionFromZ[Series[Zgt,{g,0,2}]//FS//Normal,3]*)
+(*Zgt=Zg Z\[Gamma]1 /.z[_]->1;*)
+(*Series[Zgt,{g,0,loopOrder}]//FS//Normal*)
+(*Series[%,{\[Epsilon],0,0}]//FS//Normal;*)
+(**)
+(*\[Beta]FunctionFromZ[Series[Zgt,{g,0,loopOrder}]//FS//Normal,loopOrder+1]*)
 (*RGeq2=Simplify[Normal[%]]==0;*)
 
 
@@ -2880,7 +2884,7 @@ dfSLE=1+3/(4(2b+1));
 (*Limit[{dfRG1L,dfRG1Lsimp,dfRG2Lsimp,dfRG2Lwf,dfRG2L,dfRG2Lsimp,dfSLE},b->\[Infinity]]/.\[Epsilon]->2*)
 
 
-(* ::Subsubsection:: *)
+(* ::Subsection:: *)
 (*\[Section]\[Section] 2d*)
 
 
@@ -2916,7 +2920,7 @@ dfSLE=1+3/(4(2b+1));
 (*%/.\[Epsilon]->2*)
 
 
-(* ::Item:: *)
+(* ::Subsubsection:: *)
 (*Plots*)
 
 
@@ -2956,6 +2960,51 @@ dfSLE=1+3/(4(2b+1));
 
 (* ::Input:: *)
 (*(* The errors are under hestimated *)*)
+
+
+(* ::Item:: *)
+(*Plot for Kay*)
+
+
+(* ::Input:: *)
+(*endRange=5;*)
+(*dfRG2Lwf:=dfWF;*)
+(**)
+(**)
+(*Simulation2d=ListPlot[{{1,Around[1.2486744695483691`, 0.023270605268075166`]},{2,Around[1.1151146520584079`, 0.0134148268356009]},{3,Around[1.0768665526174213`, 0.014642777375504247`]},{4,Around[1.0474461998303197`, 0.008312476568391155]},{5,Around[1.0454880607320536`, 0.0064093876238445445`]}},PlotStyle->{RGBColor[0, 1, 0],PointSize[0.005]},PlotLegends->Placed[{"Simulation Data (old)"},{Right,Top}]];*)
+(**)
+(**)
+(*Simulation2dGemini=ListPlot[{{0, Around[1.7534581201029278`,0.019063147975801702`](*1.753\[PlusMinus]0.006*)}*)
+(*,{1,Around[1.25127,0.0214579](*1.275\[PlusMinus]0.008*)}*)
+(*,{2,Around[1.148,0.014](*1.1659\[PlusMinus]0.0019*)}*)
+(*,{3,Around[1.1072,0.0120271](*1.1073\[PlusMinus]0.0024*)}*)
+(*,{4,Around[1.08667,0.01](*1.0737\[PlusMinus]0.0018*)}*)
+(*,{5,Around[1.06705,0.006](*1.0670\[PlusMinus]0.0012*)}(*,{10,1.0251\[PlusMinus]0.0012}*)}*)
+(*,PlotStyle->{RGBColor[0, 0.66, 0],PointSize[0.005]},(*PlotMarkers->x,*)PlotLegends->Placed[{Style["Simulated Data \!\(\**)
+(*StyleBox[\"d\",\nFontSlant->\"Italic\"]\)=2"(* (Gemini-opt1)"*),FontFamily->"Times"]},{Right,Top}]];*)
+(**)
+(*plotSLE=Plot[dfSLE,{b,0,endRange},PlotStyle->RGBColor[1, 0, 0],PlotRange->All, PlotLegends->Placed[{Style[Row[{"SLE: \!\(\*SubscriptBox[\(d\), \(f\)]\) = ",TraditionalForm[#]}]&@dfSLE,FontFamily->"Times"]},{Right,Top}]];*)
+(**)
+(*plotRG1L=Plot[#/.\[Epsilon]->2,{b,0,endRange},PlotStyle->RGBColor[0.64, 0, 1],PlotRange->All,PlotLegends->Placed[{Row[{"OLD 1-Loop: ",TraditionalForm[#]}]},{Right,Top}]]&@dfRG1L;*)
+(**)
+(*plotRG1Lsimp=Plot[#/.\[Epsilon]->2,{b,0,endRange},PlotStyle->RGBColor[0, 0, 1],PlotRange->All,PlotLegends->Placed[{Style[Row[{"FT@1-Loop: \!\(\*SubscriptBox[\(d\), \(f\)]\) = ",TraditionalForm[#],"\!\(\*SubscriptBox[\(|\), \(\[Epsilon] = 2\)]\)"}],FontFamily->"Times"]},{Right,Top}]]&@dfRG1Lsimp;*)
+(**)
+(*plotRG2Lsimp=Plot[#/.\[Epsilon]->2,{b,0,endRange},PlotStyle->RGBColor[0, 1, 1],PlotRange->All,PlotLegends->Placed[{Row[{"NEW 2-Loop: ",TraditionalForm[#]}]},{Right,Top}]]&@dfRG2Lsimp;*)
+(**)
+(**)
+(*(*plotRG2Lwf=Plot[dfRG2Lwf/.\[Epsilon]->2/.a->+3,{b,0,endRange},PlotStyle->,PlotRange->All];*)*)
+(*(*plotRG2L=Plot[dfRG2L/.\[Epsilon]->2,{b,0,endRange},PlotStyle->,PlotRange->All];*)*)
+(**)
+(*Show[{plotSLE*)
+(*(*,plotRG1L*)*)
+(*,plotRG1Lsimp(**)
+(*,plotRG2Lsimp*)*)
+(*(*,Simulation2d*)*)
+(*,Simulation2dGemini*)
+(*(*,plotRG2Lwf*)
+(*,plotRG2L*)}*)
+(*,PlotRange->{1,2},AxesLabel->{b,Subscript[d, f]},AxesOrigin->{0,1}(*,PlotLabel->Row[{"d = 2"}]*)(*PlotLegends->Placed["AllExpressions", {Right,Top}]*)(*, ImageSize->100*)*)
+(*]*)
 
 
 (* ::Subsubsection:: *)
@@ -3040,13 +3089,14 @@ dfSLE=1+3/(4(2b+1));
 (*endRange=5;*)
 (**)
 (**)
-(*Simulation3d=ListPlot[{{0,2},{1,1.624},{2,Around[1.511,0.039]},{3,Around[1.483,0.028]},{4,Around[1.431,0.016]},{5,Around[1.436,0.016]}(*,{10,}*)},PlotStyle->{RGBColor[0, 1, 0],PointSize[0.005]},PlotLegends->Placed[{"Simulation Data (old)"},{Right,Top}]];*)
+(*Simulation3d=ListPlot[{{1,1.624}(*{0,2},{1,1.624},{2,Around[1.511,0.039]},{3,Around[1.483,0.028]},{4,Around[1.431,0.016]},{5,Around[1.436,0.016]}*)(*,{10,}*)},PlotStyle->{RGBColor[1, 0, 0],PointSize[0.015]},PlotLegends->Placed[{Style["Result by David Wilson"(* (Gemini-opt1)"*),FontFamily->"Times"]},{Right,Top}]];*)
 (**)
-(*Simulation3dGemini=ListPlot[{(*{0,1.753\[PlusMinus]0.006},*){2,Around[1.51,0.01]}(*,{3,1.1073\[PlusMinus]0.0024},{4,1.0737\[PlusMinus]0.0018},{5,1.0670\[PlusMinus]0.0012},{10,1.0251\[PlusMinus]0.0012}*)},PlotStyle->{RGBColor[0, 0.66, 0],PointSize[0.1]},PlotMarkers->X,PlotLegends->Placed[{"Simulation Data (Gemini-opt1)"},{Right,Top}]];*)
+(*Simulation3dGemini=ListPlot[{{0,Around[2,0.02]},{1,Around[1.61133,0.03]},{2,Around[1.511,0.039]},{3,Around[1.483,0.028]},{4,Around[1.431,0.036]},{5,Around[1.436,0.036]}(*,{10,}*)}(*{(*{0,1.753\[PlusMinus]0.006},*){2,Around[1.51,0.01]}(*,{3,1.1073\[PlusMinus]0.0024},{4,1.0737\[PlusMinus]0.0018},{5,1.0670\[PlusMinus]0.0012},{10,1.0251\[PlusMinus]0.0012}*)}*),PlotStyle->{RGBColor[0, 0.66, 0],PointSize[0.01]},PlotLegends->Placed[{Style["Simulated Data \!\(\**)
+(*StyleBox[\"d\",\nFontSlant->\"Italic\"]\)=3"(* (Gemini-opt1)"*),FontFamily->"Times"]},{Right,Top}]];*)
 (**)
 (*plotRG1L=Plot[#/.\[Epsilon]->1,{b,inRange,endRange},PlotStyle->RGBColor[0.64, 0, 1],PlotRange->All,PlotLegends->Placed[{Row[{"OLD 1-Loop: ",TraditionalForm[#]}]},{Right,Top}]]&@dfRG1L;*)
 (**)
-(*plotRG1Lsimp=Plot[#/.\[Epsilon]->1,{b,inRange,endRange},PlotStyle->RGBColor[0, 0, 1],PlotRange->All,PlotLegends->Placed[{Row[{"NEW 1-Loop: ",TraditionalForm[#]}]},{Right,Top}]]&@dfRG1Lsimp;*)
+(*plotRG1Lsimp=Plot[#/.\[Epsilon]->1,{b,inRange,endRange},PlotStyle->RGBColor[0, 0, 1],PlotRange->All,PlotLegends->Placed[{Style[Row[{"FT@1-Loop: \!\(\*SubscriptBox[\(d\), \(f\)]\) = ",TraditionalForm[#],"\!\(\*SubscriptBox[\(|\), \(\[Epsilon] = 3\)]\)"}],FontFamily->"Times"]},{Right,Top}]]&@dfRG1Lsimp;*)
 (**)
 (*plotRG2Lsimp=Plot[#/.\[Epsilon]->1,{b,0,endRange},PlotStyle->RGBColor[0, 1, 1],PlotRange->All,PlotLegends->Placed[{Row[{"NEW 2-Loop: ",TraditionalForm[#]}]},{Right,Top}]]&@dfRG2Lsimp;*)
 (**)
@@ -3057,12 +3107,12 @@ dfSLE=1+3/(4(2b+1));
 (*(*fitPlot=Plot[fitFunc,{b,inRange,endRange},PlotStyle->Red,PlotRange->All];*)*)
 (**)
 (**)
-(*Show[{plotRG1L*)
-(*,plotRG1Lsimp*)
-(*,plotRG2Lsimp(*,plotRG2Lwf,plotRG2L*)(*,fitPlot*)*)
+(*Show[{(*plotRG1L*)
+(*,*)plotRG1Lsimp*)
+(*(*,plotRG2Lsimp*)(*,plotRG2Lwf,plotRG2L*)(*,fitPlot*)*)
 (*,Simulation3d*)
-(*,Simulation3dGemini*)
-(*},PlotRange->{1,2},AxesLabel->{b,Subscript[d, f]},AxesOrigin->{0,1},PlotLabel->Row[{"d = 3"}]]*)
+(*,Simulation3dGemini(*,Graphics[{Red,Text[Style["Result \nby David Wilson"(* (Gemini-opt1)"*),FontFamily->"Times"],{1,1.45}]}]*)*)
+(*},PlotRange->{{0,5},{1.3,2}},AxesLabel->{b,Subscript[d, f]},AxesOrigin->{0,1.3}(*,PlotLabel->Row[{"d = 3"}]*)]*)
 
 
 (* ::Input:: *)
