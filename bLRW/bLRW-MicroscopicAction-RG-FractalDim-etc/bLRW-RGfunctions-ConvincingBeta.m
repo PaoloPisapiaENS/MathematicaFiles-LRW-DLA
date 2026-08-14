@@ -76,6 +76,55 @@ Return[\[Beta]f//FullSimplify]]
 
 
 (* ::Input::Initialization:: *)
+ClearAll[\[Beta]Function];
+
+Options[\[Beta]Function]={"print"->False,"g0Order"->0};
+
+\[Beta]Function[coupling_,OptionsPattern[]]:=Module[{gr,\[Beta]f,nLoop,i},
+Clear[g,g0,\[Mu],\[Epsilon]];
+
+nLoop=OptionValue["g0Order"];
+If[nLoop==0,nLoop=Exponent[coupling,g0]];
+
+gr=Normal@Series[coupling,{g0,0,nLoop}];
+
+If[OptionValue["print"],
+Print["Initial effective couling:\n ",gr,"\n"];];
+
+\[Beta]f=-\[Mu] D[gr,\[Mu]]//Expand;
+\[Beta]f=Series[\[Beta]f,{g0,0,nLoop}];
+If[OptionValue["print"],
+Print[" \[Beta]-function with bare coupling:\n\t", \[Beta]f,"\n"];];
+
+gr=g-coupling+g0 \[Mu]^-\[Epsilon];
+
+If[OptionValue["print"],
+Print[" Bare coupling= \n ",gr,"\n"];];
+
+(* Invert g(g0) *)
+Do[\[Beta]f=\[Beta]f/.g0^n_ \[Mu]^(-n_ \[Epsilon]):>(gr)^n \[Mu]^(n \[Epsilon])//Expand;
+(*\[Beta]f=\[Beta]f/.(g0 ):>(gr)\[Mu]^ \[Epsilon]//Expand;
+(*\[Beta]f=Series[\[Beta]f,{g0,0,nLoop}]//Expand;*)
+\[Beta]f=\[Beta]f/.g0^n_/;n>nLoop:>0;
+\[Beta]f=\[Beta]f/.g0^n_/;n==nLoop:>(g \[Mu]^\[Epsilon])^n//Expand;*)
+If[OptionValue["print"],
+Print[" Substition #",i,":\n\t",\[Beta]f//FullSimplify,"\n"];];
+,{i,1,nLoop}];
+
+(*For[i=1,i<=nLoop,i++,
+\[Beta]f=\[Beta]f/.g0^n_ \[Mu]^(n_ \[Epsilon]):>(gr)^n//Expand;
+\[Beta]f=\[Beta]f/.(g0 \[Mu]^\[Epsilon]):>(gr)//Expand;
+];*)
+
+\[Beta]f=Normal[\[Beta]f]/.g0^n_ :>(g \[Mu]^\[Epsilon])^n//Expand;
+\[Beta]f=\[Beta]f/.(g0 ):>(g \[Mu]^\[Epsilon])//Expand;
+\[Beta]f=Series[\[Beta]f,{g,0,nLoop}]//Map[Expand,#]&;
+(*Print[\[Beta]f];*)
+(*\[Beta]f=Normal[\[Beta]f];*)
+Return[\[Beta]f//FullSimplify]]
+
+
+(* ::Input::Initialization:: *)
 ClearAll[\[Beta]FunctionFromZ];
 
 Options[\[Beta]FunctionFromZ]={"print"->False};
