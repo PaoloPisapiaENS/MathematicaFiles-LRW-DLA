@@ -80,7 +80,7 @@ ClearAll[\[Beta]Function];
 
 Options[\[Beta]Function]={"print"->False,"g0Order"->0};
 
-\[Beta]Function[coupling_,OptionsPattern[]]:=Module[{gr,\[Beta]f,nLoop,i},
+\[Beta]Function[coupling_,OptionsPattern[]]:=Module[{gr,gB,\[Gamma],\[Beta]f,nLoop,i},
 Clear[g,g0,\[Mu],\[Epsilon]];
 
 nLoop=OptionValue["g0Order"];
@@ -96,13 +96,22 @@ Print["Initial effective couling:\n ",gr,"\n"];];
 If[OptionValue["print"],
 Print[" \[Beta]-function with bare coupling:\n\t", \[Beta]f,"\n"];];
 
-gr=g-coupling+g0 \[Mu]^-\[Epsilon];
+(* Invert g(g0) *)
+(*gr=g-coupling+g0 \[Mu]^-\[Epsilon]+O[g0]^nLoop;*)
+gB=(g0+(g-gr)*\[Mu]^\[Epsilon]//Expand)+O[\[Gamma]]^(nLoop+1);
+
+gB=(gB/.{g->g \[Gamma],g0->g0 \[Gamma]});
 
 If[OptionValue["print"],
-Print[" Bare coupling= \n ",gr,"\n"];];
+Print[" Initial bare coupling: \n\t g0(g)=",gB,"\n"];];
+gB=(gB//.g0->gB/\[Gamma])//Expand;
+gB=Normal[gB]/.\[Gamma]->1;
 
-(* Invert g(g0) *)
-Do[\[Beta]f=\[Beta]f/.g0^n_ \[Mu]^(-n_ \[Epsilon]):>(gr)^n \[Mu]^(n \[Epsilon])//Expand;
+If[OptionValue["print"],
+Print[" Bare coupling: \n\t g0(g)=",gB,"\n"];];
+
+(*
+Do[\[Beta]f=\[Beta]f/.g0^n_ \[Mu]^(-n_ \[Epsilon]):>(gr)^n\[Mu]^(n \[Epsilon])//Expand;
 (*\[Beta]f=\[Beta]f/.(g0 ):>(gr)\[Mu]^ \[Epsilon]//Expand;
 (*\[Beta]f=Series[\[Beta]f,{g0,0,nLoop}]//Expand;*)
 \[Beta]f=\[Beta]f/.g0^n_/;n>nLoop:>0;
@@ -116,12 +125,14 @@ Print[" Substition #",i,":\n\t",\[Beta]f//FullSimplify,"\n"];];
 \[Beta]f=\[Beta]f/.(g0 \[Mu]^\[Epsilon]):>(gr)//Expand;
 ];*)
 
-\[Beta]f=Normal[\[Beta]f]/.g0^n_ :>(g \[Mu]^\[Epsilon])^n//Expand;
-\[Beta]f=\[Beta]f/.(g0 ):>(g \[Mu]^\[Epsilon])//Expand;
+\[Beta]f=Normal[\[Beta]f]/.g0^n_ :>(g \[Mu]^\[Epsilon])^n//Expand;*)
+\[Beta]f=Normal[\[Beta]f]/.(g0 ):>(gB)//Expand;
 \[Beta]f=Series[\[Beta]f,{g,0,nLoop}]//Map[Expand,#]&;
 (*Print[\[Beta]f];*)
 (*\[Beta]f=Normal[\[Beta]f];*)
-Return[\[Beta]f//FullSimplify]]
+
+Return[\[Beta]f//FullSimplify]
+]
 
 
 (* ::Input::Initialization:: *)
@@ -292,6 +303,7 @@ gammagGuys=b(2 hat + 2 hat) + b^2 doubleBanana +4 b^2 hat + b^2 doubleBanana;
 (* IN WHAT FOLLOWS, I SUB doubleBanana-> MINUS 1/\[Epsilon]^2. SO HERE I NEED TO SUM THE BANANA SQUARED. Actually, the replacement ALREADY implements the partial subtraction of subdivergencies *)
 
 (* GradImmediateIntNotAllowed=0 then it is not allowed. To implement it also for \[Gamma]1 and \[Gamma]2, one should set h,h2->1*)
+GradImmediateIntNotAllowed/:(GradImmediateIntNotAllowed->0):={GradImmediateIntNotAllowed:>0,h->1,h2->1}
 
 twoLoopZ\[Gamma]1=1/b (-b^2 doubleBanana-2 b^3 hat+(1/2 b^2 (b-1)(banana)^2(* From \[CapitalGamma]Grad counterterm*))- b^2 (b-1)(a doubleBanana+h hat) (*If not all the \[CapitalGamma]grad can be used*));/.h->-1;
 
@@ -319,7 +331,7 @@ b^2(b-1)(2 (hat+1/2 (banana)^2(* From \[CapitalGamma]Grad counterterm*)))
 (gammagGuys -(b(2 hat )+ b^2 doubleBanana (*Should arise from the 1loops of Z\[Gamma]1*Z\[Gamma]2 *))- b^2 doubleBanana (*Moved to Z\[Gamma]2 *))(*b(2 hat )  +4 b^2 hat *))/b; 
 (*Here I'm missing the subdiv from the grad vertex. Try to remove them by hand see if the rest is finite*)
 
-twoLoopZ\[Gamma]=(b(b-1))/2 ( sunset + (hat+1/2 (banana)^2(* From \[CapitalGamma]Grad counterterm*)))/b;
+twoLoopZ\[Gamma]=(b(b-1))/2 ( sunset + (hat+1/2 (banana)^2(* From \[CapitalGamma]Grad counterterm*)))GradImmediateIntNotAllowed/b;
 
 
 (* ::Input::Initialization:: *)

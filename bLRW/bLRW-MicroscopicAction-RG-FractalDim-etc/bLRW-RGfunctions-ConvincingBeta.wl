@@ -16,6 +16,16 @@ FS=FullSimplify;
 (*"D:\\Offline_Documents\\University\\PhD_Paris\\PhD_work\\Simulations\\MathematicaFiles-LRW-DLA-bLRW\\bLRW\\bLRW-MicroscopicAction-RG-FractalDim-etc\\bLRW-RGfunctions.nb"*)
 
 
+(* ::Input:: *)
+(*FrontEndTokenExecute["SelectAll"]*)
+(*FrontEndTokenExecute["SelectionCloseAllGroups"]*)
+
+
+(* ::Input:: *)
+(*SetOptions[$FrontEnd,CommonDefaultFormatTypes->{"Output"->StandardForm}];*)
+(*SetOptions[$FrontEndSession,CommonDefaultFormatTypes->{"Output"->StandardForm}];*)
+
+
 (* ::Title:: *)
 (*\[Beta]Function[] and \[Gamma]Function[]*)
 
@@ -24,7 +34,7 @@ FS=FullSimplify;
 (*\[Beta]Function[] Definitions*)
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*For the RG with effective finite quantities (i.e. renormalization without CTs)*)
 
 
@@ -76,7 +86,93 @@ Print[\[Beta]f//FullSimplify,"\n"];];
 Return[\[Beta]f//FullSimplify]]
 
 
-(* ::Subsection:: *)
+(* ::Input::Initialization:: *)
+ClearAll[\[Beta]Function];
+
+Options[\[Beta]Function]={"print"->False,"g0Order"->0};
+
+\[Beta]Function[coupling_,OptionsPattern[]]:=Module[{gr,gB,\[Gamma],\[Beta]f,nLoop,i},
+Clear[g,g0,\[Mu],\[Epsilon]];
+
+nLoop=OptionValue["g0Order"];
+If[nLoop==0,nLoop=Exponent[coupling,g0]];
+
+gr=Normal@Series[coupling,{g0,0,nLoop}];
+
+If[OptionValue["print"],
+Print["Initial effective couling:\n ",gr,"\n"];];
+
+\[Beta]f=-\[Mu] D[gr,\[Mu]]//Expand;
+\[Beta]f=Series[\[Beta]f,{g0,0,nLoop}];
+If[OptionValue["print"],
+Print[" \[Beta]-function with bare coupling:\n\t", \[Beta]f,"\n"];];
+
+(* Invert g(g0) *)
+(*gr=g-coupling+g0 \[Mu]^-\[Epsilon]+O[g0]^nLoop;*)
+gB=(g0+(g-gr)*\[Mu]^\[Epsilon]//Expand)+O[\[Gamma]]^(nLoop+1);
+
+gB=(gB/.{g->g \[Gamma],g0->g0 \[Gamma]});
+
+If[OptionValue["print"],
+Print[" Initial bare coupling: \n\t g0(g)=",gB,"\n"];];
+gB=(gB//.g0->gB/\[Gamma])//Expand;
+gB=Normal[gB]/.\[Gamma]->1;
+
+If[OptionValue["print"],
+Print[" Bare coupling: \n\t g0(g)=",gB,"\n"];];
+
+(*
+Do[\[Beta]f=\[Beta]f/.g0^n_ \[Mu]^(-n_ \[Epsilon]):>(gr)^n\[Mu]^(n \[Epsilon])//Expand;
+(*\[Beta]f=\[Beta]f/.(g0 ):>(gr)\[Mu]^ \[Epsilon]//Expand;
+(*\[Beta]f=Series[\[Beta]f,{g0,0,nLoop}]//Expand;*)
+\[Beta]f=\[Beta]f/.g0^n_/;n>nLoop:>0;
+\[Beta]f=\[Beta]f/.g0^n_/;n==nLoop:>(g \[Mu]^\[Epsilon])^n//Expand;*)
+If[OptionValue["print"],
+Print[" Substition #",i,":\n\t",\[Beta]f//FullSimplify,"\n"];];
+,{i,1,nLoop}];
+
+(*For[i=1,i<=nLoop,i++,
+\[Beta]f=\[Beta]f/.g0^n_ \[Mu]^(n_ \[Epsilon]):>(gr)^n//Expand;
+\[Beta]f=\[Beta]f/.(g0 \[Mu]^\[Epsilon]):>(gr)//Expand;
+];*)
+
+\[Beta]f=Normal[\[Beta]f]/.g0^n_ :>(g \[Mu]^\[Epsilon])^n//Expand;*)
+\[Beta]f=Normal[\[Beta]f]/.(g0 ):>(gB)//Expand;
+\[Beta]f=Series[\[Beta]f,{g,0,nLoop}]//Map[Expand,#]&;
+(*Print[\[Beta]f];*)
+(*\[Beta]f=Normal[\[Beta]f];*)
+
+Return[\[Beta]f//FullSimplify]
+]
+
+
+(* ::Item::Closed:: *)
+(*Test on inverting g(g0)*)
+
+
+(* ::Input:: *)
+(*(*\[Beta]as function of g0*)*)
+(*\[Epsilon] \[Mu]^-\[Epsilon] g0-2 ((1+2 b) banana \[Epsilon] \[Mu]^(-2 \[Epsilon])) g0^2+SeriesData[g0, 0, {}, 1, 3, 1] ;*)
+(*(*g as function of g0*)*)
+(*g0 \[Mu]^-\[Epsilon]-(a g0^2 \[Mu]^(-2 \[Epsilon]))+b g0^3 \[Mu]^(-3\[Epsilon])-c g0^4 \[Mu]^(-4\[Epsilon]);*)
+(*(*Inversion to get g0 as a function of g*)*)
+(*gg0=(g0+(g-%)*\[Mu]^\[Epsilon]//Expand)+O[\[Gamma]]^5*)
+(*gg0=(gg0/.{g->g \[Gamma],g0->g0 \[Gamma]})*)
+(*gg0=(gg0//.g0->gg0/\[Gamma])//Expand*)
+(**)
+(*Clear[gg0]*)
+
+
+(* ::Input:: *)
+(*(*Check: yep!*)*)
+
+
+(* ::Input:: *)
+(*(Normal[SeriesData[\[Gamma], 0, {g \[Mu]^\[Epsilon], a g^2 \[Mu]^\[Epsilon], (2 a^2 - b) g^3 \[Mu]^\[Epsilon], (5 a^3 - 5 a b + c) g^4 \[Mu]^\[Epsilon]}, 1, 5, 1]]/.\[Gamma]->1)/.g->g0 \[Mu]^-\[Epsilon]-(a g0^2 \[Mu]^(-2 \[Epsilon]))+b g0^3 \[Mu]^(-3\[Epsilon])-c g0^4 \[Mu]^(-4\[Epsilon])*)
+(*Series[%,{g0,0,6}]*)
+
+
+(* ::Subsection::Closed:: *)
 (*I can write \[Beta] as  *)
 (*\!\(TraditionalForm\`\[Beta] == \[Epsilon] \**)
 (*SubscriptBox[*)
@@ -207,7 +303,7 @@ Return[Map[Expand,\[Beta]f]]]
 (*(*Nice, this is finite*)*)
 
 
-(* ::Subitem:: *)
+(* ::Subitem::Closed:: *)
 (*Let's check Kay's ansatz for g (from his email "picture"): OK, IT IS FINITE TOO*)
 
 
@@ -218,7 +314,7 @@ Return[Map[Expand,\[Beta]f]]]
 (*RGeq2=Normal[%]==0;*)
 
 
-(* ::Item:: *)
+(* ::Item::Closed:: *)
 (*Let's get the 2-Loop critical g *)
 
 
@@ -235,7 +331,7 @@ Return[Map[Expand,\[Beta]f]]]
 (*(*OK*)*)
 
 
-(* ::Subsubsection:: *)
+(* ::Subsubsection::Closed:: *)
 (*Using my result EXTENDED WITH WAVE-FUNCTION RENORMALIZATION*)
 
 
@@ -313,7 +409,7 @@ Print[" \[Gamma]f(g)= \n ",\[Gamma]f];];*)
 Return[\[Gamma]f]]
 
 
-(* ::Subsection:: *)
+(* ::Subsection::Closed:: *)
 (*\[Gamma]FunctionFromZ[]*)
 
 
@@ -396,16 +492,20 @@ Return[Normal[\[Gamma]f]]
 
 
 
-(* ::Section::Closed:: *)
+(* ::Title:: *)
 (*\[Section] 1-Loop after MY simplification*)
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*\[Section]\[Section] \[Beta] function*)
 
 
-(* ::Subsubsection:: *)
+(* ::Subsubsection::Closed:: *)
 (*\[Section]\[Section]\[Section] Splitting contributions: g, emitter Subscript[\[Gamma], 1] and absorber "Subscript[\[Gamma], 2]"*)
+
+
+(* ::Item:: *)
+(*with \[Beta]Function[] and Kay's approach*)
 
 
 (* ::Input:: *)
@@ -426,7 +526,7 @@ Return[Normal[\[Gamma]f]]
 (*(Zgt^(-1)/.g0->g0 Zgt^(-1))g0 \[Mu]^-\[Epsilon];*)
 (*g=Series[%,{g0,0,2}]//Normal*)
 (*(*g=Series[g0 \[Mu]^-\[Epsilon] Zgt^(-1),{g0,0,2}]//Normal*)*)
-(*\[Beta]Function[g,"print"->False];*)
+(*\[Beta]Function[g,"print"->True];*)
 (*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
 (*RGeq2=Simplify[Normal[%]]==0;*)
 
@@ -451,7 +551,7 @@ Return[Normal[\[Gamma]f]]
 (*(* OK *)*)
 
 
-(* ::Item:: *)
+(* ::Item::Closed:: *)
 (*with \[Beta]FunctionFromZ*)
 
 
@@ -492,7 +592,7 @@ Return[Normal[\[Gamma]f]]
 (*df=2+Collect[%,{\[Epsilon],\[Epsilon]^2},FullSimplify]/.\[Epsilon]^n_/;n>2:>0*)
 
 
-(* ::Subsubsection:: *)
+(* ::Subsubsection::Closed:: *)
 (*\[Section]\[Section]\[Section] After splitting the contributions*)
 
 
@@ -513,7 +613,7 @@ Return[Normal[\[Gamma]f]]
 (*df=2+Collect[%,{\[Epsilon],\[Epsilon]^2},FullSimplify]/.\[Epsilon]^n_/;n>2:>0*)
 
 
-(* ::Item:: *)
+(* ::Item::Closed:: *)
 (*Test with \[Gamma]FunctionFromZ*)
 
 
@@ -533,7 +633,7 @@ Return[Normal[\[Gamma]f]]
 (*\[Section]\[Section] \[CapitalGamma]_2 observable *)
 
 
-(* ::Subsubsection:: *)
+(* ::Subsubsection::Closed:: *)
 (*\[Section]\[Section]\[Section] After splitting the contributions*)
 
 
@@ -549,18 +649,18 @@ Return[Normal[\[Gamma]f]]
 (*absorber=Collect[%,{\[Epsilon],\[Epsilon]^2},FullSimplify]/.\[Epsilon]^n_/;n>2:>0*)
 
 
-(* ::Section:: *)
+(* ::Title:: *)
 (*\[Section] 2-Loop after Simplification (partial: just the 1Loop has been done, but I want to see what happens if I update just the 1Loop term in g)*)
 (*I CANNOT! IT IS NOT FINITE, I MUST GET THE 2LOOP TO CHECK!*)
 (**)
 (*IT SEEMS FINITE FOR h->1, l->2, 	WHY??*)
 
 
-(* ::Subsection:: *)
-(*\[Section]\[Section] \[Beta] function*)
+(* ::Chapter:: *)
+(*\[Section]\[Section] 2loop \[Beta] function*)
 
 
-(* ::Item:: *)
+(* ::Section:: *)
 (*Rewritten to split into Zg, Z\[Gamma]1, Z\[Gamma]2*)
 
 
@@ -575,10 +675,19 @@ betterNasties=b^2(b-1)6 hat+b^2(b-1)(2 doubleBanana +4 hat)+b^2(b-1)(2 doubleBan
 gammagGuys=b(2 hat + 2 hat) + b^2 doubleBanana +4 b^2 hat + b^2 doubleBanana;
 
 
+(* ::Input:: *)
+(*ClearAll[h,GradImmediateIntNotAllowed]*)
+
+
+(* ::Input:: *)
+(*GradImmediateIntNotAllowed/:(GradImmediateIntNotAllowed->0):={GradImmediateIntNotAllowed:>0,h->1,h2->1}*)
+
+
 (* ::Input::Initialization:: *)
 (* IN WHAT FOLLOWS, I SUB doubleBanana-> MINUS 1/\[Epsilon]^2. SO HERE I NEED TO SUM THE BANANA SQUARED. Actually, the replacement ALREADY implements the partial subtraction of subdivergencies *)
 
 (* GradImmediateIntNotAllowed=0 then it is not allowed. To implement it also for \[Gamma]1 and \[Gamma]2, one should set h,h2->1*)
+GradImmediateIntNotAllowed/:(GradImmediateIntNotAllowed->0):={GradImmediateIntNotAllowed:>0,h->1,h2->1}
 
 twoLoopZ\[Gamma]1=1/b (-b^2 doubleBanana-2 b^3 hat+(1/2 b^2 (b-1)(banana)^2(* From \[CapitalGamma]Grad counterterm*))- b^2 (b-1)(a doubleBanana+h hat) (*If not all the \[CapitalGamma]grad can be used*));/.h->-1;
 
@@ -606,10 +715,18 @@ b^2(b-1)(2 (hat+1/2 (banana)^2(* From \[CapitalGamma]Grad counterterm*)))
 (gammagGuys -(b(2 hat )+ b^2 doubleBanana (*Should arise from the 1loops of Z\[Gamma]1*Z\[Gamma]2 *))- b^2 doubleBanana (*Moved to Z\[Gamma]2 *))(*b(2 hat )  +4 b^2 hat *))/b; 
 (*Here I'm missing the subdiv from the grad vertex. Try to remove them by hand see if the rest is finite*)
 
-twoLoopZ\[Gamma]=(b(b-1))/2 ( sunset + (hat+1/2 (banana)^2(* From \[CapitalGamma]Grad counterterm*)))/b;
+twoLoopZ\[Gamma]=(b(b-1))/2 ( sunset + (hat+1/2 (banana)^2(* From \[CapitalGamma]Grad counterterm*)))GradImmediateIntNotAllowed/b;
 
 
-(* ::Subitem:: *)
+(* ::Input::Initialization:: *)
+(*This is Probably necessarely *)
+twoLoopZ\[Gamma]1=twoLoopZ\[Gamma]1/.(banana)^2->0(banana)^2/2;
+twoLoopZg=twoLoopZg/.(banana)^2->0(banana)^2/2;
+twoLoopZ\[Gamma]2=twoLoopZ\[Gamma]2/.(banana)^2->0(banana)^2/2;
+twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
+
+
+(* ::Subitem::Closed:: *)
 (*Check:*)
 
 
@@ -618,11 +735,11 @@ twoLoopZ\[Gamma]=(b(b-1))/2 ( sunset + (hat+1/2 (banana)^2(* From \[CapitalGamma
 (*FS[%*b+(- goodGuys- gammagGuys-betterNasties - realNasties)]/.banana->0*)
 
 
-(* ::Subsubsection:: *)
+(* ::Section::Closed:: *)
 (*\[Section]\[Section]\[Section] After splitting the contributions: b=1*)
 
 
-(* ::Item::Closed:: *)
+(* ::Subsection::Closed:: *)
 (*Here I just replace Z_gt by Z_g*Z_\[Gamma]1, but this should be the wrong way to compute \[Beta]... However the result is correct*)
 (*I FINALLY MADE UP MY MIND AND CONVINCED MYSELF THAT THIS IS CORRECT*)
 
@@ -642,7 +759,61 @@ twoLoopZ\[Gamma]=(b(b-1))/2 ( sunset + (hat+1/2 (banana)^2(* From \[CapitalGamma
 (*RGeq2=Simplify[Normal[%]]==0;*)
 
 
+(* ::Subsection:: *)
+(*Using Kay's approach*)
+
+
 (* ::Item::Closed:: *)
+(*No contribution splitting*)
+
+
+(* ::Input:: *)
+(*Zg=g0 \[Mu]^-\[Epsilon]-(b+2)banana (g0 \[Mu]^-\[Epsilon])^2+(g0 \[Mu]^-\[Epsilon])^3 ( (b+2)( doubleBanana + 2(b+1) hat))/.b->1;*)
+(**)
+(*Series[%,{g0,0,3}]*)
+
+
+(* ::Input:: *)
+(*g=Series[Zg,{g0,0,3}]//Normal*)
+(*(*g=Series[g0 \[Mu]^-\[Epsilon] Zgt^(-1),{g0,0,2}]//Normal*)*)
+(*\[Beta]Function[g,"print"->tTrue]*)
+(*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
+(*RGeq2=Simplify[Normal[%]]==0;*)
+
+
+(* ::Input:: *)
+(*(*Correct!*)*)
+
+
+(* ::Item:: *)
+(*Splitting the contributions*)
+
+
+(* ::Input:: *)
+(*Zg=g0 \[Mu]^-\[Epsilon]-(g0 \[Mu]^-\[Epsilon])^2 2*(bananag)+(g0 \[Mu]^-\[Epsilon])^3 ( 2 doubleBananag + 4 hatg+4 hat\[Gamma]1g +2 hatg\[Gamma]1 );(*a=5/7*)*)
+(**)
+(*Z\[Gamma]1=- (g0 \[Mu]^-\[Epsilon])^2 banana\[Gamma]1+(g0 \[Mu]^-\[Epsilon])^3 ( doubleBanana\[Gamma]1g + hatg\[Gamma]1+hat\[Gamma]1);*)
+(**)
+(*loopOrder=2;*)
+(**)
+(*Zg+Z\[Gamma]1 ;*)
+(*Series[%,{g0,0,loopOrder+1}]*)
+
+
+(* ::Input:: *)
+(*g=Series[Zg+Z\[Gamma]1 ,{g0,0,loopOrder+1}]//Normal*)
+(*(*g=Series[g0 \[Mu]^-\[Epsilon] Zgt^(-1),{g0,0,2}]//Normal*)*)
+(*\[Beta]Function[g,"print"->tTrue]*)
+(**)
+(*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
+(*RGeq2=Simplify[Normal[%]]==0;*)
+
+
+(* ::Input:: *)
+(*(*Correct!*)*)
+
+
+(* ::Subsection::Closed:: *)
 (*Let's get the 2-Loop critical g*	*)
 
 
@@ -659,47 +830,8 @@ twoLoopZ\[Gamma]=(b(b-1))/2 ( sunset + (hat+1/2 (banana)^2(* From \[CapitalGamma
 (*(* CORRECT !!!*)*)
 
 
-(* ::Subsubsection:: *)
+(* ::Section:: *)
 (*\[Section]\[Section]\[Section] After splitting the contributions: b>1  THE Z HERE COULD ACTUALLY BE Z^-1*)
-
-
-(* ::Item::Closed:: *)
-(*using \[Beta]Function[]*)
-
-
-(* ::Input:: *)
-(*Zg=1+2 g0 \[Mu]^-\[Epsilon] banana+z[g](g0 \[Mu]^-\[Epsilon])^2 twoLoopZg;*)
-(*%/.b->1*)
-(*Z\[Gamma]1=Simplify/@(1+b g0 \[Mu]^-\[Epsilon] banana +z[\[Gamma]1](g0 \[Mu]^-\[Epsilon])^2(twoLoopZ\[Gamma]1+(b+b^2)(banana)^2(*TO REMOVE THE SUB.DIVS*)));*)
-(*%/.b->1*)
-(*Z\[Gamma]2=1+(b-1) g0 \[Mu]^-\[Epsilon] banana-z[\[Gamma]2](g0 \[Mu]^-\[Epsilon])^2 twoLoopZ\[Gamma]2;*)
-(**)
-(*Z\[Gamma]=1+z[\[Gamma]](g0 \[Mu]^-\[Epsilon])^2/b (b(b-1))/2 ( sunset + (hat-1/2 (banana)^2(* From \[CapitalGamma]Grad counterterm*)));*)
-(**)
-(*Zgt=(Zg Z\[Gamma]1 Z\[Gamma]2)/Z\[Gamma]^2/.z[_]->1;*)
-(*Series[Zgt,{g0,0,2}];*)
-(*%/.b->1//FS*)
-(**)
-(*Series[(Zgt/.g0->g0 Zgt)^(-1),{g0,0,2}];*)
-(*%/.b->1//FS*)
-
-
-(* ::Input:: *)
-(*(Zgt^(1)/.g0->g0 Zgt^(1))g0 \[Mu]^-\[Epsilon];*)
-(*g=Series[%,{g0,0,3}]//Normal*)
-(*g=Series[g0 \[Mu]^-\[Epsilon] Zgt^(1),{g0,0,3}]//Normal*)
-(*\[Beta]Function[g,"print"->False]*)
-(*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
-(*RGeq2=Simplify[Normal[%]]==0;*)
-
-
-(* ::Input:: *)
-(*(16+11 \[Epsilon]+b (-32+56 b+5 \[Epsilon]))//Expand;*)
-(*Collect[%,\[Epsilon]]*)
-
-
-(* ::Input:: *)
-(*SolveAlways[16-24 b-8 b^2-32 b zg-4 b z\[Gamma]+4 b^2 z\[Gamma]-8 b^2 z\[Gamma]1-32 b^3 z\[Gamma]1+40 b z\[Gamma]2-48 b^2 z\[Gamma]2+8 b^3 z\[Gamma]2==0,b]*)
 
 
 (* ::Item::Closed:: *)
@@ -735,11 +867,11 @@ twoLoopZ\[Gamma]=(b(b-1))/2 ( sunset + (hat+1/2 (banana)^2(* From \[CapitalGamma
 (*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
 
 
-(* ::Item:: *)
+(* ::Subsection:: *)
 (*Using \[Beta]FunctionFromZ[] 	WITH CT-IN-CT TERMS SUBTRACTED*)
 
 
-(* ::Subitem::Closed:: *)
+(* ::Subsubsection::Closed:: *)
 (*b=1 for comparison(without CT-in-CT subtraction)*)
 
 
@@ -753,16 +885,8 @@ twoLoopZ\[Gamma]=(b(b-1))/2 ( sunset + (hat+1/2 (banana)^2(* From \[CapitalGamma
 (*Series[Zgt,{g,0,2}]//FS//Normal*)
 
 
-(* ::Subitem:: *)
+(* ::Subsubsection::Closed:: *)
 (*b>1*)
-
-
-(* ::Input::Initialization:: *)
-(*This is Probably necessarely *)
-twoLoopZ\[Gamma]1=twoLoopZ\[Gamma]1/.(banana)^2->0(banana)^2/2;
-twoLoopZg=twoLoopZg/.(banana)^2->0(banana)^2/2;
-twoLoopZ\[Gamma]2=twoLoopZ\[Gamma]2/.(banana)^2->0(banana)^2/2;
-twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 
 
 (* ::Input:: *)
@@ -853,7 +977,7 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (*(3+(a+a2) b)/.a2->-3/(2b)/.a->-3/(2b)//FS*)
 
 
-(* ::Item:: *)
+(* ::Item::Closed:: *)
 (*Various attempts to make it finite*)
 
 
@@ -868,7 +992,7 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (*%/.h->1*)
 
 
-(* ::Item:: *)
+(* ::Item::Closed:: *)
 (*Closer inspection of the Zinv*)
 
 
@@ -880,11 +1004,83 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (**)
 
 
+(* ::Subsection:: *)
+(*using \[Beta]Function[] and Kay's approach*)
+
+
 (* ::Item:: *)
+(*Splitting the contributions*)
+
+
+(* ::Input:: *)
+(*Z\[Gamma]1 =g0 \[Mu]^-\[Epsilon] (-b banana g0 \[Mu]^-\[Epsilon]+b g0^2 (doubleBanana+a (-1+b) doubleBanana-h hat+b (2+h) hat) \[Mu]^(-2 \[Epsilon]) z["\[Gamma]1"])*)
+(*Z\[Gamma]2 =g0 \[Mu]^-\[Epsilon] (-(-1+b) banana g0 \[Mu]^-\[Epsilon]-(g0^2 (2 b hat-2 b^3 hat-(-1+b) b^2 (a2 doubleBanana+h2 hat)) \[Mu]^(-2 \[Epsilon]) z["\[Gamma]2"])/b)*)
+(*Zg =g0 \[Mu]^-\[Epsilon] (1-2 banana g0 \[Mu]^-\[Epsilon]-1/b g0^2 (-4 (-1+b) b doubleBanana+2 (-1+b) b^2 doubleBanana+b^3 doubleBanana+2 b hat+4 b^2 hat+8 (-1+b) b^2 hat+2 (-1+b) b GradImmediateIntNotAllowed hat-(-1+b) b (2 doubleBanana+4 hat)+(-1+b) b^2 (2 doubleBanana+4 hat)-b^3 (doubleBanana+6 hat)+(-1+b) b (4 doubleBanana+8 hat)-b^3 (2 doubleBanana+10 hat)) \[Mu]^(-2 \[Epsilon]) z["g"])*)
+(*Z\[Gamma] =1-1/2 (-1+b) g0^2 GradImmediateIntNotAllowed (banana^2/2+hat+sunset) \[Mu]^(-2 \[Epsilon]) z["\[Gamma]"]*)
+
+
+(* ::Input:: *)
+(*loopOrder=2;*)
+(**)
+(**)
+(*Zgt=(Z\[Gamma]1 +Z\[Gamma]2+Zg )/Z\[Gamma] ^2/.z[_]->1/.GradImmediateIntNotAllowed->0/.{a->a,a2->-3/(b)+1-a,h->h,h2->h2};*)
+(**)
+(*FS/@(Series[%,{g0,0,loopOrder+1}])*)
+
+
+(* ::Input:: *)
+(*g=Series[Zgt,{g0,0,loopOrder+1}]//Normal*)
+(*(*g=Series[g0 \[Mu]^-\[Epsilon] Zgt^(-1),{g0,0,2}]//Normal*)*)
+(*\[Beta]Function[g,"print"->tTrue]*)
+(**)
+(*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
+(*RGeq2=Simplify[Normal[%]]==0;*)
+
+
+(* ::Item:: *)
+(**)
+
+
+(* ::Input:: *)
+(*Zg=1+2 g0 \[Mu]^-\[Epsilon] banana+z[g](g0 \[Mu]^-\[Epsilon])^2 twoLoopZg;*)
+(*%/.b->1*)
+(*Z\[Gamma]1=Simplify/@(1+b g0 \[Mu]^-\[Epsilon] banana +z[\[Gamma]1](g0 \[Mu]^-\[Epsilon])^2(twoLoopZ\[Gamma]1+(b+b^2)(banana)^2(*TO REMOVE THE SUB.DIVS*)));*)
+(*%/.b->1*)
+(*Z\[Gamma]2=1+(b-1) g0 \[Mu]^-\[Epsilon] banana-z[\[Gamma]2](g0 \[Mu]^-\[Epsilon])^2 twoLoopZ\[Gamma]2;*)
+(**)
+(*Z\[Gamma]=1+z[\[Gamma]](g0 \[Mu]^-\[Epsilon])^2/b (b(b-1))/2 ( sunset + (hat-1/2 (banana)^2(* From \[CapitalGamma]Grad counterterm*)));*)
+(**)
+(*Zgt=(Zg Z\[Gamma]1 Z\[Gamma]2)/Z\[Gamma]^2/.z[_]->1;*)
+(*Series[Zgt,{g0,0,2}];*)
+(*%/.b->1//FS*)
+(**)
+(*Series[(Zgt/.g0->g0 Zgt)^(-1),{g0,0,2}];*)
+(*%/.b->1//FS*)
+
+
+(* ::Input:: *)
+(*(Zgt^(1)/.g0->g0 Zgt^(1))g0 \[Mu]^-\[Epsilon];*)
+(*g=Series[%,{g0,0,3}]//Normal*)
+(*g=Series[g0 \[Mu]^-\[Epsilon] Zgt^(1),{g0,0,3}]//Normal*)
+(*\[Beta]Function[g,"print"->False]*)
+(*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
+(*RGeq2=Simplify[Normal[%]]==0;*)
+
+
+(* ::Input:: *)
+(*(16+11 \[Epsilon]+b (-32+56 b+5 \[Epsilon]))//Expand;*)
+(*Collect[%,\[Epsilon]]*)
+
+
+(* ::Input:: *)
+(*SolveAlways[16-24 b-8 b^2-32 b zg-4 b z\[Gamma]+4 b^2 z\[Gamma]-8 b^2 z\[Gamma]1-32 b^3 z\[Gamma]1+40 b z\[Gamma]2-48 b^2 z\[Gamma]2+8 b^3 z\[Gamma]2==0,b]*)
+
+
+(* ::Subsection::Closed:: *)
 (*Some RG functions*)
 
 
-(* ::Subitem:: *)
+(* ::Subitem::Closed:: *)
 (*Z\[Gamma]1Inv*)
 
 
@@ -904,7 +1100,7 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (*(24+\[Epsilon]+3 b (-8+\[Epsilon]-4 b \[Epsilon]))//Collect[#,\[Epsilon]]&*)
 
 
-(* ::Subitem:: *)
+(* ::Subitem::Closed:: *)
 (*Z\[Gamma]2Inv*)
 
 
@@ -928,7 +1124,7 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (**)
 
 
-(* ::Subitem:: *)
+(* ::Subitem::Closed:: *)
 (*Z\[Gamma]Inv*)
 
 
@@ -954,7 +1150,7 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (*{8/\[Epsilon]-(10 b)/\[Epsilon]+(4 a b)/\[Epsilon]+(2 b^2)/\[Epsilon]-(4 a b^2)/\[Epsilon]+(2 b h)/\[Epsilon]-(2 b^2 h)/\[Epsilon]-(4 l)/\[Epsilon]+(4 b l)/\[Epsilon]==0,(-1+b) b (-1+2 a+h)==0,(-1+b) (2+b (-1+2 a+h))==0}/.{a->0,h->1 ,l->2}*)
 
 
-(* ::Item:: *)
+(* ::Subsection::Closed:: *)
 (*df ???*)
 
 
@@ -974,7 +1170,7 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (**)
 
 
-(* ::Subsection::Closed:: *)
+(* ::Chapter:: *)
 (*\[Section]\[Section] \[CapitalGamma]1 observable 		BAD AND OLD	*)
 
 
@@ -1002,11 +1198,11 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (*Normal[Series[df/.{c->-(1/(2 b))},{\[Epsilon],0,2}]]*)
 
 
-(* ::Subsection::Closed:: *)
+(* ::Chapter::Closed:: *)
 (*\[Section]\[Section] \[CapitalGamma]1 observable NEW AFTER SIMPLIFICATION AND SPLIT OF CONTRIBUTIONS*)
 
 
-(* ::Subsubsection:: *)
+(* ::Subsubsection::Closed:: *)
 (*\[Section]\[Section]\[Section] b=1 *)
 (*IT WORKS FOR Zg=1+2 g 1/\[Epsilon]-g^2 (-7/\[Epsilon]^2 5/7+5/(2\[Epsilon]));*)
 (* IT COMES FROM THE FACT THAT THE CT CAN BE PUT ONE INSIDE THE OTHER!!!!*)
@@ -1048,7 +1244,7 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (*\[Beta]Function[g0 \[Mu]^(-\[Epsilon])*((1-3g/\[Epsilon]+3g^2(1/\[Epsilon]^2+4(1/(2\[Epsilon]^2)+1/(4\[Epsilon]))))/.g->g0 \[Mu]^(-\[Epsilon]))]*)
 
 
-(* ::Item:: *)
+(* ::Item::Closed:: *)
 (**)
 
 
@@ -1065,7 +1261,7 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (*Series[%,{\[Epsilon],0,2}]*)
 
 
-(* ::Section:: *)
+(* ::Title::Closed:: *)
 (*Plots*)
 
 
@@ -1076,7 +1272,7 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (*dfSLE=1+3/(4(2b+1));*)
 
 
-(* ::Subsection:: *)
+(* ::Subsection::Closed:: *)
 (*\[Section] New (after my simpl)*)
 
 
@@ -1099,7 +1295,7 @@ dfSLE=1+3/(4(2b+1));
 (*Limit[{dfRG1L,dfRG1Lsimp,dfRG2Lsimp,dfRG2Lwf,dfRG2L,dfRG2Lsimp,dfSLE},b->\[Infinity]]/.\[Epsilon]->2*)
 
 
-(* ::Subsection:: *)
+(* ::Subsection::Closed:: *)
 (*\[Section]\[Section] 2d*)
 
 
@@ -1135,7 +1331,7 @@ dfSLE=1+3/(4(2b+1));
 (*%/.\[Epsilon]->2*)
 
 
-(* ::Subsubsection:: *)
+(* ::Subsubsection::Closed:: *)
 (*Plots*)
 
 
@@ -1177,7 +1373,7 @@ dfSLE=1+3/(4(2b+1));
 (*(* The errors are under hestimated *)*)
 
 
-(* ::Item:: *)
+(* ::Item::Closed:: *)
 (*Plot for Kay*)
 
 
@@ -1222,7 +1418,7 @@ dfSLE=1+3/(4(2b+1));
 (*]*)
 
 
-(* ::Subsubsection:: *)
+(* ::Subsubsection::Closed:: *)
 (*\[Section]\[Section] 3d*)
 
 
@@ -1256,7 +1452,7 @@ dfSLE=1+3/(4(2b+1));
 (*%/.\[Epsilon]->1*)
 
 
-(* ::Subsubsection:: *)
+(* ::Subsubsection::Closed:: *)
 (*Extra data from my simulations*)
 
 
