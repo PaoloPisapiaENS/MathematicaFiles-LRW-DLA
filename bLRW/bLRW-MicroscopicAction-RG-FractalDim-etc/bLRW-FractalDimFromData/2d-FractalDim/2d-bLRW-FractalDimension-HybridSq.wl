@@ -21,6 +21,11 @@ SetOptions[EvaluationNotebook[],NotebookEventActions->{"Open":>(Print["Notebook 
 Directory[]
 
 
+(* ::Input:: *)
+(*SetOptions[$FrontEnd,CommonDefaultFormatTypes->{"Output"->StandardForm}];*)
+(*SetOptions[$FrontEndSession,CommonDefaultFormatTypes->{"Output"->StandardForm}];*)
+
+
 (* ::Title:: *)
 (*Implementation of Kay's method to extract a variance from noisy data: mean of batches and variance estimate from there, then mean over estimates*)
 
