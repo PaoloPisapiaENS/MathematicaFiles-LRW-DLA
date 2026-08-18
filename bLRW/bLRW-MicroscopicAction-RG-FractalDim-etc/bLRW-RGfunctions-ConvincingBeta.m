@@ -23,56 +23,10 @@
 (*SetOptions[$FrontEndSession,NotebookAutoSave->True]*)
 (*With[{nb=EvaluationNotebook[]},RunScheduledTask[If["ModifiedInMemory"/. NotebookInformation[nb],NotebookSave[nb]],300]]
 NotebookSave[]*)
-FS=FullSimplify;
-<<"D:\\Offline_Documents\\University\\PhD_Paris\\PhD_work\\Simulations\\Kay-initialization.m"
 
 
 (* ::Input::Initialization:: *)
-ClearAll[\[Beta]Function];
-
-Options[\[Beta]Function]={"print"->False,"g0Order"->0};
-
-\[Beta]Function[coupling_,OptionsPattern[]]:=Module[{gr,\[Beta]f,nLoop,i},
-Clear[g,g0,\[Mu],\[Epsilon]];
-
-nLoop=OptionValue["g0Order"];
-If[nLoop==0,nLoop=Exponent[coupling,g0]];
-
-gr=Normal@Series[coupling,{g0,0,nLoop}];
-
-If[OptionValue["print"],
-Print["Initial effective couling:\n ",gr,"\n"];];
-
-\[Beta]f=-\[Mu] D[gr,\[Mu]]//Expand;
-If[OptionValue["print"],
-Print["\n\[Beta]-function with bare coupling: ", \[Beta]f,"\n"];];
-
-gr=g-coupling+g0 \[Mu]^-\[Epsilon];
-
-If[OptionValue["print"],
-Print[" Bare coupling= \n ",gr,"\n"];];
-
-(* Invert g(g0) *)
-Do[\[Beta]f=\[Beta]f/.g0^n_ \[Mu]^(-n_ \[Epsilon]):>(gr)^n \[Mu]^(n \[Epsilon])//Expand;
-\[Beta]f=\[Beta]f/.(g0 ):>(gr)\[Mu]^ \[Epsilon]//Expand;
-(*\[Beta]f=Series[\[Beta]f,{g0,0,nLoop}]//Expand;*)
-\[Beta]f=\[Beta]f/.g0^n_/;n>nLoop:>0;
-\[Beta]f=\[Beta]f/.g0^n_/;n==nLoop:>(g \[Mu]^\[Epsilon])^n//Expand;
-If[OptionValue["print"],
-Print[\[Beta]f//FullSimplify,"\n"];];
-,{i,1,nLoop}];
-
-(*For[i=1,i<=nLoop,i++,
-\[Beta]f=\[Beta]f/.g0^n_ \[Mu]^(n_ \[Epsilon]):>(gr)^n//Expand;
-\[Beta]f=\[Beta]f/.(g0 \[Mu]^\[Epsilon]):>(gr)//Expand;
-];*)
-
-\[Beta]f=Normal[\[Beta]f]/.g0^n_ :>(g \[Mu]^\[Epsilon])^n//Expand;
-\[Beta]f=\[Beta]f/.(g0 ):>(g \[Mu]^\[Epsilon])//Expand;
-\[Beta]f=Series[\[Beta]f,{g,0,nLoop}]//Map[Expand,#]&;
-(*Print[\[Beta]f];*)
-(*\[Beta]f=Normal[\[Beta]f];*)
-Return[\[Beta]f//FullSimplify]]
+<<PaoloInitialization`
 
 
 (* ::Input::Initialization:: *)
@@ -131,7 +85,7 @@ Print[" Substition #",i,":\n\t",\[Beta]f//FullSimplify,"\n"];];
 (*Print[\[Beta]f];*)
 (*\[Beta]f=Normal[\[Beta]f];*)
 
-Return[\[Beta]f//FullSimplify]
+Return[\[Beta]f//FS]
 ]
 
 
@@ -170,7 +124,7 @@ ClearAll[\[Gamma]Function];
 Options[\[Gamma]Function]={"print"->False,"g0Order"->0};
 
 
-\[Gamma]Function[observable_,bareCoupling_, OptionsPattern[]]:=Module[{U,gr,\[Gamma]f,nLoop,i},
+\[Gamma]Function[observable_,bareCoupling_, OptionsPattern[]]:=Module[{U,gB,gr,\[Gamma],\[Gamma]f,nLoop,i},
 Clear[g,g0,\[Mu],\[Epsilon]];
 
 
@@ -185,36 +139,35 @@ U=Normal@Series[observable,{g0,0,nLoop}];
 \[Gamma]f=-\[Mu] D[Log[U],\[Mu]]//Expand;
 If[OptionValue["print"],
 Print[" \[Gamma]f(\!\(\*SubscriptBox[
-StyleBox[\"g\",\nBackground->RGBColor[0.9, 1, 1]], \(0\)]\))= \n ",\[Gamma]f];];
+StyleBox[\"g\",\nBackground->RGBColor[0.9, 1, 1]], \(0\)]\))=-\[Mu] D[Log[U],\[Mu]]= ",\[Gamma]f];];
 
+\[Gamma]f=Series[\[Gamma]f,{g0,0,nLoop}];
+If[OptionValue["print"],
+Print["\t\t= ",\[Gamma]f];];
 
-gr=g-gr+g0 \[Mu]^-\[Epsilon];
+(*Invert g(g0)*)
+
+(*gr=g-gr+g0 \[Mu]^-\[Epsilon];
 
 If[OptionValue["print"],
-Print[" Bare coupling= \n ",gr];];
+Print[" Bare coupling= \n ",gr];];*)
 
-Do[\[Gamma]f=\[Gamma]f/.g0^n_ :>(gr)^n \[Mu]^(n \[Epsilon])//Expand;
-\[Gamma]f=\[Gamma]f/.(g0 ):>(gr)\[Mu]^\[Epsilon]//Expand;
-\[Gamma]f=\[Gamma]f/.g0^n_/;n>nLoop:>0;
-\[Gamma]f=\[Gamma]f/.g0^n_/;n==nLoop:>(g \[Mu]^\[Epsilon])^n//Expand;
-,{i,1,nLoop}];
+gB=(g0+(g-gr)*\[Mu]^\[Epsilon]//Expand)+O[\[Gamma]]^(nLoop+1);
 
-(*For[i=1,i<=nLoop,i++,
-\[Gamma]f=\[Gamma]f/.g0^n_ \[Mu]^(n_ \[Epsilon]):>(gr)^n//Expand;
-\[Gamma]f=\[Gamma]f/.(g0 \[Mu]^\[Epsilon]):>(gr)//Expand;
-];*)
+gB=(gB/. {g->g  \[Gamma],g0->g0  \[Gamma]});
 
-\[Gamma]f=\[Gamma]f/.g0^n_ :>(g)^n \[Mu]^(n \[Epsilon])//Expand;
-\[Gamma]f=\[Gamma]f/.(g0 ):>(g)\[Mu]^\[Epsilon]//Expand;
-(*
-If[OptionValue["print"],
-Print[" \[Gamma]f(g)= \n ",\[Gamma]f];];*)
+If[OptionValue["print"],Print[" Initial bare coupling: \n\t g0(g)=",gB,"\n"];];
 
-\[Gamma]f=Series[\[Gamma]f,{g,0,nLoop}]//Expand;
-\[Gamma]f=Factor@Simplify/@\[Gamma]f;
-(*Print[\[Gamma]f];*)
-(*\[Gamma]f=Normal[\[Gamma]f];*)
-Return[\[Gamma]f]]
+gB=(gB//.g0->gB/\[Gamma])//Expand;
+gB=Normal[gB]/. \[Gamma]->1;
+
+If[OptionValue["print"],Print[" Bare coupling: \n\t g0(g)=",gB,"\n"];];
+
+
+\[Gamma]f=Normal[\[Gamma]f]/.(g0 ):>(gB)//Expand;
+\[Gamma]f=Series[\[Gamma]f,{g,0,nLoop}]//Map[Expand,#]&;
+
+Return[\[Gamma]f//FS]]
 
 
 (* ::Input::Initialization:: *)
@@ -346,7 +299,21 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 dfRG1L:=2-b \[Epsilon]/(2+b)
 dfRG1Lsimp:=2-(b \[Epsilon])/(1+2 b)
 
-dfRG2Lsimp:=Collect[fractalDim,\[Epsilon],FS]
+dfRG2Lsimp:=2-(b \[Epsilon])/(1+2 b)-(b (1+b+4 b^2) \[Epsilon]^2)/(2 (1+2 b)^3)
+
+dfRG2Lwf:=dfWF
+dfRG2L:=2-b \[Epsilon]/(2+b)-b (\[Epsilon]/(2+b))^2
+
+(*dfRG2Lsimp:=2-(b \[Epsilon])/(1+2 b)-(b ^2 \[Epsilon]^2)/(1+2 b)^2*)(*BAD*)
+
+dfSLE=1+3/(4(2b+1));
+
+
+(* ::Input::Initialization:: *)
+dfRG1L:=2-b \[Epsilon]/(2+b)
+dfRG1Lsimp:=2-(b \[Epsilon])/(1+2 b)
+
+dfRG2Lsimp:=2-(b \[Epsilon])/(1+2 b)-(b (1+b+4 b^2) \[Epsilon]^2)/(2 (1+2 b)^3)
 
 dfRG2Lwf:=dfWF
 dfRG2L:=2-b \[Epsilon]/(2+b)-b (\[Epsilon]/(2+b))^2

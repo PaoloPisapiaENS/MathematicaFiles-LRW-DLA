@@ -4,8 +4,14 @@
 (*SetOptions[$FrontEndSession,NotebookAutoSave->True]*)
 (*With[{nb=EvaluationNotebook[]},RunScheduledTask[If["ModifiedInMemory"/. NotebookInformation[nb],NotebookSave[nb]],300]]
 NotebookSave[]*)
-FS=FullSimplify;
-<<"D:\\Offline_Documents\\University\\PhD_Paris\\PhD_work\\Simulations\\Kay-initialization.m"
+
+
+(* ::Input::Initialization:: *)
+<<PaoloInitialization`
+
+
+(* ::Input:: *)
+(*?PaoloInitialization`**)
 
 
 (* ::Input:: *)
@@ -21,16 +27,11 @@ FS=FullSimplify;
 (*FrontEndTokenExecute["SelectionCloseAllGroups"]*)
 
 
-(* ::Input:: *)
-(*SetOptions[$FrontEnd,CommonDefaultFormatTypes->{"Output"->StandardForm}];*)
-(*SetOptions[$FrontEndSession,CommonDefaultFormatTypes->{"Output"->StandardForm}];*)
-
-
 (* ::Title:: *)
 (*\[Beta]Function[] and \[Gamma]Function[]*)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*\[Beta]Function[] Definitions*)
 
 
@@ -38,52 +39,53 @@ FS=FullSimplify;
 (*For the RG with effective finite quantities (i.e. renormalization without CTs)*)
 
 
-(* ::Input::Initialization:: *)
-ClearAll[\[Beta]Function];
-
-Options[\[Beta]Function]={"print"->False,"g0Order"->0};
-
-\[Beta]Function[coupling_,OptionsPattern[]]:=Module[{gr,\[Beta]f,nLoop,i},
-Clear[g,g0,\[Mu],\[Epsilon]];
-
-nLoop=OptionValue["g0Order"];
-If[nLoop==0,nLoop=Exponent[coupling,g0]];
-
-gr=Normal@Series[coupling,{g0,0,nLoop}];
-
-If[OptionValue["print"],
-Print["Initial effective couling:\n ",gr,"\n"];];
-
-\[Beta]f=-\[Mu] D[gr,\[Mu]]//Expand;
-If[OptionValue["print"],
-Print["\n\[Beta]-function with bare coupling: ", \[Beta]f,"\n"];];
-
-gr=g-coupling+g0 \[Mu]^-\[Epsilon];
-
-If[OptionValue["print"],
-Print[" Bare coupling= \n ",gr,"\n"];];
-
-(* Invert g(g0) *)
-Do[\[Beta]f=\[Beta]f/.g0^n_ \[Mu]^(-n_ \[Epsilon]):>(gr)^n \[Mu]^(n \[Epsilon])//Expand;
-\[Beta]f=\[Beta]f/.(g0 ):>(gr)\[Mu]^ \[Epsilon]//Expand;
-(*\[Beta]f=Series[\[Beta]f,{g0,0,nLoop}]//Expand;*)
-\[Beta]f=\[Beta]f/.g0^n_/;n>nLoop:>0;
-\[Beta]f=\[Beta]f/.g0^n_/;n==nLoop:>(g \[Mu]^\[Epsilon])^n//Expand;
-If[OptionValue["print"],
-Print[\[Beta]f//FullSimplify,"\n"];];
-,{i,1,nLoop}];
-
-(*For[i=1,i<=nLoop,i++,
-\[Beta]f=\[Beta]f/.g0^n_ \[Mu]^(n_ \[Epsilon]):>(gr)^n//Expand;
-\[Beta]f=\[Beta]f/.(g0 \[Mu]^\[Epsilon]):>(gr)//Expand;
-];*)
-
-\[Beta]f=Normal[\[Beta]f]/.g0^n_ :>(g \[Mu]^\[Epsilon])^n//Expand;
-\[Beta]f=\[Beta]f/.(g0 ):>(g \[Mu]^\[Epsilon])//Expand;
-\[Beta]f=Series[\[Beta]f,{g,0,nLoop}]//Map[Expand,#]&;
-(*Print[\[Beta]f];*)
-(*\[Beta]f=Normal[\[Beta]f];*)
-Return[\[Beta]f//FullSimplify]]
+(* ::Input:: *)
+(*(*This is the old version*)*)
+(*ClearAll[\[Beta]Function];*)
+(**)
+(*Options[\[Beta]Function]={"print"->False,"g0Order"->0};*)
+(**)
+(*\[Beta]Function[coupling_,OptionsPattern[]]:=Module[{gr,\[Beta]f,nLoop,i},*)
+(*Clear[g,g0,\[Mu],\[Epsilon]];*)
+(**)
+(*nLoop=OptionValue["g0Order"];*)
+(*If[nLoop==0,nLoop=Exponent[coupling,g0]];*)
+(**)
+(*gr=Normal@Series[coupling,{g0,0,nLoop}];*)
+(**)
+(*If[OptionValue["print"],*)
+(*Print["Initial effective couling:\n ",gr,"\n"];];*)
+(**)
+(*\[Beta]f=-\[Mu] D[gr,\[Mu]]//Expand;*)
+(*If[OptionValue["print"],*)
+(*Print["\n\[Beta]-function with bare coupling: ", \[Beta]f,"\n"];];*)
+(**)
+(*gr=g-coupling+g0 \[Mu]^-\[Epsilon];*)
+(**)
+(*If[OptionValue["print"],*)
+(*Print[" Bare coupling= \n ",gr,"\n"];];*)
+(**)
+(*(* Invert g(g0) *)*)
+(*Do[\[Beta]f=\[Beta]f/.g0^n_ \[Mu]^(-n_ \[Epsilon]):>(gr)^n \[Mu]^(n \[Epsilon])//Expand;*)
+(*\[Beta]f=\[Beta]f/.(g0 ):>(gr)\[Mu]^ \[Epsilon]//Expand;*)
+(*(*\[Beta]f=Series[\[Beta]f,{g0,0,nLoop}]//Expand;*)*)
+(*\[Beta]f=\[Beta]f/.g0^n_/;n>nLoop:>0;*)
+(*\[Beta]f=\[Beta]f/.g0^n_/;n==nLoop:>(g \[Mu]^\[Epsilon])^n//Expand;*)
+(*If[OptionValue["print"],*)
+(*Print[\[Beta]f//FullSimplify,"\n"];];*)
+(*,{i,1,nLoop}];*)
+(**)
+(*(*For[i=1,i<=nLoop,i++,*)
+(*\[Beta]f=\[Beta]f/.g0^n_ \[Mu]^(n_ \[Epsilon]):>(gr)^n//Expand;*)
+(*\[Beta]f=\[Beta]f/.(g0 \[Mu]^\[Epsilon]):>(gr)//Expand;*)
+(*];*)*)
+(**)
+(*\[Beta]f=Normal[\[Beta]f]/.g0^n_ :>(g \[Mu]^\[Epsilon])^n//Expand;*)
+(*\[Beta]f=\[Beta]f/.(g0 ):>(g \[Mu]^\[Epsilon])//Expand;*)
+(*\[Beta]f=Series[\[Beta]f,{g,0,nLoop}]//Map[Expand,#]&;*)
+(*(*Print[\[Beta]f];*)*)
+(*(*\[Beta]f=Normal[\[Beta]f];*)*)
+(*Return[\[Beta]f//FullSimplify]]*)
 
 
 (* ::Input::Initialization:: *)
@@ -142,7 +144,7 @@ Print[" Substition #",i,":\n\t",\[Beta]f//FullSimplify,"\n"];];
 (*Print[\[Beta]f];*)
 (*\[Beta]f=Normal[\[Beta]f];*)
 
-Return[\[Beta]f//FullSimplify]
+Return[\[Beta]f//FS]
 ]
 
 
@@ -351,8 +353,66 @@ Return[Map[Expand,\[Beta]f]]]
 (*\[Gamma]Function[] Definitions*)
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*\[Gamma]Function[]*)
+
+
+(* ::Input:: *)
+(*(*Old code*)*)
+
+
+(* ::Input:: *)
+(*ClearAll[\[Gamma]Function];*)
+(**)
+(**)
+(*Options[\[Gamma]Function]={"print"->False,"g0Order"->0};*)
+(**)
+(**)
+(*\[Gamma]Function[observable_,bareCoupling_, OptionsPattern[]]:=Module[{U,gr,\[Gamma]f,nLoop,i},*)
+(*Clear[g,g0,\[Mu],\[Epsilon]];*)
+(**)
+(**)
+(*nLoop=OptionValue["g0Order"];*)
+(*If[nLoop==0,nLoop=Exponent[bareCoupling,g0]-1];*)
+(*(*Print[nLoop]*);*)
+(**)
+(*gr=Normal@Series[bareCoupling,{g0,0,nLoop}];*)
+(**)
+(*U=Normal@Series[observable,{g0,0,nLoop}];*)
+(**)
+(*\[Gamma]f=-\[Mu] D[Log[U],\[Mu]]//Expand;*)
+(*If[OptionValue["print"],*)
+(*Print[" \[Gamma]f(\!\(\*SubscriptBox[*)
+(*StyleBox[\"g\",\nBackground->RGBColor[0.9, 1, 1]], \(0\)]\))= \n ",\[Gamma]f];];*)
+(**)
+(**)
+(*gr=g-gr+g0 \[Mu]^-\[Epsilon];*)
+(**)
+(*If[OptionValue["print"],*)
+(*Print[" Bare coupling= \n ",gr];];*)
+(**)
+(*Do[\[Gamma]f=\[Gamma]f/.g0^n_ :>(gr)^n \[Mu]^(n \[Epsilon])//Expand;*)
+(*\[Gamma]f=\[Gamma]f/.(g0 ):>(gr)\[Mu]^\[Epsilon]//Expand;*)
+(*\[Gamma]f=\[Gamma]f/.g0^n_/;n>nLoop:>0;*)
+(*\[Gamma]f=\[Gamma]f/.g0^n_/;n==nLoop:>(g \[Mu]^\[Epsilon])^n//Expand;*)
+(*,{i,1,nLoop}];*)
+(**)
+(*(*For[i=1,i<=nLoop,i++,*)
+(*\[Gamma]f=\[Gamma]f/.g0^n_ \[Mu]^(n_ \[Epsilon]):>(gr)^n//Expand;*)
+(*\[Gamma]f=\[Gamma]f/.(g0 \[Mu]^\[Epsilon]):>(gr)//Expand;*)
+(*];*)*)
+(**)
+(*\[Gamma]f=\[Gamma]f/.g0^n_ :>(g)^n \[Mu]^(n \[Epsilon])//Expand;*)
+(*\[Gamma]f=\[Gamma]f/.(g0 ):>(g)\[Mu]^\[Epsilon]//Expand;*)
+(*(**)
+(*If[OptionValue["print"],*)
+(*Print[" \[Gamma]f(g)= \n ",\[Gamma]f];];*)*)
+(**)
+(*\[Gamma]f=Series[\[Gamma]f,{g,0,nLoop}]//Expand;*)
+(*\[Gamma]f=Factor@Simplify/@\[Gamma]f;*)
+(*(*Print[\[Gamma]f];*)*)
+(*(*\[Gamma]f=Normal[\[Gamma]f];*)*)
+(*Return[\[Gamma]f]]*)
 
 
 (* ::Input::Initialization:: *)
@@ -362,7 +422,7 @@ ClearAll[\[Gamma]Function];
 Options[\[Gamma]Function]={"print"->False,"g0Order"->0};
 
 
-\[Gamma]Function[observable_,bareCoupling_, OptionsPattern[]]:=Module[{U,gr,\[Gamma]f,nLoop,i},
+\[Gamma]Function[observable_,bareCoupling_, OptionsPattern[]]:=Module[{U,gB,gr,\[Gamma],\[Gamma]f,nLoop,i},
 Clear[g,g0,\[Mu],\[Epsilon]];
 
 
@@ -377,39 +437,38 @@ U=Normal@Series[observable,{g0,0,nLoop}];
 \[Gamma]f=-\[Mu] D[Log[U],\[Mu]]//Expand;
 If[OptionValue["print"],
 Print[" \[Gamma]f(\!\(\*SubscriptBox[
-StyleBox[\"g\",\nBackground->RGBColor[0.9, 1, 1]], \(0\)]\))= \n ",\[Gamma]f];];
+StyleBox[\"g\",\nBackground->RGBColor[0.9, 1, 1]], \(0\)]\))=-\[Mu] D[Log[U],\[Mu]]= ",\[Gamma]f];];
 
+\[Gamma]f=Series[\[Gamma]f,{g0,0,nLoop}];
+If[OptionValue["print"],
+Print["\t\t= ",\[Gamma]f];];
 
-gr=g-gr+g0 \[Mu]^-\[Epsilon];
+(*Invert g(g0)*)
+
+(*gr=g-gr+g0 \[Mu]^-\[Epsilon];
 
 If[OptionValue["print"],
-Print[" Bare coupling= \n ",gr];];
+Print[" Bare coupling= \n ",gr];];*)
 
-Do[\[Gamma]f=\[Gamma]f/.g0^n_ :>(gr)^n \[Mu]^(n \[Epsilon])//Expand;
-\[Gamma]f=\[Gamma]f/.(g0 ):>(gr)\[Mu]^\[Epsilon]//Expand;
-\[Gamma]f=\[Gamma]f/.g0^n_/;n>nLoop:>0;
-\[Gamma]f=\[Gamma]f/.g0^n_/;n==nLoop:>(g \[Mu]^\[Epsilon])^n//Expand;
-,{i,1,nLoop}];
+gB=(g0+(g-gr)*\[Mu]^\[Epsilon]//Expand)+O[\[Gamma]]^(nLoop+1);
 
-(*For[i=1,i<=nLoop,i++,
-\[Gamma]f=\[Gamma]f/.g0^n_ \[Mu]^(n_ \[Epsilon]):>(gr)^n//Expand;
-\[Gamma]f=\[Gamma]f/.(g0 \[Mu]^\[Epsilon]):>(gr)//Expand;
-];*)
+gB=(gB/. {g->g  \[Gamma],g0->g0  \[Gamma]});
 
-\[Gamma]f=\[Gamma]f/.g0^n_ :>(g)^n \[Mu]^(n \[Epsilon])//Expand;
-\[Gamma]f=\[Gamma]f/.(g0 ):>(g)\[Mu]^\[Epsilon]//Expand;
-(*
-If[OptionValue["print"],
-Print[" \[Gamma]f(g)= \n ",\[Gamma]f];];*)
+If[OptionValue["print"],Print[" Initial bare coupling: \n\t g0(g)=",gB,"\n"];];
 
-\[Gamma]f=Series[\[Gamma]f,{g,0,nLoop}]//Expand;
-\[Gamma]f=Factor@Simplify/@\[Gamma]f;
-(*Print[\[Gamma]f];*)
-(*\[Gamma]f=Normal[\[Gamma]f];*)
-Return[\[Gamma]f]]
+gB=(gB//.g0->gB/\[Gamma])//Expand;
+gB=Normal[gB]/. \[Gamma]->1;
+
+If[OptionValue["print"],Print[" Bare coupling: \n\t g0(g)=",gB,"\n"];];
 
 
-(* ::Subsection::Closed:: *)
+\[Gamma]f=Normal[\[Gamma]f]/.(g0 ):>(gB)//Expand;
+\[Gamma]f=Series[\[Gamma]f,{g,0,nLoop}]//Map[Expand,#]&;
+
+Return[\[Gamma]f//FS]]
+
+
+(* ::Subsection:: *)
 (*\[Gamma]FunctionFromZ[]*)
 
 
@@ -492,7 +551,7 @@ Return[Normal[\[Gamma]f]]
 
 
 
-(* ::Title:: *)
+(* ::Title::Closed:: *)
 (*\[Section] 1-Loop after MY simplification*)
 
 
@@ -500,11 +559,11 @@ Return[Normal[\[Gamma]f]]
 (*\[Section]\[Section] \[Beta] function*)
 
 
-(* ::Subsubsection::Closed:: *)
+(* ::Subsubsection:: *)
 (*\[Section]\[Section]\[Section] Splitting contributions: g, emitter Subscript[\[Gamma], 1] and absorber "Subscript[\[Gamma], 2]"*)
 
 
-(* ::Item:: *)
+(* ::Item::Closed:: *)
 (*with \[Beta]Function[] and Kay's approach*)
 
 
@@ -572,7 +631,7 @@ Return[Normal[\[Gamma]f]]
 (*(*It works!!*)*)
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*\[Section]\[Section] \[CapitalGamma]_1 observable *)
 
 
@@ -585,7 +644,7 @@ Return[Normal[\[Gamma]f]]
 (**)
 (*\[CapitalGamma]1=1-b g0 \[Mu]^-\[Epsilon] banana ;*)
 (**)
-(*\[Gamma]Function[\[CapitalGamma]1,gg,"print"->False]*)
+(*\[Gamma]Function[\[CapitalGamma]1,gg,"print"->True]*)
 (*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
 (**)
 (*Normal@%/.g->gc1//FullSimplify;*)
@@ -596,7 +655,7 @@ Return[Normal[\[Gamma]f]]
 (*\[Section]\[Section]\[Section] After splitting the contributions*)
 
 
-(* ::Item::Closed:: *)
+(* ::Item:: *)
 (*with \[Gamma]Function[]*)
 
 
@@ -657,10 +716,134 @@ Return[Normal[\[Gamma]f]]
 
 
 (* ::Chapter:: *)
-(*\[Section]\[Section] 2loop \[Beta] function*)
+(*\[Section]\[Section] 2loop b=1*)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
+(*\[Section]\[Section]\[Section] \[Beta]-function After splitting the contributions: b=1*)
+
+
+(* ::Subsection::Closed:: *)
+(*Here I just replace Z_gt by Z_g*Z_\[Gamma]1, but this should be the wrong way to compute \[Beta]... However the result is correct*)
+(*I FINALLY MADE UP MY MIND AND CONVINCED MYSELF THAT THIS IS CORRECT*)
+
+
+(* ::Input:: *)
+(*Zg=1+2 g 1/\[Epsilon]-g^2 (-7/\[Epsilon]^2 5/7+5/(2\[Epsilon]));(*a=5/7*)*)
+(**)
+(*Z\[Gamma]1=1+ g 1/\[Epsilon]-g^2 (-2/\[Epsilon]^2+1/(2\[Epsilon]));*)
+(**)
+(*loopOrder=2;*)
+(**)
+(*Zgt=Zg Z\[Gamma]1 /.z[_]->1;*)
+(*Series[Zgt,{g,0,loopOrder}]//FS//Normal*)
+(*Series[%,{\[Epsilon],0,0}]//FS//Normal;*)
+(**)
+(*\[Beta]FunctionFromZ[Series[Zgt,{g,0,loopOrder}]//FS//Normal,loopOrder+1]*)
+(*RGeq2=Simplify[Normal[%]]==0;*)
+
+
+(* ::Subsection:: *)
+(*Using Kay's approach*)
+
+
+(* ::Item::Closed:: *)
+(*No contribution splitting*)
+
+
+(* ::Input:: *)
+(*Zg=g0 \[Mu]^-\[Epsilon]-(b+2)banana (g0 \[Mu]^-\[Epsilon])^2+(g0 \[Mu]^-\[Epsilon])^3 ( (b+2)( doubleBanana + 2(b+1) hat))/.b->1;*)
+(**)
+(*Series[%,{g0,0,3}]*)
+
+
+(* ::Input:: *)
+(*g=Series[Zg,{g0,0,3}]//Normal*)
+(*(*g=Series[g0 \[Mu]^-\[Epsilon] Zgt^(-1),{g0,0,2}]//Normal*)*)
+(*\[Beta]Function[g,"print"->tTrue]*)
+(*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
+(*RGeq2=Simplify[Normal[%]]==0;*)
+
+
+(* ::Input:: *)
+(*(*Correct!*)*)
+
+
+(* ::Item:: *)
+(*Splitting the contributions*)
+
+
+(* ::Input:: *)
+(*Zg=g0 \[Mu]^-\[Epsilon]-(g0 \[Mu]^-\[Epsilon])^2 2*(bananag)+(g0 \[Mu]^-\[Epsilon])^3 ( 2 doubleBananag + 4 hatg+4 hat\[Gamma]1g +2 hatg\[Gamma]1 );(*a=5/7*)*)
+(**)
+(*Z\[Gamma]1=- (g0 \[Mu]^-\[Epsilon]) banana\[Gamma]1+(g0 \[Mu]^-\[Epsilon])^2 ( doubleBanana\[Gamma]1g + hatg\[Gamma]1+hat\[Gamma]1);*)
+(**)
+(*loopOrder=2;*)
+(**)
+(*Zg+g0 \[Mu]^-\[Epsilon] Z\[Gamma]1 ;*)
+(*Series[%,{g0,0,loopOrder+1}]*)
+
+
+(* ::Input:: *)
+(*g=Series[Zg+g0 \[Mu]^-\[Epsilon] Z\[Gamma]1 ,{g0,0,loopOrder+1}]//Normal*)
+(*(*g=Series[g0 \[Mu]^-\[Epsilon] Zgt^(-1),{g0,0,2}]//Normal*)*)
+(*\[Beta]Function[g,"print"->tTrue]*)
+(**)
+(*%/.bananag->banana/.banana\[Gamma]1->banana/.doubleBananag->doubleBanana/.doubleBanana\[Gamma]1g->doubleBanana/.hatg->hat/.hat\[Gamma]1->hat/.hatg\[Gamma]1->hat/. hat\[Gamma]1g->hat*)
+(*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
+(*RGeq2=Simplify[Normal[%]]==0;*)
+
+
+(* ::Input:: *)
+(*(*Correct!*)*)
+
+
+(* ::Subsection::Closed:: *)
+(*Let's get the 2-Loop critical g*	*)
+
+
+(* ::Input:: *)
+(*gc2=gc1+B \[Epsilon]^2/.b->1;*)
+(*RGeq2/.g->gc2;*)
+(*Series[%,{\[Epsilon],0,3}];*)
+(*Flatten@Solve[Normal[%],B]//FS*)
+(*gc2=(gc2/.%)//FullSimplify;*)
+(*gc2=Collect[Expand@gc2,\[Epsilon],Simplify]*)
+
+
+(* ::Input:: *)
+(*(* CORRECT !!!*)*)
+
+
+(* ::Section::Closed:: *)
+(*\[Section]\[Section]\[Section] \[Gamma]-functions After splitting the contributions: b=1*)
+
+
+(* ::Subsection:: *)
+(*\[CapitalGamma]\[Gamma]1*)
+
+
+(* ::Input:: *)
+(*loopOrder=2;*)
+(**)
+(*g=Normal[Series[Zg+g0 \[Mu]^-\[Epsilon] Z\[Gamma]1,{g0,0,loopOrder+1}]]/. bananag->banana/. banana\[Gamma]1->banana/. doubleBananag->doubleBanana/. doubleBanana\[Gamma]1g->doubleBanana/. hatg->hat/. hat\[Gamma]1->hat/. hatg\[Gamma]1->hat/. hat\[Gamma]1g->hat*)
+(**)
+(*(1+Z\[Gamma]1)/(\[CapitalGamma]\[Gamma])^0/.z[_]->1/. bananag->banana/. banana\[Gamma]1->banana/. doubleBananag->doubleBanana/. doubleBanana\[Gamma]1g->doubleBanana/. hatg->hat/. hat\[Gamma]1->hat/. hatg\[Gamma]1->hat/. hat\[Gamma]1g->hat;*)
+(**)
+(*\[Gamma]Function[%,g,"print"->True]*)
+(*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
+(*%/.g->gc2+O[\[Epsilon]]^3*)
+
+
+(* ::Input:: *)
+(*(*Correct!*)*)
+
+
+(* ::Chapter:: *)
+(*\[Section]\[Section] 2loop b>1*)
+
+
+(* ::Section::Closed:: *)
 (*Rewritten to split into Zg, Z\[Gamma]1, Z\[Gamma]2*)
 
 
@@ -726,108 +909,13 @@ twoLoopZ\[Gamma]2=twoLoopZ\[Gamma]2/.(banana)^2->0(banana)^2/2;
 twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 
 
-(* ::Subitem::Closed:: *)
+(* ::Subitem:: *)
 (*Check:*)
 
 
 (* ::Input:: *)
 (*twoLoopZg+twoLoopZ\[Gamma]1+twoLoopZ\[Gamma]2;*)
 (*FS[%*b+(- goodGuys- gammagGuys-betterNasties - realNasties)]/.banana->0*)
-
-
-(* ::Section::Closed:: *)
-(*\[Section]\[Section]\[Section] After splitting the contributions: b=1*)
-
-
-(* ::Subsection::Closed:: *)
-(*Here I just replace Z_gt by Z_g*Z_\[Gamma]1, but this should be the wrong way to compute \[Beta]... However the result is correct*)
-(*I FINALLY MADE UP MY MIND AND CONVINCED MYSELF THAT THIS IS CORRECT*)
-
-
-(* ::Input:: *)
-(*Zg=1+2 g 1/\[Epsilon]-g^2 (-7/\[Epsilon]^2 5/7+5/(2\[Epsilon]));(*a=5/7*)*)
-(**)
-(*Z\[Gamma]1=1+ g 1/\[Epsilon]-g^2 (-2/\[Epsilon]^2+1/(2\[Epsilon]));*)
-(**)
-(*loopOrder=2;*)
-(**)
-(*Zgt=Zg Z\[Gamma]1 /.z[_]->1;*)
-(*Series[Zgt,{g,0,loopOrder}]//FS//Normal*)
-(*Series[%,{\[Epsilon],0,0}]//FS//Normal;*)
-(**)
-(*\[Beta]FunctionFromZ[Series[Zgt,{g,0,loopOrder}]//FS//Normal,loopOrder+1]*)
-(*RGeq2=Simplify[Normal[%]]==0;*)
-
-
-(* ::Subsection:: *)
-(*Using Kay's approach*)
-
-
-(* ::Item::Closed:: *)
-(*No contribution splitting*)
-
-
-(* ::Input:: *)
-(*Zg=g0 \[Mu]^-\[Epsilon]-(b+2)banana (g0 \[Mu]^-\[Epsilon])^2+(g0 \[Mu]^-\[Epsilon])^3 ( (b+2)( doubleBanana + 2(b+1) hat))/.b->1;*)
-(**)
-(*Series[%,{g0,0,3}]*)
-
-
-(* ::Input:: *)
-(*g=Series[Zg,{g0,0,3}]//Normal*)
-(*(*g=Series[g0 \[Mu]^-\[Epsilon] Zgt^(-1),{g0,0,2}]//Normal*)*)
-(*\[Beta]Function[g,"print"->tTrue]*)
-(*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
-(*RGeq2=Simplify[Normal[%]]==0;*)
-
-
-(* ::Input:: *)
-(*(*Correct!*)*)
-
-
-(* ::Item:: *)
-(*Splitting the contributions*)
-
-
-(* ::Input:: *)
-(*Zg=g0 \[Mu]^-\[Epsilon]-(g0 \[Mu]^-\[Epsilon])^2 2*(bananag)+(g0 \[Mu]^-\[Epsilon])^3 ( 2 doubleBananag + 4 hatg+4 hat\[Gamma]1g +2 hatg\[Gamma]1 );(*a=5/7*)*)
-(**)
-(*Z\[Gamma]1=- (g0 \[Mu]^-\[Epsilon])^2 banana\[Gamma]1+(g0 \[Mu]^-\[Epsilon])^3 ( doubleBanana\[Gamma]1g + hatg\[Gamma]1+hat\[Gamma]1);*)
-(**)
-(*loopOrder=2;*)
-(**)
-(*Zg+Z\[Gamma]1 ;*)
-(*Series[%,{g0,0,loopOrder+1}]*)
-
-
-(* ::Input:: *)
-(*g=Series[Zg+Z\[Gamma]1 ,{g0,0,loopOrder+1}]//Normal*)
-(*(*g=Series[g0 \[Mu]^-\[Epsilon] Zgt^(-1),{g0,0,2}]//Normal*)*)
-(*\[Beta]Function[g,"print"->tTrue]*)
-(**)
-(*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
-(*RGeq2=Simplify[Normal[%]]==0;*)
-
-
-(* ::Input:: *)
-(*(*Correct!*)*)
-
-
-(* ::Subsection::Closed:: *)
-(*Let's get the 2-Loop critical g*	*)
-
-
-(* ::Input:: *)
-(*gc2=gc1+B \[Epsilon]^2/.b->1;*)
-(*RGeq2/.g->gc2;*)
-(*Series[%,{\[Epsilon],0,3}];*)
-(*Flatten@Solve[Normal[%],B]//FS*)
-(*gc2=(gc2/.%)//FullSimplify;*)
-(*gc2=Collect[Expand@gc2,\[Epsilon],Simplify]*)
-
-
-(* ::Input:: *)
-(*(* CORRECT !!!*)*)
 
 
 (* ::Section:: *)
@@ -867,7 +955,7 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
 
 
-(* ::Subsection:: *)
+(* ::Subsection::Closed:: *)
 (*Using \[Beta]FunctionFromZ[] 	WITH CT-IN-CT TERMS SUBTRACTED*)
 
 
@@ -1004,79 +1092,7 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (**)
 
 
-(* ::Subsection:: *)
-(*using \[Beta]Function[] and Kay's approach*)
-
-
-(* ::Item:: *)
-(*Splitting the contributions*)
-
-
-(* ::Input:: *)
-(*Z\[Gamma]1 =g0 \[Mu]^-\[Epsilon] (-b banana g0 \[Mu]^-\[Epsilon]+b g0^2 (doubleBanana+a (-1+b) doubleBanana-h hat+b (2+h) hat) \[Mu]^(-2 \[Epsilon]) z["\[Gamma]1"])*)
-(*Z\[Gamma]2 =g0 \[Mu]^-\[Epsilon] (-(-1+b) banana g0 \[Mu]^-\[Epsilon]-(g0^2 (2 b hat-2 b^3 hat-(-1+b) b^2 (a2 doubleBanana+h2 hat)) \[Mu]^(-2 \[Epsilon]) z["\[Gamma]2"])/b)*)
-(*Zg =g0 \[Mu]^-\[Epsilon] (1-2 banana g0 \[Mu]^-\[Epsilon]-1/b g0^2 (-4 (-1+b) b doubleBanana+2 (-1+b) b^2 doubleBanana+b^3 doubleBanana+2 b hat+4 b^2 hat+8 (-1+b) b^2 hat+2 (-1+b) b GradImmediateIntNotAllowed hat-(-1+b) b (2 doubleBanana+4 hat)+(-1+b) b^2 (2 doubleBanana+4 hat)-b^3 (doubleBanana+6 hat)+(-1+b) b (4 doubleBanana+8 hat)-b^3 (2 doubleBanana+10 hat)) \[Mu]^(-2 \[Epsilon]) z["g"])*)
-(*Z\[Gamma] =1-1/2 (-1+b) g0^2 GradImmediateIntNotAllowed (banana^2/2+hat+sunset) \[Mu]^(-2 \[Epsilon]) z["\[Gamma]"]*)
-
-
-(* ::Input:: *)
-(*loopOrder=2;*)
-(**)
-(**)
-(*Zgt=(Z\[Gamma]1 +Z\[Gamma]2+Zg )/Z\[Gamma] ^2/.z[_]->1/.GradImmediateIntNotAllowed->0/.{a->a,a2->-3/(b)+1-a,h->h,h2->h2};*)
-(**)
-(*FS/@(Series[%,{g0,0,loopOrder+1}])*)
-
-
-(* ::Input:: *)
-(*g=Series[Zgt,{g0,0,loopOrder+1}]//Normal*)
-(*(*g=Series[g0 \[Mu]^-\[Epsilon] Zgt^(-1),{g0,0,2}]//Normal*)*)
-(*\[Beta]Function[g,"print"->tTrue]*)
-(**)
-(*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
-(*RGeq2=Simplify[Normal[%]]==0;*)
-
-
-(* ::Item:: *)
-(**)
-
-
-(* ::Input:: *)
-(*Zg=1+2 g0 \[Mu]^-\[Epsilon] banana+z[g](g0 \[Mu]^-\[Epsilon])^2 twoLoopZg;*)
-(*%/.b->1*)
-(*Z\[Gamma]1=Simplify/@(1+b g0 \[Mu]^-\[Epsilon] banana +z[\[Gamma]1](g0 \[Mu]^-\[Epsilon])^2(twoLoopZ\[Gamma]1+(b+b^2)(banana)^2(*TO REMOVE THE SUB.DIVS*)));*)
-(*%/.b->1*)
-(*Z\[Gamma]2=1+(b-1) g0 \[Mu]^-\[Epsilon] banana-z[\[Gamma]2](g0 \[Mu]^-\[Epsilon])^2 twoLoopZ\[Gamma]2;*)
-(**)
-(*Z\[Gamma]=1+z[\[Gamma]](g0 \[Mu]^-\[Epsilon])^2/b (b(b-1))/2 ( sunset + (hat-1/2 (banana)^2(* From \[CapitalGamma]Grad counterterm*)));*)
-(**)
-(*Zgt=(Zg Z\[Gamma]1 Z\[Gamma]2)/Z\[Gamma]^2/.z[_]->1;*)
-(*Series[Zgt,{g0,0,2}];*)
-(*%/.b->1//FS*)
-(**)
-(*Series[(Zgt/.g0->g0 Zgt)^(-1),{g0,0,2}];*)
-(*%/.b->1//FS*)
-
-
-(* ::Input:: *)
-(*(Zgt^(1)/.g0->g0 Zgt^(1))g0 \[Mu]^-\[Epsilon];*)
-(*g=Series[%,{g0,0,3}]//Normal*)
-(*g=Series[g0 \[Mu]^-\[Epsilon] Zgt^(1),{g0,0,3}]//Normal*)
-(*\[Beta]Function[g,"print"->False]*)
-(*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
-(*RGeq2=Simplify[Normal[%]]==0;*)
-
-
-(* ::Input:: *)
-(*(16+11 \[Epsilon]+b (-32+56 b+5 \[Epsilon]))//Expand;*)
-(*Collect[%,\[Epsilon]]*)
-
-
-(* ::Input:: *)
-(*SolveAlways[16-24 b-8 b^2-32 b zg-4 b z\[Gamma]+4 b^2 z\[Gamma]-8 b^2 z\[Gamma]1-32 b^3 z\[Gamma]1+40 b z\[Gamma]2-48 b^2 z\[Gamma]2+8 b^3 z\[Gamma]2==0,b]*)
-
-
-(* ::Subsection::Closed:: *)
+(* ::Subsubsection:: *)
 (*Some RG functions*)
 
 
@@ -1150,7 +1166,7 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (*{8/\[Epsilon]-(10 b)/\[Epsilon]+(4 a b)/\[Epsilon]+(2 b^2)/\[Epsilon]-(4 a b^2)/\[Epsilon]+(2 b h)/\[Epsilon]-(2 b^2 h)/\[Epsilon]-(4 l)/\[Epsilon]+(4 b l)/\[Epsilon]==0,(-1+b) b (-1+2 a+h)==0,(-1+b) (2+b (-1+2 a+h))==0}/.{a->0,h->1 ,l->2}*)
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsubsection::Closed:: *)
 (*df ???*)
 
 
@@ -1170,7 +1186,142 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (**)
 
 
-(* ::Chapter:: *)
+(* ::Subsection:: *)
+(*using \[Beta]Function[] and Kay's approach*)
+
+
+(* ::Subsubsection:: *)
+(*Splitting the contributions*)
+
+
+(* ::Input:: *)
+(*\[CapitalGamma]\[Gamma]1 =(-b banana g0 \[Mu]^-\[Epsilon]+b g0^2 (doubleBanana+a (-1+b) doubleBanana-h hat+b (2+h) hat) \[Mu]^(-2 \[Epsilon]) z["\[Gamma]1"]);*)
+(*PPrint[{%," = "},%,"\n"]*)
+(**)
+(*\[CapitalGamma]\[Gamma]2 =(-(-1+b) banana g0 \[Mu]^-\[Epsilon]-(g0^2 (2 b hat-2 b^3 hat-(-1+b) b^2 (a2 doubleBanana+h2 hat)) \[Mu]^(-2 \[Epsilon]) z["\[Gamma]2"])/b);*)
+(*PPrint[{%," = "},%,"\n"]*)
+(**)
+(*\[CapitalGamma]g =g0 \[Mu]^-\[Epsilon] (1-2 banana g0 \[Mu]^-\[Epsilon]-1/b g0^2 (-4 (-1+b) b doubleBanana+2 (-1+b) b^2 doubleBanana+b^3 doubleBanana+2 b hat+4 b^2 hat+8 (-1+b) b^2 hat+2 (-1+b) b GradImmediateIntNotAllowed hat-(-1+b) b (2 doubleBanana+4 hat)+(-1+b) b^2 (2 doubleBanana+4 hat)-b^3 (doubleBanana+6 hat)+(-1+b) b (4 doubleBanana+8 hat)-b^3 (2 doubleBanana+10 hat)) \[Mu]^(-2 \[Epsilon]) z["g"]);*)
+(*PPrint[{%," = "},%,"\n"]*)
+(**)
+(*\[CapitalGamma]\[Gamma] =1-1/2 (-1+b) g0^2 GradImmediateIntNotAllowed (banana^2/2+hat+sunset) \[Mu]^(-2 \[Epsilon]) z["\[Gamma]"];*)
+(*PPrint[{%," = "},%,"\n"]*)
+
+
+(* ::Input:: *)
+(*loopOrder=2;*)
+(**)
+(**)
+(*\[CapitalGamma]gt=(g0 \[Mu]^-\[Epsilon] \[CapitalGamma]\[Gamma]1 +g0 \[Mu]^-\[Epsilon] \[CapitalGamma]\[Gamma]2+\[CapitalGamma]g )/\[CapitalGamma]\[Gamma] ^2/.z[_]->1/.Flatten@{GradImmediateIntNotAllowed->0,a->a,a2->-3/(b)+1-a,h->h,h2->h2};*)
+(**)
+(*FS/@(Series[%,{g0,0,loopOrder+1}])*)
+
+
+(* ::Input:: *)
+(*g=Series[\[CapitalGamma]gt,{g0,0,loopOrder+1}]//Normal*)
+(*(*g=Series[g0 \[Mu]^-\[Epsilon] Zgt^(-1),{g0,0,2}]//Normal*)*)
+(*\[Beta]Function[g,"print"->tTrue]*)
+(**)
+(*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
+(*RGeq2=Simplify[Normal[%]]==0;*)
+
+
+(* ::Subsubsection:: *)
+(*g* at 2loop*)
+
+
+(* ::Input:: *)
+(*gstar2=Select[Flatten@SolveValues[RGeq2,g],#=!=0&];*)
+(**)
+(*gstar2=Series[gstar2,{\[Epsilon],0,loopOrder},Assumptions->b>0]//Expand*)
+(*%/.\[Epsilon]->0*)
+(*gstar2=Select[Normal@gstar2,(#/.\[Epsilon]->0)==0&][[1]]*)
+
+
+(* ::Subsubsection:: *)
+(*RG functions: \[CapitalGamma]\[Gamma]1 & Subscript[d, f]*)
+
+
+(* ::Input:: *)
+(*loopOrder=2;*)
+(**)
+(*replaceRule=Flatten@{GradImmediateIntNotAllowed->0,a2->-3/(b)+1-a,a->0,h->h,h2->h2};*)
+(*g=Normal[Series[\[CapitalGamma]gt,{g0,0,loopOrder+1}]]/.replaceRule;*)
+(**)
+(*(1+\[CapitalGamma]\[Gamma]1)/(\[CapitalGamma]\[Gamma])^0/.z[_]->1;*)
+(*FS/@(%/.replaceRule)*)
+(**)
+(*obsWithoutZ=\[Gamma]Function[%,g,"print"->tTrue]*)
+(*(*%/.b->1*)*)
+(*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
+(*%/.g->gstar2+O[\[Epsilon]]^3//FS*)
+(**)
+(*df2=2+Normal@%*)
+
+
+(* ::Input:: *)
+(*(*If GradImmediateIntNotAllowed\[RuleDelayed]0, then following is the same as above*)*)
+(*g=Normal[Series[\[CapitalGamma]gt,{g0,0,loopOrder+1}]]/.replaceRule;*)
+(*(1+\[CapitalGamma]\[Gamma]1)*(\[CapitalGamma]\[Gamma])^-1/.z[_]->1;*)
+(*FS/@(%/.replaceRule)*)
+(**)
+(*obsWithZ=\[Gamma]Function[%,g,"print"->tTrue]*)
+(*(*%/.b->1*)*)
+(*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
+(*%/.g->gstar2+O[\[Epsilon]]^3//FS*)
+
+
+(* ::Subsubsection::Closed:: *)
+(*Z\[Gamma]2Inv*)
+
+
+(* ::Input:: *)
+(*Z\[Gamma]2Inv/Z\[Gamma]Inv^0/.z[_]->1//FS*)
+(*\[Gamma]FunctionFromZ[%,ZgtInv/.{a->0,h->1(*,l\[Rule]1/8 (16-2 b+4 a2 b+2 b h2-b \[Epsilon]-b h2 \[Epsilon])*)},"print"->True,"gstar"->tTrue]*)
+(**)
+
+
+(* ::Input:: *)
+(*(-1+b)(2 (-2+\[Epsilon])+b (2-4 a2-2 h2+2 \[Epsilon]+h2 \[Epsilon])) /.\[Epsilon]->0*)
+(*+(8/\[Epsilon])-(9 b)/\[Epsilon]+(2 a2 b)/\[Epsilon]+b^2/\[Epsilon]-(2 a2 b^2)/\[Epsilon]+(b h2)/\[Epsilon]-(b^2 h2)/\[Epsilon]-(4 l)/\[Epsilon]+(4 b l)/\[Epsilon]*)
+(*Solve[{%%==0,%==0},{a2,l}]//FS*)
+(*%/.h2->1*)
+
+
+(* ::Input:: *)
+(*replaceRule ={a->0,h->1,h2->1 ,a2->-(1/b),l->3/2};*)
+(*Z\[Gamma]2Inv/Z\[Gamma]Inv^0/. z[_]->1//FS*)
+(*\[Gamma]FunctionFromZ[%/.replaceRule,ZgtInv/. replaceRule,"print"->True,"gstar"->True]*)
+(**)
+
+
+(* ::Subsubsection::Closed:: *)
+(*Z\[Gamma]Inv*)
+
+
+(* ::Input:: *)
+(*replaceRule={a->0,h->1,h2->1 ,a2->-(1/b),l->3/2};*)
+(*Z\[Gamma]Inv/.z[_]->1//FS*)
+(*\[Eta]=\[Gamma]FunctionFromZ[%/.replaceRule,ZgtInv/.replaceRule,"print"->True,"gstar"->True]*)
+(**)
+
+
+(* ::Subsubsection::Closed:: *)
+(*a,h and l to make them finite*)
+
+
+(* ::Input:: *)
+(*\[Beta]FunctionFromZ[ZgtInv/. {a->a,h->1 h,z[_]->1},3]*)
+(*\[Gamma]FunctionFromZ[Z\[Gamma]1Inv/. {a->a,h->1 h,z[_]->1},ZgtInv/. {a->a,h->1 h},"print"->tTrue,"gstar"->tTrue]*)
+(*\[Gamma]FunctionFromZ[Z\[Gamma]2Inv/. {a->a,h->1 h,z[_]->1},ZgtInv/. {a->a,h->1 h},"print"->tTrue,"gstar"->tTrue]*)
+
+
+(* ::Input:: *)
+(*Solve[{8/\[Epsilon]-(10 b)/\[Epsilon]+(4 a b)/\[Epsilon]+(2 b^2)/\[Epsilon]-(4 a b^2)/\[Epsilon]+(2 b h)/\[Epsilon]-(2 b^2 h)/\[Epsilon]-(4 l)/\[Epsilon]+(4 b l)/\[Epsilon]==0,(-1+b) b (-1+2 a+h)==0,(-1+b) (2+b (-1+2 a+h))==0},{a,h,l}]*)
+(*{8/\[Epsilon]-(10 b)/\[Epsilon]+(4 a b)/\[Epsilon]+(2 b^2)/\[Epsilon]-(4 a b^2)/\[Epsilon]+(2 b h)/\[Epsilon]-(2 b^2 h)/\[Epsilon]-(4 l)/\[Epsilon]+(4 b l)/\[Epsilon]==0,(-1+b) b (-1+2 a+h)==0,(-1+b) (2+b (-1+2 a+h))==0}/.{a->0,h->1 ,l->2}*)
+
+
+(* ::Chapter::Closed:: *)
 (*\[Section]\[Section] \[CapitalGamma]1 observable 		BAD AND OLD	*)
 
 
@@ -1261,7 +1412,7 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (*Series[%,{\[Epsilon],0,2}]*)
 
 
-(* ::Title::Closed:: *)
+(* ::Title:: *)
 (*Plots*)
 
 
@@ -1272,7 +1423,7 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (*dfSLE=1+3/(4(2b+1));*)
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*\[Section] New (after my simpl)*)
 
 
@@ -1280,7 +1431,7 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 dfRG1L:=2-b \[Epsilon]/(2+b)
 dfRG1Lsimp:=2-(b \[Epsilon])/(1+2 b)
 
-dfRG2Lsimp:=Collect[fractalDim,\[Epsilon],FS]
+dfRG2Lsimp:=2-(b \[Epsilon])/(1+2 b)-(b (1+b+4 b^2) \[Epsilon]^2)/(2 (1+2 b)^3)
 
 dfRG2Lwf:=dfWF
 dfRG2L:=2-b \[Epsilon]/(2+b)-b (\[Epsilon]/(2+b))^2
@@ -1291,11 +1442,13 @@ dfSLE=1+3/(4(2b+1));
 
 
 (* ::Input:: *)
-(*{dfRG1L,dfRG1Lsimp,dfRG2Lsimp,dfRG2Lwf,dfRG2L,dfRG2Lsimp,dfSLE}/.b->0/.\[Epsilon]->2*)
+(*{dfRG1L,dfRG1Lsimp,dfRG2Lsimp,dfRG2Lwf,dfRG2L,dfRG2Lsimp,dfSLE};*)
+(*PPrint[{#,"->"},#/.b->0/.\[Epsilon]->2]&/@{dfRG1L,dfRG1Lsimp,dfRG2Lsimp,dfRG2Lwf,dfRG2L,dfRG2Lsimp,dfSLE};*)
+(**)
 (*Limit[{dfRG1L,dfRG1Lsimp,dfRG2Lsimp,dfRG2Lwf,dfRG2L,dfRG2Lsimp,dfSLE},b->\[Infinity]]/.\[Epsilon]->2*)
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*\[Section]\[Section] 2d*)
 
 
@@ -1331,7 +1484,7 @@ dfSLE=1+3/(4(2b+1));
 (*%/.\[Epsilon]->2*)
 
 
-(* ::Subsubsection::Closed:: *)
+(* ::Subsubsection:: *)
 (*Plots*)
 
 
@@ -1365,7 +1518,7 @@ dfSLE=1+3/(4(2b+1));
 (*,Simulation2dGemini*)
 (*(*,plotRG2Lwf*)
 (*,plotRG2L*)}*)
-(*,PlotRange->{0.5,2},AxesLabel->{b,Subscript[d, f]},AxesOrigin->{0,1},PlotLabel->Row[{"d = 2"}](*PlotLegends->Placed["AllExpressions", {Right,Top}]*)*)
+(*,PlotRange->All,AxesLabel->{b,Subscript[d, f]},AxesOrigin->{0,1},PlotLabel->Row[{"d = 2"}](*PlotLegends->Placed["AllExpressions", {Right,Top}]*)*)
 (*]*)
 
 
@@ -1400,7 +1553,7 @@ dfSLE=1+3/(4(2b+1));
 (**)
 (*plotRG1Lsimp=Plot[#/.\[Epsilon]->2,{b,0,endRange},PlotStyle->RGBColor[0, 0, 1],PlotRange->All,PlotLegends->Placed[{Style[Row[{"FT@1-Loop: \!\(\*SubscriptBox[\(d\), \(f\)]\) = ",TraditionalForm[#],"\!\(\*SubscriptBox[\(|\), \(\[Epsilon] = 2\)]\)"}],FontFamily->"Times"]},{Right,Top}]]&@dfRG1Lsimp;*)
 (**)
-(*plotRG2Lsimp=Plot[#/.\[Epsilon]->2,{b,0,endRange},PlotStyle->RGBColor[0, 1, 1],PlotRange->All,PlotLegends->Placed[{Row[{"NEW 2-Loop: ",TraditionalForm[#]}]},{Right,Top}]]&@dfRG2Lsimp;*)
+(*plotRG2Lsimp=Plot[#/.\[Epsilon]->2,{b,0,endRange},PlotStyle->RGBColor[0, 1, 1],PlotRange->All,PlotLegends->Placed[{Style[Row[{"FT@2-Loop: \!\(\*SubscriptBox[\(d\), \(f\)]\) = ",TraditionalForm[#],"\!\(\*SubscriptBox[\(|\), \(\[Epsilon] = 2\)]\)"}],FontFamily->"Times"]},{Right,Top}]]&@dfRG2Lsimp;*)
 (**)
 (**)
 (*(*plotRG2Lwf=Plot[dfRG2Lwf/.\[Epsilon]->2/.a->+3,{b,0,endRange},PlotStyle->,PlotRange->All];*)*)
@@ -1408,58 +1561,43 @@ dfSLE=1+3/(4(2b+1));
 (**)
 (*Show[{plotSLE*)
 (*(*,plotRG1L*)*)
-(*,plotRG1Lsimp(**)
-(*,plotRG2Lsimp*)*)
+(*,plotRG1Lsimp*)
+(*,plotRG2Lsimp*)
 (*(*,Simulation2d*)*)
 (*,Simulation2dGemini*)
 (*(*,plotRG2Lwf*)
 (*,plotRG2L*)}*)
-(*,PlotRange->{1,2},AxesLabel->{b,Subscript[d, f]},AxesOrigin->{0,1}(*,PlotLabel->Row[{"d = 2"}]*)(*PlotLegends->Placed["AllExpressions", {Right,Top}]*)(*, ImageSize->100*)*)
+(*,PlotRange->{0,2},AxesLabel->{b,Subscript[d, f]},AxesOrigin->{0,0}(*,PlotLabel->Row[{"d = 2"}]*)(*PlotLegends->Placed["AllExpressions", {Right,Top}]*)(*, ImageSize->100*)*)
 (*]*)
 
 
-(* ::Subsubsection::Closed:: *)
+(* ::Subsection:: *)
 (*\[Section]\[Section] 3d*)
 
 
-(* ::Item::Closed:: *)
-(*Limits*)
+(* ::Input::Initialization:: *)
+dfRG1L:=2-b \[Epsilon]/(2+b)
+dfRG1Lsimp:=2-(b \[Epsilon])/(1+2 b)
 
+dfRG2Lsimp:=2-(b \[Epsilon])/(1+2 b)-(b (1+b+4 b^2) \[Epsilon]^2)/(2 (1+2 b)^3)
 
-(* ::Subitem::Closed:: *)
-(*b->\[Infinity]*)
+dfRG2Lwf:=dfWF
+dfRG2L:=2-b \[Epsilon]/(2+b)-b (\[Epsilon]/(2+b))^2
 
+(*dfRG2Lsimp:=2-(b \[Epsilon])/(1+2 b)-(b ^2 \[Epsilon]^2)/(1+2 b)^2*)(*BAD*)
 
-(* ::Input:: *)
-(*Limit[dfRG2Lwf,b->\[Infinity]]*)
-(*%/.\[Epsilon]->1*)
-(*%/.a->-2*)
-(**)
-(*Limit[dfRG2L,b->\[Infinity]]*)
-(*%/.\[Epsilon]->1*)
-
-
-(* ::Subitem::Closed:: *)
-(*b->0*)
+dfSLE=1+3/(4(2b+1));
 
 
 (* ::Input:: *)
-(*Limit[dfRG2Lwf,b->0]*)
-(*%/.\[Epsilon]->1*)
-(*%/.a->-2*)
+(*{dfRG1L,dfRG1Lsimp,dfRG2Lsimp,dfRG2Lwf,dfRG2L,dfRG2Lsimp,dfSLE};*)
+(*PPrint[{#,"->"},#/.b->0/.\[Epsilon]->1]&/@{dfRG1L,dfRG1Lsimp,dfRG2Lsimp,dfRG2Lwf,dfRG2L,dfRG2Lsimp};*)
 (**)
-(*Limit[dfRG2L,b->0]*)
-(*%/.\[Epsilon]->1*)
+(*Limit[{dfRG1L,dfRG1Lsimp,dfRG2Lsimp,dfRG2Lwf,dfRG2L,dfRG2Lsimp},b->\[Infinity]]/.\[Epsilon]->1*)
 
 
-(* ::Subsubsection::Closed:: *)
+(* ::Subsubsection:: *)
 (*Extra data from my simulations*)
-
-
-(* ::Input:: *)
-(**)
-(*dfRG1Lsimp:=2-(b \[Epsilon])/(1+2 b);*)
-(*dfSLE=1+3/(4(2b+1));*)
 
 
 (* ::Input:: *)
@@ -1509,7 +1647,7 @@ dfSLE=1+3/(4(2b+1));
 (**)
 (*plotRG1Lsimp=Plot[#/.\[Epsilon]->1,{b,inRange,endRange},PlotStyle->RGBColor[0, 0, 1],PlotRange->All,PlotLegends->Placed[{Style[Row[{"FT@1-Loop: \!\(\*SubscriptBox[\(d\), \(f\)]\) = ",TraditionalForm[#],"\!\(\*SubscriptBox[\(|\), \(\[Epsilon] = 3\)]\)"}],FontFamily->"Times"]},{Right,Top}]]&@dfRG1Lsimp;*)
 (**)
-(*plotRG2Lsimp=Plot[#/.\[Epsilon]->1,{b,0,endRange},PlotStyle->RGBColor[0, 1, 1],PlotRange->All,PlotLegends->Placed[{Row[{"NEW 2-Loop: ",TraditionalForm[#]}]},{Right,Top}]]&@dfRG2Lsimp;*)
+(*plotRG2Lsimp=Plot[#/.\[Epsilon]->1,{b,0,endRange},PlotStyle->RGBColor[0, 1, 1],PlotRange->All,PlotLegends->Placed[{Style[Row[{"FT@2-Loop: \!\(\*SubscriptBox[\(d\), \(f\)]\) = ",TraditionalForm[#],"\!\(\*SubscriptBox[\(|\), \(\[Epsilon] = 3\)]\)"}],FontFamily->"Times"]},{Right,Top}]]&@dfRG2Lsimp;*)
 (**)
 (*(*plotRG2Lwf=Plot[dfRG2Lwf/.\[Epsilon]->1/.a->+3,{b,inRange,endRange},PlotStyle->,PlotRange->All];*)
 (*plotRG2L=Plot[dfRG2L/.\[Epsilon]->1,{b,inRange,endRange},PlotStyle->,PlotRange->All];*)*)
@@ -1520,10 +1658,14 @@ dfSLE=1+3/(4(2b+1));
 (**)
 (*Show[{(*plotRG1L*)
 (*,*)plotRG1Lsimp*)
-(*(*,plotRG2Lsimp*)(*,plotRG2Lwf,plotRG2L*)(*,fitPlot*)*)
+(*,plotRG2Lsimp(*,plotRG2Lwf,plotRG2L*)(*,fitPlot*)*)
 (*,Simulation3d*)
 (*,Simulation3dGemini(*,Graphics[{Red,Text[Style["Result \nby David Wilson"(* (Gemini-opt1)"*),FontFamily->"Times"],{1,1.45}]}]*)*)
-(*},PlotRange->{{0,5},{1.3,2}},AxesLabel->{b,Subscript[d, f]},AxesOrigin->{0,1.3}(*,PlotLabel->Row[{"d = 3"}]*)]*)
+(*},PlotRange->{{0,5},{1.3,2}},AxesLabel->{b,Subscript[d, f]},AxesOrigin->{0,1.3},ImageSize->Large(*,PlotLabel->Row[{"d = 3"}]*)]*)
+
+
+(* ::Text:: *)
+(*THIS LOOKS VERY PROMISING!!! I'M USING THE REPLACEMENT rule {GradImmediateIntNotAllowed:>0,h->1,h2->1,a2->1-a-3/b,a->0,h->h,h2->h2}*)
 
 
 (* ::Input:: *)

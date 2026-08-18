@@ -20,9 +20,58 @@
 
 
 (* ::Input::Initialization:: *)
-(* Collapse all *)
-FrontEndTokenExecute["SelectAll"]
-FrontEndTokenExecute["SelectionCloseAllGroups"]
+BeginPackage["PaoloInitialization`"]
+
+
+(* ::Input::Initialization:: *)
+FS::usage="FS is short for FullSimplify";
+PE::usage="PE is short for PowerExpand";
+TF::usage="TF is short for TeXForm";
+CollapseAll::usage="CollapseAll collapses all \.af\_(\:30c4)_/\.af ";
+
+
+(* ::Input::Initialization:: *)
+PPrint;
+
+
+(* ::Input::Initialization:: *)
+Paolofont::usage="Set the desired font once"; 
+Paolofontsize::usage="Set the desired font size once";
+
+
+(* ::Input::Initialization:: *)
+PaoloInitialization::usage="PaoloInitialization` is a custom initialization package contains all the default settings and functions that Paolo likes.";
+
+
+(* ::Input::Initialization:: *)
+$PaoloInitializationVersion::usage="$PaoloInitializationVersion is the current version of the DrawGraph package.";
+$PaoloInitializationReleaseDate::usage="$PaoloInitializationReleaseDate is the release date of the current version.";$PaoloInitializationReleaseDate="2026-08-18";$PaoloInitializationVersion=Quiet@Check[StringReplace[FileBaseName[$Input],Except["p"<>DigitCharacter]->"."],"1"];
+
+
+(* ::Input::Initialization:: *)
+$PaoloInitializationPrint::usage="$PaoloInitializationPrint=True turns on the debug printing of the package.";
+If[!ValueQ[$PaoloInitializationPrint],$PaoloInitializationPrint=True];
+
+
+(* ::Input::Initialization:: *)
+PaoloInitialization`Private`MyPrint=If[$PaoloInitializationPrint,Print[##]]&;
+
+
+(* ::Input::Initialization:: *)
+PaoloInitialization`Private`MyPrint[Style["~~~~~~~~~~~~~~~~ PaoloInitialization v"<>ToString[$PaoloInitializationVersion]<>" ~~~~~~~~~~~~~~~~~~~~\n\
+Author: Paolo Pisapia\n\
+Release Date: "<>$PaoloInitializationReleaseDate<>"\n\
+Timestamp: "<>DateString[FileDate[$InputFileName]]<>"\nRead from: "<>$InputFileName<>"\n\
+The package contains all the default settings and functions that Paolo likes. \
+It takes inspiration from Kay Wiese's initialization file.\n\nSee ?PaoloInitialization`* for a list of functions. ",{Bold,RGBColor[0, 0, Rational[2, 3]]}]];
+
+
+(* ::Input::Initialization:: *)
+(*Print[Style["###################################\n This is Paolo-initialization running\n###################################",{}]];*)
+
+
+(* ::Input::Initialization:: *)
+Begin["Private`"]
 
 
 (* ::Input::Initialization:: *)
@@ -30,6 +79,14 @@ FrontEndTokenExecute["SelectionCloseAllGroups"]
 FS:=FullSimplify
 PE:=PowerExpand
 TF:=TeXForm
+CollapseAll:=Module[{},(* Collapse all *)
+FrontEndTokenExecute["SelectAll"];
+FrontEndTokenExecute["SelectionCloseAllGroups"]];
+
+
+(* ::Input::Initialization:: *)
+Paolofontsize=13;
+Paolofont="Times";
 
 
 (* ::Input::Initialization:: *)
@@ -55,18 +112,19 @@ SetOptions[ Graphics,BaseStyle->{FontFamily->Kayplotfont,FontSize->Kayplotfontsi
 
 (* set directories *)
 Module[{notebookdirectory=NotebookDirectory[]},
-Print["Directory for read/write is \""<>notebookdirectory<>"\""];
+Print[Style["Directory to read/write is: \""<>notebookdirectory<>"\"",{RGBColor[0, 0, Rational[2, 3]]}]];
 SetDirectory[notebookdirectory];
 ]
+
+
+(* ::Input::Initialization:: *)
+PPrint::usage="PPrint[textReplaceable, var, textToKeep(optional),options] prints formatted (using options) text with variable evaluation. e.g. a=2; PPrint[{a,\"=\"},a] outputs a=2.";
 
 
 (* ::Input::Initialization:: *)
 ClearAll[PPrint];
 SetAttributes[PPrint,HoldAll];
 
-
-Paolofontsize=16;
-Paolofont="Times";
 
 Options[PPrint]={"style"->{FontFamily->Paolofont,FontSize->Paolofontsize}};
 
@@ -83,8 +141,13 @@ MatchQ[Unevaluated[var],Unevaluated[%]],((InString[$Line-1]//ToExpression)/.RowB
 
 textReplaced=Unevaluated[Unevaluated[textReplaceable]/. HoldPattern[var]->varName];
 
-textKept=If[textToKeep==="",evalVar,textToKeep];
-Print[Style[Row[Flatten@{textReplaced,textKept}],OptionValue["style"]]]
+textKept=textToKeep;If[textToKeep==="",evalVar,textToKeep];
+Print[Style[Row[Flatten@{textReplaced,evalVar,textKept}],OptionValue["style"]]]
 ];
 
 (*With[{textReplaced=textReplaceable/.var->SymbolName[Unevaluated[var]],textKept=If[textToKeep=="",var,textToKeep]},Print[Row[Flatten@{textReplaced,textKept}]]];*)
+
+
+(* ::Input::Initialization:: *)
+End[]
+EndPackage[]
