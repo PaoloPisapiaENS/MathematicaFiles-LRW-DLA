@@ -242,8 +242,14 @@ Return[Normal[\[Gamma]f]]
 
 
 (* ::Input::Initialization:: *)
+replaceDiagrams={banana ->1/\[Epsilon],doubleBanana ->1/\[Epsilon]^2,hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon]),sunset->-1/(8\[Epsilon])}
+
+hideSubDivs={bananag->banana,banana\[Gamma]1->banana,banana\[Gamma]Grad->banana,doubleBananag->doubleBanana,doubleBanana\[Gamma]1g->doubleBanana,doubleBanana\[Gamma]Grad->doubleBanana,hatg->hat,hat\[Gamma]1->hat,hat\[Gamma]2->hat,hatg\[Gamma]1->hat, hat\[Gamma]1g->hat,hatgabs->hat,hat\[Gamma]Paolo->hat,hat\[Gamma]Grad->hat}
+
+
+(* ::Input::Initialization:: *)
 (* REFERENCE, DO NOT TOUCH *)
-goodGuys=-b^3 (2 doubleBanana + 4 hat +6 hat)-b^2(doubleBanana +2 b hat)*2-b^3(6 hat + doubleBanana);
+goodGuys=-b^3 (2 doubleBanana + 4 hat +4 hat + 2 hat)-b^2(doubleBanana +2 b hat)*2-b^3(6 hat + doubleBanana);
 
 realNasties=b(b-1)(4 doubleBanana + 8 hat )+b(b-1)2 hat - b(b-1)(2  doubleBanana +4 hat )- b(b-1)( 4 doubleBanana);
 
@@ -256,14 +262,14 @@ gammagGuys=b(2 hat + 2 hat) + b^2 doubleBanana +4 b^2 hat + b^2 doubleBanana;
 (* IN WHAT FOLLOWS, I SUB doubleBanana-> MINUS 1/\[Epsilon]^2. SO HERE I NEED TO SUM THE BANANA SQUARED. Actually, the replacement ALREADY implements the partial subtraction of subdivergencies *)
 
 (* GradImmediateIntNotAllowed=0 then it is not allowed. To implement it also for \[Gamma]1 and \[Gamma]2, one should set h,h2->1*)
-GradImmediateIntNotAllowed/:(GradImmediateIntNotAllowed->0):={GradImmediateIntNotAllowed:>0,h->1,h2->1}
+GradImmediateIntNotAllowed/:(GradImmediateIntNotAllowed->0):={GradImmediateIntNotAllowed:>0,h->1,h2->1,H->0}
 
 twoLoopZ\[Gamma]1=1/b (-b^2 doubleBanana-2 b^3 hat+(1/2 b^2 (b-1)(banana)^2(* From \[CapitalGamma]Grad counterterm*))- b^2 (b-1)(a doubleBanana+h hat) (*If not all the \[CapitalGamma]grad can be used*));/.h->-1;
 
 twoLoopZ\[Gamma]2=1/b (-b^2 doubleBanana-2 b^3 hat +(1/2 b^2 (b-1)(banana)^2(* From \[CapitalGamma]Grad counterterm*)) +b^2 (doubleBanana+1/2 (banana)^2(* From \[CapitalGamma]paoloG counterterm*))+2 b (hat +1/2 (banana)^2(* From \[CapitalGamma]paoloG counterterm*))- b^2 (b-1)(a2 doubleBanana+h2 hat) (*If not all the \[CapitalGamma]grad can be used*));/.h2->-1(*(2 b hat-2 b^3 hat)/b*)(*/.hat->(hat+1/4(banana)^2(* From \[CapitalGamma]Grad counterterm*))*)
 
-twoLoopZg=((goodGuys+b^2(doubleBanana +2 b hat)*2(*Moved to Z\[Gamma]1 and Z\[Gamma]2 *)+b^3( doubleBanana)(*Should arise from the 1loops of Z\[Gamma]1*Z\[Gamma]2 *))
-+(*realNasties modified*)
+twoLoopZg=(-b^3 (2 doubleBananag + 4 hatg +4 hat\[Gamma]1g+2 hatg\[Gamma]1 + 6 hat\[Gamma]2)(*-b^3 (doubleBanana+6 hat)-b^3 (2 doubleBanana+10 hat)-2 b^2 (doubleBanana+2 b hat)(*goodGuys*)+2b^2(doubleBanana +2 b hat)(*Moved to Z\[Gamma]1 and Z\[Gamma]2 (thus subtracted here) *)+b^3( doubleBanana)(*Should arise from the 1loops of Z\[Gamma]1*Z\[Gamma]2 (thus subtracted here) *)*)
++(*realNasties modified	.*)
 (* ONLY \[Gamma]Grad 1) in my notes*)b(b-1)(4 (doubleBanana+(banana)^2(* From \[CapitalGamma]Grad counterterm*)) + 8 (hat+1/2 (banana)^2(* From \[CapitalGamma]Grad counterterm*)) )
 +(* ONLY \[Gamma]Grad 3) in my notes*)
 b(b-1)2 (hat+1/2 (banana)^2(* From \[CapitalGamma]Grad counterterm*)) GradImmediateIntNotAllowed
@@ -296,10 +302,15 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 
 
 (* ::Input::Initialization:: *)
+replaceRule={GradImmediateIntNotAllowed:>0,h->1,h2->1,H->0,a2->1-a-3/b,a->0,A->1};
+
+
+(* ::Input::Initialization:: *)
 dfRG1L:=2-b \[Epsilon]/(2+b)
 dfRG1Lsimp:=2-(b \[Epsilon])/(1+2 b)
 
 dfRG2Lsimp:=2-(b \[Epsilon])/(1+2 b)-(b (1+b+4 b^2) \[Epsilon]^2)/(2 (1+2 b)^3)
+
 
 dfRG2Lwf:=dfWF
 dfRG2L:=2-b \[Epsilon]/(2+b)-b (\[Epsilon]/(2+b))^2

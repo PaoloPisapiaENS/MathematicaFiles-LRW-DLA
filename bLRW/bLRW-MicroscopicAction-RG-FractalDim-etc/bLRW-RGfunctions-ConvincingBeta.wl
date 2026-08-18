@@ -1,5 +1,9 @@
 (* ::Package:: *)
 
+(* ::Title::Closed:: *)
+(*Initialization*)
+
+
 (* ::Input::Initialization:: *)
 (*SetOptions[$FrontEndSession,NotebookAutoSave->True]*)
 (*With[{nb=EvaluationNotebook[]},RunScheduledTask[If["ModifiedInMemory"/. NotebookInformation[nb],NotebookSave[nb]],300]]
@@ -27,11 +31,11 @@ NotebookSave[]*)
 (*FrontEndTokenExecute["SelectionCloseAllGroups"]*)
 
 
-(* ::Title:: *)
+(* ::Title::Closed:: *)
 (*\[Beta]Function[] and \[Gamma]Function[]*)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*\[Beta]Function[] Definitions*)
 
 
@@ -712,7 +716,14 @@ Return[Normal[\[Gamma]f]]
 (*\[Section] 2-Loop after Simplification (partial: just the 1Loop has been done, but I want to see what happens if I update just the 1Loop term in g)*)
 (*I CANNOT! IT IS NOT FINITE, I MUST GET THE 2LOOP TO CHECK!*)
 (**)
-(*IT SEEMS FINITE FOR h->1, l->2, 	WHY??*)
+(*IT SEEMS GOOD FOR *)
+(*{GradImmediateIntNotAllowed :> 0, h -> 1, h2 -> 1, a2 -> 1 - a - 3/b, a -> 0}, 	WHY??*)
+
+
+(* ::Input::Initialization:: *)
+replaceDiagrams={banana ->1/\[Epsilon],doubleBanana ->1/\[Epsilon]^2,hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon]),sunset->-1/(8\[Epsilon])}
+
+hideSubDivs={bananag->banana,banana\[Gamma]1->banana,banana\[Gamma]Grad->banana,doubleBananag->doubleBanana,doubleBanana\[Gamma]1g->doubleBanana,doubleBanana\[Gamma]Grad->doubleBanana,hatg->hat,hat\[Gamma]1->hat,hat\[Gamma]2->hat,hatg\[Gamma]1->hat, hat\[Gamma]1g->hat,hatgabs->hat,hat\[Gamma]Paolo->hat,hat\[Gamma]Grad->hat}
 
 
 (* ::Chapter:: *)
@@ -789,8 +800,8 @@ Return[Normal[\[Gamma]f]]
 (*(*g=Series[g0 \[Mu]^-\[Epsilon] Zgt^(-1),{g0,0,2}]//Normal*)*)
 (*\[Beta]Function[g,"print"->tTrue]*)
 (**)
-(*%/.bananag->banana/.banana\[Gamma]1->banana/.doubleBananag->doubleBanana/.doubleBanana\[Gamma]1g->doubleBanana/.hatg->hat/.hat\[Gamma]1->hat/.hatg\[Gamma]1->hat/. hat\[Gamma]1g->hat*)
-(*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
+(*%/.hideSubDivs *)
+(*%/.replaceDiagrams//FullSimplify//Factor*)
 (*RGeq2=Simplify[Normal[%]]==0;*)
 
 
@@ -843,13 +854,13 @@ Return[Normal[\[Gamma]f]]
 (*\[Section]\[Section] 2loop b>1*)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Rewritten to split into Zg, Z\[Gamma]1, Z\[Gamma]2*)
 
 
 (* ::Input::Initialization:: *)
 (* REFERENCE, DO NOT TOUCH *)
-goodGuys=-b^3 (2 doubleBanana + 4 hat +6 hat)-b^2(doubleBanana +2 b hat)*2-b^3(6 hat + doubleBanana);
+goodGuys=-b^3 (2 doubleBanana + 4 hat +4 hat + 2 hat)-b^2(doubleBanana +2 b hat)*2-b^3(6 hat + doubleBanana);
 
 realNasties=b(b-1)(4 doubleBanana + 8 hat )+b(b-1)2 hat - b(b-1)(2  doubleBanana +4 hat )- b(b-1)( 4 doubleBanana);
 
@@ -870,14 +881,14 @@ gammagGuys=b(2 hat + 2 hat) + b^2 doubleBanana +4 b^2 hat + b^2 doubleBanana;
 (* IN WHAT FOLLOWS, I SUB doubleBanana-> MINUS 1/\[Epsilon]^2. SO HERE I NEED TO SUM THE BANANA SQUARED. Actually, the replacement ALREADY implements the partial subtraction of subdivergencies *)
 
 (* GradImmediateIntNotAllowed=0 then it is not allowed. To implement it also for \[Gamma]1 and \[Gamma]2, one should set h,h2->1*)
-GradImmediateIntNotAllowed/:(GradImmediateIntNotAllowed->0):={GradImmediateIntNotAllowed:>0,h->1,h2->1}
+GradImmediateIntNotAllowed/:(GradImmediateIntNotAllowed->0):={GradImmediateIntNotAllowed:>0,h->1,h2->1,H->0}
 
 twoLoopZ\[Gamma]1=1/b (-b^2 doubleBanana-2 b^3 hat+(1/2 b^2 (b-1)(banana)^2(* From \[CapitalGamma]Grad counterterm*))- b^2 (b-1)(a doubleBanana+h hat) (*If not all the \[CapitalGamma]grad can be used*));/.h->-1;
 
 twoLoopZ\[Gamma]2=1/b (-b^2 doubleBanana-2 b^3 hat +(1/2 b^2 (b-1)(banana)^2(* From \[CapitalGamma]Grad counterterm*)) +b^2 (doubleBanana+1/2 (banana)^2(* From \[CapitalGamma]paoloG counterterm*))+2 b (hat +1/2 (banana)^2(* From \[CapitalGamma]paoloG counterterm*))- b^2 (b-1)(a2 doubleBanana+h2 hat) (*If not all the \[CapitalGamma]grad can be used*));/.h2->-1(*(2 b hat-2 b^3 hat)/b*)(*/.hat->(hat+1/4(banana)^2(* From \[CapitalGamma]Grad counterterm*))*)
 
-twoLoopZg=((goodGuys+b^2(doubleBanana +2 b hat)*2(*Moved to Z\[Gamma]1 and Z\[Gamma]2 *)+b^3( doubleBanana)(*Should arise from the 1loops of Z\[Gamma]1*Z\[Gamma]2 *))
-+(*realNasties modified*)
+twoLoopZg=(-b^3 (2 doubleBananag + 4 hatg +4 hat\[Gamma]1g+2 hatg\[Gamma]1 + 6 hat\[Gamma]2)(*-b^3 (doubleBanana+6 hat)-b^3 (2 doubleBanana+10 hat)-2 b^2 (doubleBanana+2 b hat)(*goodGuys*)+2b^2(doubleBanana +2 b hat)(*Moved to Z\[Gamma]1 and Z\[Gamma]2 (thus subtracted here) *)+b^3( doubleBanana)(*Should arise from the 1loops of Z\[Gamma]1*Z\[Gamma]2 (thus subtracted here) *)*)
++(*realNasties modified	.*)
 (* ONLY \[Gamma]Grad 1) in my notes*)b(b-1)(4 (doubleBanana+(banana)^2(* From \[CapitalGamma]Grad counterterm*)) + 8 (hat+1/2 (banana)^2(* From \[CapitalGamma]Grad counterterm*)) )
 +(* ONLY \[Gamma]Grad 3) in my notes*)
 b(b-1)2 (hat+1/2 (banana)^2(* From \[CapitalGamma]Grad counterterm*)) GradImmediateIntNotAllowed
@@ -973,7 +984,7 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (*Series[Zgt,{g,0,2}]//FS//Normal*)
 
 
-(* ::Subsubsection::Closed:: *)
+(* ::Subsubsection:: *)
 (*b>1*)
 
 
@@ -1194,15 +1205,27 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (*Splitting the contributions*)
 
 
+(* ::Text:: *)
+(*To make sense of this we differentiate the diagrams according to the subdivergences*)
+
+
+(* ::Input::Initialization:: *)
+replaceRule={GradImmediateIntNotAllowed:>0,h->1,h2->1,H->0,a2->1-a-3/b,a->0,A->1};
+
+
 (* ::Input:: *)
-(*\[CapitalGamma]\[Gamma]1 =(-b banana g0 \[Mu]^-\[Epsilon]+b g0^2 (doubleBanana+a (-1+b) doubleBanana-h hat+b (2+h) hat) \[Mu]^(-2 \[Epsilon]) z["\[Gamma]1"]);*)
+(*\[CapitalGamma]\[Gamma]1 =(-b banana\[Gamma]1 g0 \[Mu]^-\[Epsilon]+b g0^2 (b doubleBanana\[Gamma]1g- A(b-1) doubleBanana\[Gamma]Grad +(2b hatg\[Gamma]1+b hatgabs-hat\[Gamma]Paolo)-H(b-1) hat\[Gamma]Grad) \[Mu]^(-2 \[Epsilon]) z["\[Gamma]1"]);(*Logic change: I write A and H in front of the diagrams we obtain from the Grad term. Before, we used a and h to subtract these terms from the complete expression.*)
+(*(-b banana g0 \[Mu]^-\[Epsilon]+b g0^2 (b doubleBanana\[Gamma]1g-(b-1) doubleBanana\[Gamma]Grad+a (-1+b) doubleBanana\[Gamma]Grad-h hat+b (2+h) hat) \[Mu]^(-2 \[Epsilon]) z["\[Gamma]1"]);*)*)
 (*PPrint[{%," = "},%,"\n"]*)
 (**)
-(*\[CapitalGamma]\[Gamma]2 =(-(-1+b) banana g0 \[Mu]^-\[Epsilon]-(g0^2 (2 b hat-2 b^3 hat-(-1+b) b^2 (a2 doubleBanana+h2 hat)) \[Mu]^(-2 \[Epsilon]) z["\[Gamma]2"])/b);*)
+(*\[CapitalGamma]\[Gamma]2 =(-(-1+b) banana g0 \[Mu]^-\[Epsilon]-g0^2 (2  hat-2 b^2 hat-(-1+b) b (a2 doubleBanana+h2 hat)) \[Mu]^(-2 \[Epsilon]) z["\[Gamma]2"]);*)
 (*PPrint[{%," = "},%,"\n"]*)
 (**)
-(*\[CapitalGamma]g =g0 \[Mu]^-\[Epsilon] (1-2 banana g0 \[Mu]^-\[Epsilon]-1/b g0^2 (-4 (-1+b) b doubleBanana+2 (-1+b) b^2 doubleBanana+b^3 doubleBanana+2 b hat+4 b^2 hat+8 (-1+b) b^2 hat+2 (-1+b) b GradImmediateIntNotAllowed hat-(-1+b) b (2 doubleBanana+4 hat)+(-1+b) b^2 (2 doubleBanana+4 hat)-b^3 (doubleBanana+6 hat)+(-1+b) b (4 doubleBanana+8 hat)-b^3 (2 doubleBanana+10 hat)) \[Mu]^(-2 \[Epsilon]) z["g"]);*)
+(*\[CapitalGamma]g =g0 \[Mu]^-\[Epsilon] (1-(2 b bananag-2 (b-1)banana\[Gamma]Grad )g0 \[Mu]^-\[Epsilon]-g0^2 \[Mu]^(-2 \[Epsilon]) (-4 (-1+b) doubleBanana+2 (-1+b) b doubleBanana+b^2 doubleBanana+2  hat+4 b hat+8 (-1+b) b hat+2 (-1+b)  GradImmediateIntNotAllowed hat-(-1+b) (2 doubleBanana+4 hat)+(-1+b) b (2 doubleBanana+4 hat)-b^2 (doubleBanana+6 hat)+(-1+b)(4 doubleBanana+8 hat)-b^2 (2 doubleBanana+10 hat))  z["g"]);*)
 (*PPrint[{%," = "},%,"\n"]*)
+(**)
+(**)
+(*\[CapitalGamma]g =g0 \[Mu]^-\[Epsilon] (1-(2 b bananag-2 (b-1)banana\[Gamma]Grad )g0 \[Mu]^-\[Epsilon]-g0^2 \[Mu]^(-2 \[Epsilon]) (twoLoopZg));*)
 (**)
 (*\[CapitalGamma]\[Gamma] =1-1/2 (-1+b) g0^2 GradImmediateIntNotAllowed (banana^2/2+hat+sunset) \[Mu]^(-2 \[Epsilon]) z["\[Gamma]"];*)
 (*PPrint[{%," = "},%,"\n"]*)
@@ -1211,8 +1234,7 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (* ::Input:: *)
 (*loopOrder=2;*)
 (**)
-(**)
-(*\[CapitalGamma]gt=(g0 \[Mu]^-\[Epsilon] \[CapitalGamma]\[Gamma]1 +g0 \[Mu]^-\[Epsilon] \[CapitalGamma]\[Gamma]2+\[CapitalGamma]g )/\[CapitalGamma]\[Gamma] ^2/.z[_]->1/.Flatten@{GradImmediateIntNotAllowed->0,a->a,a2->-3/(b)+1-a,h->h,h2->h2};*)
+(*\[CapitalGamma]gt=(g0 \[Mu]^-\[Epsilon] \[CapitalGamma]\[Gamma]1 +g0 \[Mu]^-\[Epsilon] \[CapitalGamma]\[Gamma]2+\[CapitalGamma]g )/\[CapitalGamma]\[Gamma] ^2/.z[_]->1//.replaceRule;*)
 (**)
 (*FS/@(Series[%,{g0,0,loopOrder+1}])*)
 
@@ -1220,10 +1242,15 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (* ::Input:: *)
 (*g=Series[\[CapitalGamma]gt,{g0,0,loopOrder+1}]//Normal*)
 (*(*g=Series[g0 \[Mu]^-\[Epsilon] Zgt^(-1),{g0,0,2}]//Normal*)*)
-(*\[Beta]Function[g,"print"->tTrue]*)
+(*\[Beta]Function[g/.hideSubDivs ,"print"->tTrue]*)
 (**)
-(*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
+(*%/.hideSubDivs *)
+(*%/.replaceDiagrams//FullSimplify//Factor*)
 (*RGeq2=Simplify[Normal[%]]==0;*)
+
+
+(* ::Input:: *)
+(*SeriesData[g, 0, {\[Epsilon], -1 - 2 b, b + 5 b^2}, 1, 4, 1]*)
 
 
 (* ::Subsubsection:: *)
@@ -1249,11 +1276,13 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (*g=Normal[Series[\[CapitalGamma]gt,{g0,0,loopOrder+1}]]/.replaceRule;*)
 (**)
 (*(1+\[CapitalGamma]\[Gamma]1)/(\[CapitalGamma]\[Gamma])^0/.z[_]->1;*)
-(*FS/@(%/.replaceRule)*)
+(*FS/@(%/.replaceRule);*)
+(*PPrint[{\[CapitalGamma]\[Gamma]1,"="},\[CapitalGamma]\[Gamma]1]*)
 (**)
-(*obsWithoutZ=\[Gamma]Function[%,g,"print"->tTrue]*)
+(*obsWithoutZ=\[Gamma]Function[%%,g,"print"->tTrue]*)
 (*(*%/.b->1*)*)
-(*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
+(*%/. hideSubDivs*)
+(*%/. replaceDiagrams//FullSimplify//Factor*)
 (*%/.g->gstar2+O[\[Epsilon]]^3//FS*)
 (**)
 (*df2=2+Normal@%*)
@@ -1267,36 +1296,37 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (**)
 (*obsWithZ=\[Gamma]Function[%,g,"print"->tTrue]*)
 (*(*%/.b->1*)*)
-(*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
+(*%/. hideSubDivs*)
+(*%/. replaceDiagrams//FullSimplify//Factor*)
 (*%/.g->gstar2+O[\[Epsilon]]^3//FS*)
 
 
 (* ::Subsubsection::Closed:: *)
-(*Z\[Gamma]2Inv*)
+(*RG functions: \[CapitalGamma]\[Gamma]2		not finite (is this an observable of the theory?)*)
 
 
 (* ::Input:: *)
-(*Z\[Gamma]2Inv/Z\[Gamma]Inv^0/.z[_]->1//FS*)
-(*\[Gamma]FunctionFromZ[%,ZgtInv/.{a->0,h->1(*,l\[Rule]1/8 (16-2 b+4 a2 b+2 b h2-b \[Epsilon]-b h2 \[Epsilon])*)},"print"->True,"gstar"->tTrue]*)
+(*loopOrder=2;*)
+(**)
+(*replaceRule=Flatten@{GradImmediateIntNotAllowed->0,a2->-3/(b)+1-a,a->0,h->h,h2->h2};*)
+(*g=Normal[Series[\[CapitalGamma]gt,{g0,0,loopOrder+1}]]//.replaceRule*)
+(**)
+(*(1+\[CapitalGamma]\[Gamma]2)/(\[CapitalGamma]\[Gamma])^0/.z[_]->1;*)
+(*FS/@(%//.replaceRule)*)
+(**)
+(*\[Gamma]Function[%,g,"print"->tTrue]*)
+(*(*%/.b->1*)*)
+(*%/.banana ->1/\[Epsilon]/.doubleBanana ->1/\[Epsilon]^2/.hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon])/.sunset->-1/(8\[Epsilon])//FullSimplify//Factor*)
+(*%/.g->gstar2+O[\[Epsilon]]^3//FS;*)
 (**)
 
 
 (* ::Input:: *)
-(*(-1+b)(2 (-2+\[Epsilon])+b (2-4 a2-2 h2+2 \[Epsilon]+h2 \[Epsilon])) /.\[Epsilon]->0*)
-(*+(8/\[Epsilon])-(9 b)/\[Epsilon]+(2 a2 b)/\[Epsilon]+b^2/\[Epsilon]-(2 a2 b^2)/\[Epsilon]+(b h2)/\[Epsilon]-(b^2 h2)/\[Epsilon]-(4 l)/\[Epsilon]+(4 b l)/\[Epsilon]*)
-(*Solve[{%%==0,%==0},{a2,l}]//FS*)
-(*%/.h2->1*)
-
-
-(* ::Input:: *)
-(*replaceRule ={a->0,h->1,h2->1 ,a2->-(1/b),l->3/2};*)
-(*Z\[Gamma]2Inv/Z\[Gamma]Inv^0/. z[_]->1//FS*)
-(*\[Gamma]FunctionFromZ[%/.replaceRule,ZgtInv/. replaceRule,"print"->True,"gstar"->True]*)
-(**)
+(*-8+4 b+2 \[Epsilon]+3 b \[Epsilon]//Collect[#,\[Epsilon]]&*)
 
 
 (* ::Subsubsection::Closed:: *)
-(*Z\[Gamma]Inv*)
+(*Z\[Gamma]Inv		TBD*)
 
 
 (* ::Input:: *)
@@ -1304,21 +1334,6 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 (*Z\[Gamma]Inv/.z[_]->1//FS*)
 (*\[Eta]=\[Gamma]FunctionFromZ[%/.replaceRule,ZgtInv/.replaceRule,"print"->True,"gstar"->True]*)
 (**)
-
-
-(* ::Subsubsection::Closed:: *)
-(*a,h and l to make them finite*)
-
-
-(* ::Input:: *)
-(*\[Beta]FunctionFromZ[ZgtInv/. {a->a,h->1 h,z[_]->1},3]*)
-(*\[Gamma]FunctionFromZ[Z\[Gamma]1Inv/. {a->a,h->1 h,z[_]->1},ZgtInv/. {a->a,h->1 h},"print"->tTrue,"gstar"->tTrue]*)
-(*\[Gamma]FunctionFromZ[Z\[Gamma]2Inv/. {a->a,h->1 h,z[_]->1},ZgtInv/. {a->a,h->1 h},"print"->tTrue,"gstar"->tTrue]*)
-
-
-(* ::Input:: *)
-(*Solve[{8/\[Epsilon]-(10 b)/\[Epsilon]+(4 a b)/\[Epsilon]+(2 b^2)/\[Epsilon]-(4 a b^2)/\[Epsilon]+(2 b h)/\[Epsilon]-(2 b^2 h)/\[Epsilon]-(4 l)/\[Epsilon]+(4 b l)/\[Epsilon]==0,(-1+b) b (-1+2 a+h)==0,(-1+b) (2+b (-1+2 a+h))==0},{a,h,l}]*)
-(*{8/\[Epsilon]-(10 b)/\[Epsilon]+(4 a b)/\[Epsilon]+(2 b^2)/\[Epsilon]-(4 a b^2)/\[Epsilon]+(2 b h)/\[Epsilon]-(2 b^2 h)/\[Epsilon]-(4 l)/\[Epsilon]+(4 b l)/\[Epsilon]==0,(-1+b) b (-1+2 a+h)==0,(-1+b) (2+b (-1+2 a+h))==0}/.{a->0,h->1 ,l->2}*)
 
 
 (* ::Chapter::Closed:: *)
@@ -1432,6 +1447,7 @@ dfRG1L:=2-b \[Epsilon]/(2+b)
 dfRG1Lsimp:=2-(b \[Epsilon])/(1+2 b)
 
 dfRG2Lsimp:=2-(b \[Epsilon])/(1+2 b)-(b (1+b+4 b^2) \[Epsilon]^2)/(2 (1+2 b)^3)
+
 
 dfRG2Lwf:=dfWF
 dfRG2L:=2-b \[Epsilon]/(2+b)-b (\[Epsilon]/(2+b))^2

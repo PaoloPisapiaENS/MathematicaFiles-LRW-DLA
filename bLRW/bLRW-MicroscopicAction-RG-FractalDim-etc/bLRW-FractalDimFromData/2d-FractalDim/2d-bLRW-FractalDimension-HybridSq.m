@@ -20,6 +20,16 @@
 
 
 (* ::Input::Initialization:: *)
+(*SetOptions[$FrontEndSession,NotebookAutoSave->True]*)
+(*With[{nb=EvaluationNotebook[]},RunScheduledTask[If["ModifiedInMemory"/. NotebookInformation[nb],NotebookSave[nb]],300]]
+NotebookSave[]*)
+
+
+(* ::Input::Initialization:: *)
+<<PaoloInitialization`
+
+
+(* ::Input::Initialization:: *)
 SetOptions[EvaluationNotebook[],NotebookEventActions->{"Open":>(Print["Notebook opened at ",DateString[]];
 <<"D:\\Offline_Documents\\University\\PhD_Paris\\PhD_work\\Simulations\\MathematicaFiles-LRW-DLA-bLRW\\bLRW\\bLRW-MicroscopicAction-RG-FractalDim-etc\\bLRW-FractalDimFromData\\2d-FractalDim\\2d-bLRW-FractalDimension.m")}]
 <<"D:\\Offline_Documents\\University\\PhD_Paris\\PhD_work\\Simulations\\MathematicaFiles-LRW-DLA-bLRW\\bLRW\\bLRW-MicroscopicAction-RG-FractalDim-etc\\bLRW-FractalDimFromData\\2d-FractalDim\\2d-bLRW-FractalDimension.m"
