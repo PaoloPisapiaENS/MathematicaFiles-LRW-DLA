@@ -27,6 +27,7 @@ NotebookSave[]*)
 
 (* ::Input::Initialization:: *)
 <<PaoloInitialization`
+??PaoloInitialization`*
 
 
 (* ::Input::Initialization:: *)
@@ -244,7 +245,7 @@ Return[Normal[\[Gamma]f]]
 (* ::Input::Initialization:: *)
 replaceDiagrams={banana ->1/\[Epsilon],doubleBanana ->1/\[Epsilon]^2,hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon]),sunset->-1/(8\[Epsilon])}
 
-hideSubDivs={bananag->banana,banana\[Gamma]1->banana,banana\[Gamma]Grad->banana,doubleBananag->doubleBanana,doubleBanana\[Gamma]1g->doubleBanana,doubleBanana\[Gamma]Grad->doubleBanana,hatg->hat,hat\[Gamma]1->hat,hat\[Gamma]2->hat,hatg\[Gamma]1->hat, hat\[Gamma]1g->hat,hatgabs->hat,hat\[Gamma]Paolo->hat,hat\[Gamma]Grad->hat}
+hideSubDivs={bananag->banana,banana\[Gamma]1->banana,banana\[Gamma]2->banana, banana\[Gamma]Paolo->banana,banana\[Gamma]Grad->banana,doubleBananag->doubleBanana,doubleBanana\[Gamma]1g->doubleBanana,doubleBanana\[Gamma]Grad->doubleBanana,doubleBanana\[Gamma]Paolog-> doubleBanana,doubleBanana\[Gamma]2g-> doubleBanana,hatg->hat,hat\[Gamma]1->hat,hat\[Gamma]2->hat,hatg\[Gamma]1->hat, hat\[Gamma]1g->hat,hatg\[Gamma]2\[Gamma]1->hat,hat\[Gamma]Paolo->hat,hat\[Gamma]Grad->hat,hat\[Gamma]2g ->hat,hatg\[Gamma]2 ->hat,hat\[Gamma]1\[Gamma]2 ->hat,hat\[Gamma]Paolo\[Gamma]1 ->hat,hat\[Gamma]Paolo\[Gamma]2->hat}
 
 
 (* ::Input::Initialization:: *)
@@ -302,7 +303,7 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 
 
 (* ::Input::Initialization:: *)
-replaceRule={GradImmediateIntNotAllowed:>0,h->1,h2->1,H->0,a2->1-a-3/b,a->0,A->1};
+replaceRule={GradImmediateIntNotAllowed:>0,h->1,h2->1,H->0,H2->0,a2->1-a-3/b,a->0,A2->1-A+3/b,A->1};
 
 
 (* ::Input::Initialization:: *)

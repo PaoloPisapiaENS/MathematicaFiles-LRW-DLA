@@ -24,6 +24,10 @@ BeginPackage["PaoloInitialization`"]
 
 
 (* ::Input::Initialization:: *)
+PaoloInitialization::usage="PaoloInitialization` is a custom initialization package contains all the default settings and functions that Paolo likes.";
+
+
+(* ::Input::Initialization:: *)
 FS::usage="FS is short for FullSimplify";
 PE::usage="PE is short for PowerExpand";
 TF::usage="TF is short for TeXForm";
@@ -31,16 +35,22 @@ CollapseAll::usage="CollapseAll collapses all \.af\_(\:30c4)_/\.af ";
 
 
 (* ::Input::Initialization:: *)
-PPrint;
+$Paolofont::usage="Set the desired font once"; 
+$Paolofontsize::usage="Set the desired font size once";
 
 
 (* ::Input::Initialization:: *)
-Paolofont::usage="Set the desired font once"; 
-Paolofontsize::usage="Set the desired font size once";
+AutoExportWL::usage="AutoExportWL[] enables automatic synchronization and export to a companion .wl file every time Ctrl+S is pressed in the current notebook.";
 
 
 (* ::Input::Initialization:: *)
-PaoloInitialization::usage="PaoloInitialization` is a custom initialization package contains all the default settings and functions that Paolo likes.";
+PPrint::usage="PPrint[textReplaceable_List, var, options, textToKeep(optional)] prints formatted (using options) text with variable evaluation. e.g. a=2; PPrint[{a,\"=\"},a] outputs a=2.\n"<>"PPrint[textReplaceable_NotList,var, options, textToKeep(optional)] defaults to PPrint[{textReplaceable,\" = \"},var, options, textToKeep(optional)]\n"<>
+"Options: {\"style\"\[Rule]{FontFamily\[Rule]\"Times\",FontSize\[Rule]13}}";
+
+
+(* ::Input::Initialization:: *)
+$Paolofontsize=13;
+$Paolofont="Times";
 
 
 (* ::Input::Initialization:: *)
@@ -85,11 +95,6 @@ FrontEndTokenExecute["SelectionCloseAllGroups"]];
 
 
 (* ::Input::Initialization:: *)
-Paolofontsize=13;
-Paolofont="Times";
-
-
-(* ::Input::Initialization:: *)
 (* font selection for plotting *)
 If[!NumberQ[Kayplotfontsize],Kayplotfontsize=13];
 Kayplotfont="Times";
@@ -112,23 +117,21 @@ SetOptions[ Graphics,BaseStyle->{FontFamily->Kayplotfont,FontSize->Kayplotfontsi
 
 (* set directories *)
 Module[{notebookdirectory=NotebookDirectory[]},
-Print[Style["Directory to read/write is: \""<>notebookdirectory<>"\"",{RGBColor[0, 0, Rational[2, 3]]}]];
+Print[Style["Directory to read/export is: \""<>notebookdirectory<>"\"",{RGBColor[0, 0, Rational[2, 3]]}]];
 SetDirectory[notebookdirectory];
 ]
 
 
 (* ::Input::Initialization:: *)
-PPrint::usage="PPrint[textReplaceable, var, textToKeep(optional),options] prints formatted (using options) text with variable evaluation. e.g. a=2; PPrint[{a,\"=\"},a] outputs a=2.";
-
-
-(* ::Input::Initialization:: *)
-ClearAll[PPrint];
+Clear[PPrint];
 SetAttributes[PPrint,HoldAll];
 
 
-Options[PPrint]={"style"->{FontFamily->Paolofont,FontSize->Paolofontsize}};
+Options[PPrint]={"style"->{FontFamily->$Paolofont,FontSize->$Paolofontsize}};
 
-PPrint[textReplaceable_,var_,textToKeep_:"",OptionsPattern[]]:=Module[{varName,evalVar,textReplaced,textKept,prevInput},
+PPrint[textReplaceable_,var_,options:OptionsPattern[]]:=PPrint[textReplaceable,var,options,""];
+
+PPrint[textReplaceable_List,var_,OptionsPattern[],textToKeep_]:=Module[{varName,evalVar,textReplaced,textKept,prevInput},
 
 evalVar=var;
 
@@ -145,7 +148,30 @@ textKept=textToKeep;If[textToKeep==="",evalVar,textToKeep];
 Print[Style[Row[Flatten@{textReplaced,evalVar,textKept}],OptionValue["style"]]]
 ];
 
+PPrint[textReplaceable_,var_,options:OptionsPattern[],textToKeep_:""]:=PPrint[{textReplaceable," = "},var,options,textToKeep];
+
+
 (*With[{textReplaced=textReplaceable/.var->SymbolName[Unevaluated[var]],textKept=If[textToKeep=="",var,textToKeep]},Print[Row[Flatten@{textReplaced,textKept}]]];*)
+
+
+(* ::Input::Initialization:: *)
+AutoExportWL[]:=(SetOptions[EvaluationNotebook[],NotebookEventActions->{{"MenuCommand","Save"}:>(NotebookSave[EvaluationNotebook[]];
+With[{nbPath=Quiet@NotebookFileName[EvaluationNotebook[]]},If[StringQ[nbPath],Module[{nbExpr,rawCells,processedCells,wlPath},nbExpr=NotebookGet[EvaluationNotebook[]];
+wlPath=StringReplace[nbPath,RegularExpression["\\.nb$"]->".wl"];
+(*1. Match genuine leaf cells*)rawCells=Cases[nbExpr,Cell[content_,style_String,opts___?OptionQ]:>{content,style,{opts}},Infinity];
+(*2. Convert each cell into text format*)processedCells=Table[With[{content=item[[1]],style=item[[2]],opts=item[[3]]},Switch[style,(*Drop outputs*)"Output"|"Print"|"Message",Nothing,(*Code/Input cells*)"Input"|"Code",Module[{codeText,lines},codeText=UsingFrontEnd@First@FrontEndExecute[FrontEnd`ExportPacket[Cell[If[Head[content]===BoxData,content,BoxData[content]],"Input"],"InputText"]];
+If[StringQ[codeText]&&StringTrim[codeText]=!="",lines=StringSplit[StringTrim[codeText],"\n"];
+StringRiffle[lines,"\n"],Nothing]],(*Structural headings*)"Title"|"Subtitle"|"Chapter"|"Section"|"Subsection"|"Subsubsection"|"Text"|"Item"|"Subitem",Module[{txt,isClosed,tag},txt=ToString[content/. {TextData->Identity,BoxData->Identity,StyleBox[s_,___]:>s}];
+txt=StringTrim[txt];
+If[txt=!="",isClosed=MatchQ[Open/. opts,False];
+tag="(* ::"<>style<>If[isClosed,"::Closed:: *)",":: *)"];
+tag<>"\n(*"<>txt<>"*)",Nothing]],_,Nothing]],{item,rawCells}];
+(*3. Export to.wl file*)Export[wlPath,StringJoin["(* ::Package:: *)\n\n",StringRiffle[DeleteCases[processedCells,Nothing],"\n\n\n"]],"Text"];]]]),PassEventsDown->True}];
+
+Print[Style["Auto-export to .wl enabled for this notebook on Ctrl+S.",RGBColor[0, 0, Rational[2, 3]]]];);
+
+(*Automatically activate on load in the notebook evaluating the package*)
+If[$Notebooks,AutoExportWL[]];
 
 
 (* ::Input::Initialization:: *)
