@@ -24,14 +24,13 @@ BeginPackage["PaoloInitialization`"]
 
 
 (* ::Input::Initialization:: *)
-PaoloInitialization::usage="PaoloInitialization` is a custom initialization package contains all the default settings and functions that Paolo likes.";
+PaoloInitialization::usage="PaoloInitialization` is a custom initialization package contains all the default settings and functions that Paolo likes";
 
 
 (* ::Input::Initialization:: *)
 FS::usage="FS is short for FullSimplify";
 PE::usage="PE is short for PowerExpand";
 TF::usage="TF is short for TeXForm";
-CollapseAll::usage="CollapseAll collapses all \.af\_(\:30c4)_/\.af ";
 
 
 (* ::Input::Initialization:: *)
@@ -40,7 +39,9 @@ $Paolofontsize::usage="Set the desired font size once";
 
 
 (* ::Input::Initialization:: *)
-AutoExportWL::usage="AutoExportWL[] enables automatic synchronization and export to a companion .wl file every time Ctrl+S is pressed in the current notebook.";
+myNotebookEventActions ::usage="A unique function to set the custom NotebookEventActions (currently: CollapseAll, AutoExportWL)";
+CollapseAll::usage="CollapseAll collapses all with short cut Ctrl+Alt+A (i.e. Alt Gr+A). It works thank to AutoHotkey sending \[ARing] when these keys are pressed";
+AutoExportWL::usage="AutoExportWL enables automatic synchronization and export to a companion .wl file every time Ctrl+S is pressed in the current notebook";
 
 
 (* ::Input::Initialization:: *)
@@ -89,9 +90,6 @@ Begin["Private`"]
 FS:=FullSimplify
 PE:=PowerExpand
 TF:=TeXForm
-CollapseAll:=Module[{},(* Collapse all *)
-FrontEndTokenExecute["SelectAll"];
-FrontEndTokenExecute["SelectionCloseAllGroups"]];
 
 
 (* ::Input::Initialization:: *)
@@ -120,6 +118,35 @@ Module[{notebookdirectory=NotebookDirectory[]},
 Print[Style["Directory to read/export is: \""<>notebookdirectory<>"\"",{RGBColor[0, 0, Rational[2, 3]]}]];
 SetDirectory[notebookdirectory];
 ]
+
+
+(* ::Input::Initialization:: *)
+myNotebookEventActions[]:=SetOptions[EvaluationNotebook[],NotebookEventActions->Join[CollapseAll,AutoExportWL]];
+
+(*Automatically activate on load in the notebook evaluating the package*)
+If[$Notebooks,myNotebookEventActions[];
+Print[Style["Collapse all with Ctrl+Alt+A, or Alt Gr+A.\n"<>
+"Auto-export to .wl enabled for this notebook on Ctrl+S.",RGBColor[0, 0, Rational[2, 3]]]]];
+
+
+(* ::Input::Initialization:: *)
+CollapseAll={{"KeyDown","\[ARing]"}:>(FrontEndTokenExecute[EvaluationNotebook[],"SelectAll"];
+FrontEndTokenExecute[EvaluationNotebook[],"SelectionCloseAllGroups"];),PassEventsDown->False};
+
+
+(* ::Input::Initialization:: *)
+AutoExportWL={{"MenuCommand","Save"}:>(NotebookSave[EvaluationNotebook[]];
+With[{nbPath=Quiet@NotebookFileName[EvaluationNotebook[]]},If[StringQ[nbPath],Module[{nbExpr,rawCells,processedCells,wlPath},nbExpr=NotebookGet[EvaluationNotebook[]];
+wlPath=StringReplace[nbPath,RegularExpression["\\.nb$"]->".wl"];
+(*1. Match genuine leaf cells*)rawCells=Cases[nbExpr,Cell[content_,style_String,opts___?OptionQ]:>{content,style,{opts}},Infinity];
+(*2. Convert each cell into text format*)processedCells=Table[With[{content=item[[1]],style=item[[2]],opts=item[[3]]},Switch[style,(*Drop outputs*)"Output"|"Print"|"Message",Nothing,(*Code/Input cells*)"Input"|"Code",Module[{codeText,lines},codeText=UsingFrontEnd@First@FrontEndExecute[FrontEnd`ExportPacket[Cell[If[Head[content]===BoxData,content,BoxData[content]],"Input"],"InputText"]];
+If[StringQ[codeText]&&StringTrim[codeText]=!="",lines=StringSplit[StringTrim[codeText],"\n"];
+StringRiffle[lines,"\n"],Nothing]],(*Structural headings*)"Title"|"Subtitle"|"Chapter"|"Section"|"Subsection"|"Subsubsection"|"Text"|"Item"|"Subitem",Module[{txt,isClosed,tag},txt=ToString[content/. {TextData->Identity,BoxData->Identity,StyleBox[s_,___]:>s}];
+txt=StringTrim[txt];
+If[txt=!="",isClosed=MatchQ[Open/. opts,False];
+tag="(* ::"<>style<>If[isClosed,"::Closed:: *)",":: *)"];
+tag<>"\n(*"<>txt<>"*)",Nothing]],_,Nothing]],{item,rawCells}];
+(*3. Export to.wl file*)Export[wlPath,StringJoin["(* ::Package:: *)\n\n",StringRiffle[DeleteCases[processedCells,Nothing],"\n\n\n"]],"Text"];]]]),PassEventsDown->True};
 
 
 (* ::Input::Initialization:: *)
@@ -152,26 +179,6 @@ PPrint[textReplaceable_,var_,options:OptionsPattern[],textToKeep_:""]:=PPrint[{t
 
 
 (*With[{textReplaced=textReplaceable/.var->SymbolName[Unevaluated[var]],textKept=If[textToKeep=="",var,textToKeep]},Print[Row[Flatten@{textReplaced,textKept}]]];*)
-
-
-(* ::Input::Initialization:: *)
-AutoExportWL[]:=(SetOptions[EvaluationNotebook[],NotebookEventActions->{{"MenuCommand","Save"}:>(NotebookSave[EvaluationNotebook[]];
-With[{nbPath=Quiet@NotebookFileName[EvaluationNotebook[]]},If[StringQ[nbPath],Module[{nbExpr,rawCells,processedCells,wlPath},nbExpr=NotebookGet[EvaluationNotebook[]];
-wlPath=StringReplace[nbPath,RegularExpression["\\.nb$"]->".wl"];
-(*1. Match genuine leaf cells*)rawCells=Cases[nbExpr,Cell[content_,style_String,opts___?OptionQ]:>{content,style,{opts}},Infinity];
-(*2. Convert each cell into text format*)processedCells=Table[With[{content=item[[1]],style=item[[2]],opts=item[[3]]},Switch[style,(*Drop outputs*)"Output"|"Print"|"Message",Nothing,(*Code/Input cells*)"Input"|"Code",Module[{codeText,lines},codeText=UsingFrontEnd@First@FrontEndExecute[FrontEnd`ExportPacket[Cell[If[Head[content]===BoxData,content,BoxData[content]],"Input"],"InputText"]];
-If[StringQ[codeText]&&StringTrim[codeText]=!="",lines=StringSplit[StringTrim[codeText],"\n"];
-StringRiffle[lines,"\n"],Nothing]],(*Structural headings*)"Title"|"Subtitle"|"Chapter"|"Section"|"Subsection"|"Subsubsection"|"Text"|"Item"|"Subitem",Module[{txt,isClosed,tag},txt=ToString[content/. {TextData->Identity,BoxData->Identity,StyleBox[s_,___]:>s}];
-txt=StringTrim[txt];
-If[txt=!="",isClosed=MatchQ[Open/. opts,False];
-tag="(* ::"<>style<>If[isClosed,"::Closed:: *)",":: *)"];
-tag<>"\n(*"<>txt<>"*)",Nothing]],_,Nothing]],{item,rawCells}];
-(*3. Export to.wl file*)Export[wlPath,StringJoin["(* ::Package:: *)\n\n",StringRiffle[DeleteCases[processedCells,Nothing],"\n\n\n"]],"Text"];]]]),PassEventsDown->True}];
-
-Print[Style["Auto-export to .wl enabled for this notebook on Ctrl+S.",RGBColor[0, 0, Rational[2, 3]]]];);
-
-(*Automatically activate on load in the notebook evaluating the package*)
-If[$Notebooks,AutoExportWL[]];
 
 
 (* ::Input::Initialization:: *)

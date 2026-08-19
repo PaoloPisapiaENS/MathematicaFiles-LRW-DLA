@@ -25,6 +25,9 @@ FrontEndTokenExecute["SelectAll"]
 FrontEndTokenExecute["SelectionCloseAllGroups"]
 
 
+$Assumptions = b > 0
+
+
 (* ::Title:: *)
 (*βFunction[] and γFunction[]*)
 
@@ -1491,13 +1494,14 @@ Normal[%] /. hideSubDivs
 
 
 replaceRule = {GradImmediateIntNotAllowed :> 0, h -> 1, h2 -> 1, 
-   H -> 0, H2 -> 0, a2 -> 1 - a - 3/b, a -> 0, A2 -> A2, A -> A};
-
+   H -> 0, H2 -> 0, a2 -> 1 - a - 3/b, a -> 0, A2 -> 3/b - A, A -> 1};
+
+
 g = Collect[(Series[\[CapitalGamma]gt //. replaceRule, {g0, 0, 
        loopOrder + 1}] // Normal), {g0}, FS];
 PPrint[%, %]
 (*g=Series[g0 \[Mu]^-\[Epsilon] Zgt^(-1),{g0,0,2}]//Normal*)
-\[Beta]Function[g(*/.hideSubDivs*)  , 
+\[Beta]Function[g /. hideSubDivs  , 
  "print" -> 
   tTrue](*It's slow if the subDivs are not hidden directly in g, I \
 think it's just because it's a long expression*)
@@ -1515,6 +1519,9 @@ SeriesData[g, 0, {\[Epsilon], -1 - 2 b, b + 5 b^2}, 1, 4, 1]
   b (10 - 3 \[Epsilon] + b (-4 + 11 \[Epsilon])) - 
   2 Hold[b - 1] (4 + \[Epsilon] + b (-6 + A + A2 + 3 \[Epsilon]) + 
      4 Hold[b - 1]) // Collect[#, \[Epsilon], FS] &
+
+
+-3 + (A + A2) b == 0 /. A2 -> 3/b - A
 
 
 (*HERE I "FORGOT" ABOUT THE DIAGRAM WITH BOTH A BANANA FOR THE \
@@ -1595,9 +1602,6 @@ gstar2 = Select[Normal@gstar2, (# /. \[Epsilon] -> 0) == 0 &][[1]]
 
 loopOrder = 2;
 
-replaceRule = 
-  Flatten@{GradImmediateIntNotAllowed -> 0, a2 -> -3/(b) + 1 - a, 
-    a -> 0, h -> h, h2 -> h2};
 g = Normal[Series[\[CapitalGamma]gt, {g0, 0, loopOrder + 1}]] /. 
    replaceRule;
 
@@ -1610,6 +1614,9 @@ obsWithoutZ = \[Gamma]Function[%%, g, "print" -> tTrue]
 (*%/.b->1*)
 % /. hideSubDivs
 % /. replaceDiagrams // FullSimplify // Factor
+ReleaseHold[%]
+
+
 % /. g -> gstar2 + O[\[Epsilon]]^3 // FS
 
 df2 = 2 + Normal@%
@@ -1770,12 +1777,6 @@ Series[%, {\[Epsilon], 0, 2}]
 
 (* ::Title:: *)
 (*Plots*)
-
-
-dfRG1L := 2 - b \[Epsilon]/(2 + b)
-dfRG2Lwf := df
-dfRG2L := 2 - b \[Epsilon]/(2 + b) - b (\[Epsilon]/(2 + b))^2
-dfSLE = 1 + 3/(4 (2 b + 1));
 
 
 (* ::Subsection:: *)
@@ -2161,4 +2162,4 @@ Show[{(*plotRG1L
 fitFunc /. b -> 3
 
 
-PaoloInitialization`content
+Private`content

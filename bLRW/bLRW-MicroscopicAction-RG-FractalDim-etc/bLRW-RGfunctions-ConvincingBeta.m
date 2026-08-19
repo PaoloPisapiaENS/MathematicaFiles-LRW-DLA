@@ -31,6 +31,10 @@ NotebookSave[]*)
 
 
 (* ::Input::Initialization:: *)
+$Assumptions=b>0
+
+
+(* ::Input::Initialization:: *)
 ClearAll[\[Beta]Function];
 
 Options[\[Beta]Function]={"print"->False,"g0Order"->0};
