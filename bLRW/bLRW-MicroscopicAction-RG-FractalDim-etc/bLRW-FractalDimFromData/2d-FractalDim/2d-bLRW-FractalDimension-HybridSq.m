@@ -27,6 +27,7 @@ NotebookSave[]*)
 
 (* ::Input::Initialization:: *)
 <<PaoloInitialization`
+??PaoloInitialization`*
 
 
 (* ::Input::Initialization:: *)
@@ -76,6 +77,42 @@ stdDevs={Mean[stdDevs[[All,1]]]};
 If[OptionValue["print"],Print[Style[" Std deviation/\!\(\*SqrtBox[\(N\)]\) estimate= ",{RGBColor[0,0,1],Bold}],stdDevs[[1]]//N]];
 
 stdDevs[[1]]*Sqrt[size]]
+
+
+(* ::Input::Initialization:: *)
+ClearAll[BootstrapEstimate];
+
+Options[BootstrapEstimate]={"print"->False};
+
+BootstrapEstimate[data_,options:OptionsPattern[]]:=BootstrapEstimate[data,options,20000];
+
+BootstrapEstimate[data_,OptionsPattern[],repeat_]:=Module[{size,dataMean,repeatNumber,lowerCI,upperCI,deltaMinus, deltaPlus,sample,bootmeans,completedCount=0,startTime=AbsoluteTime[],formatTime},
+
+size=Length[data];
+dataMean=Mean[data];
+repeatNumber=repeat;
+
+formatTime[sec_]:=With[{s=Round[sec]},StringRiffle[IntegerString[#,10,2]&/@{Quotient[s,3600],Mod[Quotient[s,60],60],Mod[s,60]},":"]];
+
+(*Monitor tracks the calculation and shows a live panel*)
+Monitor[
+bootmeans=Table[sample=RandomChoice[data,size];
+completedCount++;
+Mean[sample],repeatNumber],
+
+(*Progress panel layout inside Monitor*)
+Panel[Column[{Row[{Style["Task Progress: ",Bold],completedCount," / ",repeatNumber}],ProgressIndicator[completedCount,{0,repeatNumber},ImageSize->Large],With[{elapsed=Round[AbsoluteTime[]-startTime]},Row[{Style["Elapsed: ",Gray],formatTime[elapsed],"   |   ",Style["ETA: ",Gray],If[completedCount>0,With[{remaining=Round[(elapsed/completedCount)*(repeatNumber-completedCount)]},formatTime[remaining]],"00:00:00"]}]]},Spacings->1],Background->GrayLevel[0.95],FrameMargins->15]
+];
+
+
+{lowerCI,upperCI}=Quantile[bootmeans,{0.15865,0.84135}];
+
+deltaMinus=dataMean-lowerCI;
+deltaPlus=upperCI-dataMean;
+
+(*5. Assign with Around*)
+Around[dataMean,{deltaMinus,deltaPlus}]
+]
 
 
 

@@ -753,7 +753,9 @@ replaceDiagrams = {banana -> 1/\[Epsilon],
 
 hideSubDivs = {bananag -> banana, banana\[Gamma]1 -> banana, 
   banana\[Gamma]2 -> banana, banana\[Gamma]Paolo -> banana, 
-  banana\[Gamma]Grad -> banana, doubleBananag -> doubleBanana, 
+  banana\[Gamma]Grad -> banana, bananaMultigCT -> banana, 
+  banana\[Gamma]PlusCT -> banana,
+  doubleBananag -> doubleBanana, 
   doubleBanana\[Gamma]1g -> doubleBanana, 
   doubleBanana\[Gamma]Grad -> doubleBanana, 
   doubleBanana\[Gamma]Grad\[Gamma]2 -> doubleBanana, 
@@ -770,8 +772,9 @@ hideSubDivs = {bananag -> banana, banana\[Gamma]1 -> banana,
   hat\[Gamma]1\[Gamma]2 -> hat, hat\[Gamma]Paolo\[Gamma]1 -> hat, 
   hat\[Gamma]Paolo\[Gamma]2 -> hat, hat\[Gamma]Paolog -> hat, 
   hat\[Gamma]Paolo\[Gamma]2g -> hat, hatExtraGrad -> hat, 
-  hatGradMultig -> hat, hatGrad\[Gamma]Plus -> hat , 
-  hatGrad\[Gamma]PlusNOsub -> hat }
+  hatGradMultig -> hat, hatMultigGrad -> hat, 
+  hatGrad\[Gamma]Plus -> hat, hatGrad\[Gamma]PlusNOsub -> hat, 
+  hatMultig\[Gamma]Paolo -> hat}
 
 
 (* ::Chapter:: *)
@@ -1458,7 +1461,8 @@ doubleBanana+10 hat))  z["g"]);*)
 \[CapitalGamma]g = (1 - (2 b bananag - 
        2 Hold[b - 1] banana\[Gamma]Grad ) g0 \[Mu]^-\[Epsilon] - 
     g0^2 \[Mu]^(-2 \[Epsilon])  (1/
-       b (-4 Hold[(b - 1)] b doubleBananaGrad\[Gamma]Plus + 
+       b (-4 Hold[(b - 1)] b (doubleBananaGrad\[Gamma]Plus - 
+            1/2 banana\[Gamma]PlusCT^2) + 
          2 Hold[(b - 1)] b^2 doubleBananaExtraGrad + 
          8 Hold[(b - 1)] b^2 hatExtraGrad + 
          2 Hold[(b - 1)] b GradImmediateIntNotAllowed hatExtraGrad - 
@@ -1467,8 +1471,13 @@ doubleBanana+10 hat))  z["g"]);*)
             4 hatGrad\[Gamma]PlusNOsub) + 
          Hold[(b - 1)] b^2 (2 doubleBananaExtraGrad + 
             4 hatExtraGrad) + 
-         Hold[(b - 1)] b (4 doubleBananaGradMultig + 8 hatGradMultig)
-         + 2 b hat\[Gamma]Paolog + 4 b^2 hat\[Gamma]Paolo\[Gamma]2g - 
+         Hold[(b - 
+             1)] b (4 (doubleBananaGradMultig - 
+               1/2 bananaMultigCT^2) + 
+            4 (hatMultigGrad - 1/2 bananaMultigCT^2) + 
+            4 (hatGradMultig(*-(1/2)bananaMultigCT^2*)))
+         + 2 b (hatMultig\[Gamma]Paolo - 1/2 bananaMultigCT^2) + 
+         4 b^2 hat\[Gamma]Paolo\[Gamma]2g - 
          b^3 (2 doubleBananag + 4 hatg + 2 hatg\[Gamma]1 + 
             4 hat\[Gamma]1g + 2 hatg\[Gamma]2 + 4 hat\[Gamma]2g))));
 
@@ -1504,20 +1513,21 @@ Normal[%] /. hideSubDivs ;
 
 
 \[CapitalGamma]gtProduct //. replaceRule // Series[#, {g0, 0, 3}] &
-\[CapitalGamma]gt //. replaceRule // Series[#, {g0, 0, 3}] &
-%% - % // FS
+\[CapitalGamma]gtsmall //. replaceRule // Series[#, {g0, 0, 3}] &
+%% - % // FS
+ReleaseHold[%] /. hideSubDivs // FS
 
 
 replaceRule = {GradImmediateIntNotAllowed :> 0, h -> 1, h2 -> 1, 
-   H -> 0, H2 -> 0, a2 -> 1 - a - 3/b, a -> 0, A2 -> 2 + 3/b - A, 
-   A -> 1};
+   H -> 0, H2 -> 0, a2 -> 1 - a - 3/b, a -> 0, A2 -> A2(*2+3/b-A*), 
+   A -> A};
 
 
-g = Collect[(Series[\[CapitalGamma]gt(*//.replaceRule*), {g0, 0, 
-       loopOrder + 1}] // Normal), {g0}, FS];
+g = Collect[(Series[\[CapitalGamma]gtProduct(*//.replaceRule*), {g0, 
+       0, loopOrder + 1}] // Normal), {g0}, FS];
 PPrint[%, %]
 (*g=Series[g0 \[Mu]^-\[Epsilon] Zgt^(-1),{g0,0,2}]//Normal*)
-\[Beta]Function[g(*/.hideSubDivs*)  , 
+\[Beta]Function[g /. hideSubDivs  , 
  "print" -> 
   tTrue](*It's slow if the subDivs are not hidden directly in g, I \
 think it's just because it's a long expression*)
@@ -1526,7 +1536,14 @@ think it's just because it's a long expression*)
 % //. replaceRule
 % /. replaceDiagrams // FullSimplify // Factor
 ReleaseHold[%] // FS
-RGeq2 = Simplify[Normal[%]] == 0;
+RGeq2 = Simplify[Normal[%]] == 0;
+%% /. b -> 1 // FS
+
+
+(-10 + b (12 - 2 A2 (-1 + b) + \[Epsilon] + b (2 + 5 \[Epsilon]))) // 
+ Collect[#, \[Epsilon], FS] &
+% /. {\[Epsilon] -> 0, H2 -> 0}
+Solve[% == 0, A2]
 
 
 SeriesData[g, 0, {\[Epsilon], -1 - 2 b, b + 5 b^2}, 1, 4, 1]

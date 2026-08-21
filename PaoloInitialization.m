@@ -40,8 +40,8 @@ $Paolofontsize::usage="Set the desired font size once";
 
 (* ::Input::Initialization:: *)
 myNotebookEventActions ::usage="A unique function to set the custom NotebookEventActions (currently: CollapseAll, AutoExportWL)";
-CollapseAll::usage="CollapseAll collapses all with short cut Ctrl+Alt+A (i.e. Alt Gr+A). It works thank to AutoHotkey sending \[ARing] when these keys are pressed";
-AutoExportWL::usage="AutoExportWL enables automatic synchronization and export to a companion .wl file every time Ctrl+S is pressed in the current notebook";
+CollapseAll::usage="CollapseAll[] collapses all with short cut Ctrl+Alt+A (i.e. Alt Gr+A). It works thank to AutoHotkey sending \[ARing] when these keys are pressed";
+AutoExportWL::usage="AutoExportWL[] enables automatic synchronization and export to a companion .wl file every time Ctrl+S is pressed in the current notebook";
 
 
 (* ::Input::Initialization:: *)
@@ -121,21 +121,12 @@ SetDirectory[notebookdirectory];
 
 
 (* ::Input::Initialization:: *)
-myNotebookEventActions[]:=SetOptions[EvaluationNotebook[],NotebookEventActions->Join[CollapseAll,AutoExportWL]];
-
-(*Automatically activate on load in the notebook evaluating the package*)
-If[$Notebooks,myNotebookEventActions[];
-Print[Style["Collapse all with Ctrl+Alt+A, or Alt Gr+A.\n"<>
-"Auto-export to .wl enabled for this notebook on Ctrl+S.",RGBColor[0, 0, Rational[2, 3]]]]];
+CollapseAll[]:={{"KeyDown","\[ARing]"}:>(FrontEndTokenExecute[EvaluationNotebook[],"SelectAll"];
+FrontEndTokenExecute[EvaluationNotebook[],"SelectionCloseAllGroups"];)};
 
 
 (* ::Input::Initialization:: *)
-CollapseAll={{"KeyDown","\[ARing]"}:>(FrontEndTokenExecute[EvaluationNotebook[],"SelectAll"];
-FrontEndTokenExecute[EvaluationNotebook[],"SelectionCloseAllGroups"];),PassEventsDown->False};
-
-
-(* ::Input::Initialization:: *)
-AutoExportWL={{"MenuCommand","Save"}:>(NotebookSave[EvaluationNotebook[]];
+AutoExportWL[]:={{"MenuCommand","Save"}:>(NotebookSave[EvaluationNotebook[]];
 With[{nbPath=Quiet@NotebookFileName[EvaluationNotebook[]]},If[StringQ[nbPath],Module[{nbExpr,rawCells,processedCells,wlPath},nbExpr=NotebookGet[EvaluationNotebook[]];
 wlPath=StringReplace[nbPath,RegularExpression["\\.nb$"]->".wl"];
 (*1. Match genuine leaf cells*)rawCells=Cases[nbExpr,Cell[content_,style_String,opts___?OptionQ]:>{content,style,{opts}},Infinity];
@@ -146,7 +137,19 @@ txt=StringTrim[txt];
 If[txt=!="",isClosed=MatchQ[Open/. opts,False];
 tag="(* ::"<>style<>If[isClosed,"::Closed:: *)",":: *)"];
 tag<>"\n(*"<>txt<>"*)",Nothing]],_,Nothing]],{item,rawCells}];
-(*3. Export to.wl file*)Export[wlPath,StringJoin["(* ::Package:: *)\n\n",StringRiffle[DeleteCases[processedCells,Nothing],"\n\n\n"]],"Text"];]]]),PassEventsDown->True};
+(*3. Export to.wl file*)
+Export[wlPath,StringJoin["(* ::Package:: *)\n\n",StringRiffle[DeleteCases[processedCells,Nothing],"\n\n\n"]],"Text"];]]])};
+
+
+(* ::Input::Initialization:: *)
+(*Clear[myNotebookEventActions]*)
+
+myNotebookEventActions[]:=SetOptions[EvaluationNotebook[],NotebookEventActions->Join[CollapseAll[],(*AutoExportWL[]*)(*getAutoExportWLRule[],*){PassEventsDown->True}]];
+
+(*Automatically activate on load in the notebook evaluating the package*)
+If[$Notebooks,myNotebookEventActions[];
+Print[Style["Collapse all with Ctrl+Alt+A, or Alt Gr+A.\n"(*<>
+"Auto-export to .wl enabled for this notebook on Ctrl+S."*),RGBColor[0, 0, Rational[2, 3]]]]];
 
 
 (* ::Input::Initialization:: *)

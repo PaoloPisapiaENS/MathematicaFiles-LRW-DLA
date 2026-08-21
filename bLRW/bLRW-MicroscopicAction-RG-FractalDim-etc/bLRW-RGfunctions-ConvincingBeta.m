@@ -249,8 +249,9 @@ Return[Normal[\[Gamma]f]]
 (* ::Input::Initialization:: *)
 replaceDiagrams={banana ->1/\[Epsilon],doubleBanana ->1/\[Epsilon]^2,hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon]),sunset->-1/(8\[Epsilon])}
 
-hideSubDivs={bananag->banana,banana\[Gamma]1->banana,banana\[Gamma]2->banana, banana\[Gamma]Paolo->banana,banana\[Gamma]Grad->banana,doubleBananag->doubleBanana,doubleBanana\[Gamma]1g->doubleBanana,doubleBanana\[Gamma]Grad->doubleBanana,doubleBanana\[Gamma]Grad\[Gamma]2->doubleBanana,doubleBanana\[Gamma]Paolog-> doubleBanana,doubleBanana\[Gamma]2g-> doubleBanana,doubleBananaExtraGrad->doubleBanana,doubleBananaGradMultig->doubleBanana,doubleBananaGrad\[Gamma]Plus->doubleBanana,doubleBananaGrad\[Gamma]PlusNOsub->doubleBanana,
-hatg->hat,hat\[Gamma]1->hat,hat\[Gamma]2->hat,hatg\[Gamma]1->hat, hat\[Gamma]1g->hat,hatg\[Gamma]2\[Gamma]1->hat,hat\[Gamma]Paolo->hat,hat\[Gamma]Grad->hat,hat\[Gamma]2g ->hat,hatg\[Gamma]2 ->hat,hat\[Gamma]1\[Gamma]2 ->hat,hat\[Gamma]Paolo\[Gamma]1 ->hat,hat\[Gamma]Paolo\[Gamma]2->hat,hat\[Gamma]Paolog ->hat,hat\[Gamma]Paolo\[Gamma]2g->hat,hatExtraGrad->hat,hatGradMultig->hat,hatGrad\[Gamma]Plus->hat ,hatGrad\[Gamma]PlusNOsub->hat }
+hideSubDivs={bananag->banana,banana\[Gamma]1->banana,banana\[Gamma]2->banana, banana\[Gamma]Paolo->banana,banana\[Gamma]Grad->banana,bananaMultigCT->banana,banana\[Gamma]PlusCT->banana,
+doubleBananag->doubleBanana,doubleBanana\[Gamma]1g->doubleBanana,doubleBanana\[Gamma]Grad->doubleBanana,doubleBanana\[Gamma]Grad\[Gamma]2->doubleBanana,doubleBanana\[Gamma]Paolog-> doubleBanana,doubleBanana\[Gamma]2g-> doubleBanana,doubleBananaExtraGrad->doubleBanana,doubleBananaGradMultig->doubleBanana,doubleBananaGrad\[Gamma]Plus->doubleBanana,doubleBananaGrad\[Gamma]PlusNOsub->doubleBanana,
+hatg->hat,hat\[Gamma]1->hat,hat\[Gamma]2->hat,hatg\[Gamma]1->hat, hat\[Gamma]1g->hat,hatg\[Gamma]2\[Gamma]1->hat,hat\[Gamma]Paolo->hat,hat\[Gamma]Grad->hat,hat\[Gamma]2g ->hat,hatg\[Gamma]2 ->hat,hat\[Gamma]1\[Gamma]2 ->hat,hat\[Gamma]Paolo\[Gamma]1 ->hat,hat\[Gamma]Paolo\[Gamma]2->hat,hat\[Gamma]Paolog ->hat,hat\[Gamma]Paolo\[Gamma]2g->hat,hatExtraGrad->hat,hatGradMultig->hat,hatMultigGrad->hat,hatGrad\[Gamma]Plus->hat,hatGrad\[Gamma]PlusNOsub->hat,hatMultig\[Gamma]Paolo->hat}
 
 
 (* ::Input::Initialization:: *)
