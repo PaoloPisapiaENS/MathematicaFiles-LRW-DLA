@@ -10,5 +10,6 @@
 *.pdf
 LRW-Diagrams/
 
-# UPDATES ONLY THE .wl and .m
+# UPDATES ONLY THE .wl (i.e. exclude the following)
 *.nb
+*.m
