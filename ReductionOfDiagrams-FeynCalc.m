@@ -20,8 +20,11 @@
 
 
 (* ::Input::Initialization:: *)
-$FeynCalcSetOutputFormat=False;
+$FCTraditionalFormOutput=False;
 $FeynCalcSetFonts=False;
+
+
+(* ::Input::Initialization:: *)
 <<FeynCalc`
 
 (*Scope TraditionalForm ONLY to this specific notebook*)

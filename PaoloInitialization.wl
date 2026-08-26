@@ -10,6 +10,7 @@
 
 (* ::Input::Initialization:: *)
 BeginPackage["PaoloInitialization`"]
+SetOptions[EvaluationNotebook[],CommonDefaultFormatTypes->{"Output"->StandardForm}];
 
 
 (* ::Chapter::Closed:: *)

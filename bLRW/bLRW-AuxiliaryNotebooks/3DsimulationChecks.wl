@@ -31,7 +31,7 @@ SetOptions[EvaluationNotebook[],CommonDefaultFormatTypes->{"Output"->StandardFor
 
 
 (* ::Section::Closed:: *)
-(*(n=5, active L=1) b=1.0_LRW-3d-square-lattice-data-5_repeat-500000_tol-1e-10-HybridSq-LogSpacing-LogBC-UpdatedLatStruct-padding-nOver3.csv	How is it??*)
+(*(n=5, active L=1) b=1.0_LRW-3d-square-lattice-data-5_repeat-500000_tol-1e-10-HybridSq-LogSpacing-LogBC-UpdatedLatStruct-padding-nOver3.csv	This is a stupid test: all the paths have length 1...*)
 
 
 (* ::Input:: *)
@@ -85,8 +85,8 @@ SetOptions[EvaluationNotebook[],CommonDefaultFormatTypes->{"Output"->StandardFor
 (*Compared to the analytical result below, (3->??%)*)
 
 
-(* ::Section:: *)
-(*(n=9, active L=2) b=1.0_LRW-3d-square-lattice-data-9_repeat-500000_tol-1e-10-HybridSq-LogSpacing-LogBC-UpdatedLatStruct-padding-nOver3.csv		Very good agreement*)
+(* ::Section::Closed:: *)
+(*(n=9, active L=2) b=1.0_LRW-3d-square-lattice-data-9_repeat-500000_tol-1e-10-HybridSq-LogSpacing-LogBC-UpdatedLatStruct-padding-nOver3.csv		Very good agreement (gets better as the statistic increases)*)
 
 
 (* ::Input:: *)
@@ -195,22 +195,30 @@ SetOptions[EvaluationNotebook[],CommonDefaultFormatTypes->{"Output"->StandardFor
 (*Compared to the analytical result below, (6->??%)*)
 
 
-(* ::Chapter::Closed:: *)
+(* ::Chapter:: *)
 (*Checking parameters with hybrid strategy		TBD*)
 
 
-(* ::Section::Closed:: *)
-(*Path Lengths histograms (b=1.0_LRW-2d-square-lattice-data-41_repeat-500000_tol-1e-10-HybridSq-LogSpacing-LogBC-UpdatedLatStruct-padding-nOver1.csv)		*)
+(* ::Section:: *)
+(*Check padding (b=1.0_LRW-3d-square-lattice-data-9_repeat-500000_tol-1e-10-HybridSq-LogSpacing-padding-nOver1.csv)		*)
 
 
 (* ::Input:: *)
 (*n=9;*)
-(*(*1. Read as text and split by double carriage returns/newlines*)rawBlocks=Import["D:\\Offline_Documents\\University\\PhD_Paris\\PhD_work\\Simulations\\bLRW\\b-LRWdata\\2d\\b=1.0_LRW-2d-square-lattice-data-41_repeat-500000_tol-1e-10-HybridSq-LogSpacing-LogBC-UpdatedLatStruct-padding-nOver1.csv","Data","IgnoreEmptyLines"->True,"CommentCharacters"->"#"];*)
-(*rawBlocks=Most[rawBlocks];*)
-(*rawBlocks[[-2;;-1]]*)
+(*(*1. Read as text and split by double carriage returns/newlines*)rawBlocks=Import["D:\\Offline_Documents\\University\\PhD_Paris\\PhD_work\\Simulations\\bLRW\\b-LRWdata\\3d\\b=1.0_LRW-3d-square-lattice-data-9_repeat-500000_tol-1e-10-HybridSq-LogSpacing-padding-nOver1.csv","CSV"];*)
+(**)
 (*(*2. Convert each separate text block cleanly into an array of coordinate pairs*)*)
 (*paths=Developer`ToPackedArray[rawBlocks];*)
-(*paths[[1;;10]];*)
+(*paths[[1;;10]]*)
+(*Length[paths]*)
+
+
+(* ::Input:: *)
+(*paths=Pick[paths,Length/@paths,2];*)
+(*Length[paths]*)
+
+
+(* ::Input:: *)
 (*pathDistrnOver1=paths[[All,2]];*)
 (*Length@pathDistrnOver1*)
 
@@ -243,7 +251,7 @@ SetOptions[EvaluationNotebook[],CommonDefaultFormatTypes->{"Output"->StandardFor
 
 
 (* ::Input:: *)
-(*(*3. Generate the BarChart with values on top and unique symmetry families on the bottom*)barChartnOver1=BarChart[symmetricProbabilitiesnOver1[[#]],ChartLabels->Placed[pathDistr2nOver1,Axis],LabelingFunction->(Placed[Row[{NumberForm[100.*#1,{5,2}],"%"}],Above]&),Frame->True,FrameLabel->{"Path Length","Relative Occurrence (Probability)"},PlotLabel->Row[{"Path Distribution nOver1"}],ChartStyle->RGBColor[0.87,0.71,0.34],ImageSize->900(*,PlotRange->{All,{0,Max[symmetricProbabilities]*1.15}}*)]&@Span[10,50]*)
+(*(*3. Generate the BarChart with values on top and unique symmetry families on the bottom*)barChartnOver1=BarChart[symmetricProbabilitiesnOver1[[#]],ChartLabels->Placed[pathDistr2nOver1,Axis],LabelingFunction->(Placed[Row[{NumberForm[100.*#1,{5,2}],"%"}],Above]&),Frame->True,FrameLabel->{"Path Length","Relative Occurrence (Probability)"},PlotLabel->Row[{"Path Distribution nOver1"}],ChartStyle->RGBColor[0.87,0.71,0.34],ImageSize->900(*,PlotRange->{All,{0,Max[symmetricProbabilities]*1.15}}*)]&@Span[All]*)
 
 
 (* ::Subsection:: *)
@@ -251,17 +259,25 @@ SetOptions[EvaluationNotebook[],CommonDefaultFormatTypes->{"Output"->StandardFor
 
 
 (* ::Section::Closed:: *)
-(*Path Lengths histograms (b=1.0_LRW-2d-square-lattice-data-41_repeat-500000_tol-1e-10-HybridSq-LogSpacing-LogBC-UpdatedLatStruct-padding-nOver2.csv)		*)
+(*Check padding (b=1.0_LRW-3d-square-lattice-data-9_repeat-500000_tol-1e-10-HybridSq-LogSpacing-padding-nOver2.csv)		*)
 
 
 (* ::Input:: *)
 (*n=9;*)
-(*(*1. Read as text and split by double carriage returns/newlines*)rawBlocks=Import["D:\\Offline_Documents\\University\\PhD_Paris\\PhD_work\\Simulations\\bLRW\\b-LRWdata\\2d\\b=1.0_LRW-2d-square-lattice-data-41_repeat-500000_tol-1e-10-HybridSq-LogSpacing-LogBC-UpdatedLatStruct-padding-nOver2.csv","Data","IgnoreEmptyLines"->True,"CommentCharacters"->"#"];*)
-(*rawBlocks=Most[rawBlocks];*)
-(*rawBlocks[[-2;;-1]]*)
+(*(*1. Read as text and split by double carriage returns/newlines*)rawBlocks=Import["D:\\Offline_Documents\\University\\PhD_Paris\\PhD_work\\Simulations\\bLRW\\b-LRWdata\\3d\\b=1.0_LRW-3d-square-lattice-data-9_repeat-500000_tol-1e-10-HybridSq-LogSpacing-padding-nOver2.csv","CSV"];*)
+(**)
 (*(*2. Convert each separate text block cleanly into an array of coordinate pairs*)*)
 (*paths=Developer`ToPackedArray[rawBlocks];*)
-(*paths[[1;;10]];*)
+(*paths[[1;;10]]*)
+(*Length[paths]*)
+
+
+(* ::Input:: *)
+(*paths=Pick[paths,Length/@paths,2];*)
+(*Length[paths]*)
+
+
+(* ::Input:: *)
 (*pathDistrnOver2=paths[[All,2]];*)
 (*Length@pathDistrnOver2*)
 
@@ -295,7 +311,7 @@ SetOptions[EvaluationNotebook[],CommonDefaultFormatTypes->{"Output"->StandardFor
 
 
 (* ::Input:: *)
-(*(*3. Generate the BarChart with values on top and unique symmetry families on the bottom*)barChartnOver2=BarChart[symmetricProbabilitiesnOver2[[#]],ChartLabels->Placed[pathDistr2nOver2,Axis],LabelingFunction->(Placed[Row[{NumberForm[100.*#1,{5,2}],"%"}],Above]&),Frame->True,FrameLabel->{"Path Length","Relative Occurrence (Probability)"},PlotLabel->Row[{"Path Distribution nOver2"}],ChartStyle->RGBColor[0.87,0.71,0.34],ImageSize->900(*,PlotRange->{All,{0,Max[symmetricProbabilities]*1.15}}*)]&@Span[10,50]*)
+(*(*3. Generate the BarChart with values on top and unique symmetry families on the bottom*)barChartnOver2=BarChart[symmetricProbabilitiesnOver2[[#]],ChartLabels->Placed[pathDistr2nOver2,Axis],LabelingFunction->(Placed[Row[{NumberForm[100.*#1,{5,2}],"%"}],Above]&),Frame->True,FrameLabel->{"Path Length","Relative Occurrence (Probability)"},PlotLabel->Row[{"Path Distribution nOver2"}],ChartStyle->RGBColor[0.87,0.71,0.34],ImageSize->900(*,PlotRange->{All,{0,Max[symmetricProbabilities]*1.15}}*)]&@Span[All]*)
 
 
 (* ::Subsection:: *)

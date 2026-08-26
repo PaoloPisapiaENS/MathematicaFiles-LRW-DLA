@@ -21,6 +21,7 @@
 
 (* ::Input::Initialization:: *)
 BeginPackage["PaoloInitialization`"]
+SetOptions[EvaluationNotebook[],CommonDefaultFormatTypes->{"Output"->StandardForm}];
 
 
 (* ::Input::Initialization:: *)

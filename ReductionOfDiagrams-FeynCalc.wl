@@ -1,7 +1,12 @@
 (* ::Package:: *)
 
-$FeynCalcSetOutputFormat = False;
-$FeynCalcSetFonts = False;
+(*Quit*)
+
+
+$FCTraditionalFormOutput = False;
+$FeynCalcSetFonts = False;
+
+
 << FeynCalc`
 
 (*Scope TraditionalForm ONLY to this specific notebook*)
@@ -2609,7 +2614,7 @@ Collect2[%, {FVD[p2, \[Mu]], FVD[p3, \[Mu]]},
 
 
 (*Define the tensor integral*)
-amp = FAD[{k, m}, {k + p1, m}, {k + p2, m}](*SFAD[{{k1,0},{m^2,-1}}]*
+amp = FAD[{k, m}, {k - p1, m}, {k + p2, m}](*SFAD[{{k1,0},{m^2,-1}}]*
   SFAD[{{k2,0},{m^2,-1}}]*SFAD[{{k1+k2,0},{m^2,-1}}]*SFAD[{{k1+p,
   0},{m^2,-1}}]*)*FVD[k, \[Mu]] FVD[k, \[Mu]]*
   FVD[k, \[Nu]] FVD[k, \[Nu]]
@@ -2619,6 +2624,7 @@ amp = TID[amp, {k}];
 % /. m -> 0
 amp = TID[amp, {k}];
 % /. m -> 0
+% /. -p1 - p2 -> -p3
 (*
 FCReplaceMomenta[%[[1]],{k1->-k1}]
 FDS[%]+%%[[2;;-1]]*)
