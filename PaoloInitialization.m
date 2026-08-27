@@ -79,10 +79,6 @@ It takes inspiration from Kay Wiese's initialization file.\n\nSee ?PaoloInitiali
 
 
 (* ::Input::Initialization:: *)
-(*Print[Style["###################################\n This is Paolo-initialization running\n###################################",{}]];*)
-
-
-(* ::Input::Initialization:: *)
 Begin["Private`"]
 
 
@@ -124,22 +120,6 @@ SetDirectory[notebookdirectory];
 (* ::Input::Initialization:: *)
 CollapseAll[]:={{"KeyDown","\[ARing]"}:>(FrontEndTokenExecute[EvaluationNotebook[],"SelectAll"];
 FrontEndTokenExecute[EvaluationNotebook[],"SelectionCloseAllGroups"];)};
-
-
-(* ::Input::Initialization:: *)
-AutoExportWL[]:={{"MenuCommand","Save"}:>(NotebookSave[EvaluationNotebook[]];
-With[{nbPath=Quiet@NotebookFileName[EvaluationNotebook[]]},If[StringQ[nbPath],Module[{nbExpr,rawCells,processedCells,wlPath},nbExpr=NotebookGet[EvaluationNotebook[]];
-wlPath=StringReplace[nbPath,RegularExpression["\\.nb$"]->".wl"];
-(*1. Match genuine leaf cells*)rawCells=Cases[nbExpr,Cell[content_,style_String,opts___?OptionQ]:>{content,style,{opts}},Infinity];
-(*2. Convert each cell into text format*)processedCells=Table[With[{content=item[[1]],style=item[[2]],opts=item[[3]]},Switch[style,(*Drop outputs*)"Output"|"Print"|"Message",Nothing,(*Code/Input cells*)"Input"|"Code",Module[{codeText,lines},codeText=UsingFrontEnd@First@FrontEndExecute[FrontEnd`ExportPacket[Cell[If[Head[content]===BoxData,content,BoxData[content]],"Input"],"InputText"]];
-If[StringQ[codeText]&&StringTrim[codeText]=!="",lines=StringSplit[StringTrim[codeText],"\n"];
-StringRiffle[lines,"\n"],Nothing]],(*Structural headings*)"Title"|"Subtitle"|"Chapter"|"Section"|"Subsection"|"Subsubsection"|"Text"|"Item"|"Subitem",Module[{txt,isClosed,tag},txt=ToString[content/. {TextData->Identity,BoxData->Identity,StyleBox[s_,___]:>s}];
-txt=StringTrim[txt];
-If[txt=!="",isClosed=MatchQ[Open/. opts,False];
-tag="(* ::"<>style<>If[isClosed,"::Closed:: *)",":: *)"];
-tag<>"\n(*"<>txt<>"*)",Nothing]],_,Nothing]],{item,rawCells}];
-(*3. Export to.wl file*)
-Export[wlPath,StringJoin["(* ::Package:: *)\n\n",StringRiffle[DeleteCases[processedCells,Nothing],"\n\n\n"]],"Text"];]]])};
 
 
 (* ::Input::Initialization:: *)

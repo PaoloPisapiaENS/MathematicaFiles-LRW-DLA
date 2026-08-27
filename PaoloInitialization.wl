@@ -13,7 +13,7 @@ BeginPackage["PaoloInitialization`"]
 SetOptions[EvaluationNotebook[],CommonDefaultFormatTypes->{"Output"->StandardForm}];
 
 
-(* ::Chapter::Closed:: *)
+(* ::Chapter:: *)
 (*List of function usages*)
 
 
@@ -43,7 +43,7 @@ PPrint::usage="PPrint[textReplaceable_List, var, options, textToKeep(optional)] 
 "Options: {\"style\"\[Rule]{FontFamily\[Rule]\"Times\",FontSize\[Rule]13}}";
 
 
-(* ::Chapter::Closed:: *)
+(* ::Chapter:: *)
 (*Print-out message*)
 
 
@@ -75,8 +75,8 @@ The package contains all the default settings and functions that Paolo likes. \
 It takes inspiration from Kay Wiese's initialization file.\n\nSee ?PaoloInitialization`* for a list of functions. ",{Bold,RGBColor[0, 0, Rational[2, 3]]}]];
 
 
-(* ::Input::Initialization:: *)
-(*Print[Style["###################################\n This is Paolo-initialization running\n###################################",{}]];*)
+(* ::Input:: *)
+(*(*Print[Style["###################################\n This is Paolo-initialization running\n###################################",{}]];*)*)
 
 
 (* ::Chapter:: *)
@@ -91,7 +91,7 @@ Begin["Private`"]
 (*(*Quit*)*)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Useful abbreviations, font selection, directory set-up...*)
 
 
@@ -148,27 +148,27 @@ FrontEndTokenExecute[EvaluationNotebook[],"SelectionCloseAllGroups"];)};
 
 
 (* ::Subsection:: *)
-(*AutoExportWL[]: Save -> Generate *.wl*)
+(*AutoExportWL[]: Save -> Generate *.wl	NOT USED ANYMORE*)
 
 
 (* ::Input:: *)
 (*(*Clear[AutoExportWL]*)*)
 
 
-(* ::Input::Initialization:: *)
-AutoExportWL[]:={{"MenuCommand","Save"}:>(NotebookSave[EvaluationNotebook[]];
-With[{nbPath=Quiet@NotebookFileName[EvaluationNotebook[]]},If[StringQ[nbPath],Module[{nbExpr,rawCells,processedCells,wlPath},nbExpr=NotebookGet[EvaluationNotebook[]];
-wlPath=StringReplace[nbPath,RegularExpression["\\.nb$"]->".wl"];
-(*1. Match genuine leaf cells*)rawCells=Cases[nbExpr,Cell[content_,style_String,opts___?OptionQ]:>{content,style,{opts}},Infinity];
-(*2. Convert each cell into text format*)processedCells=Table[With[{content=item[[1]],style=item[[2]],opts=item[[3]]},Switch[style,(*Drop outputs*)"Output"|"Print"|"Message",Nothing,(*Code/Input cells*)"Input"|"Code",Module[{codeText,lines},codeText=UsingFrontEnd@First@FrontEndExecute[FrontEnd`ExportPacket[Cell[If[Head[content]===BoxData,content,BoxData[content]],"Input"],"InputText"]];
-If[StringQ[codeText]&&StringTrim[codeText]=!="",lines=StringSplit[StringTrim[codeText],"\n"];
-StringRiffle[lines,"\n"],Nothing]],(*Structural headings*)"Title"|"Subtitle"|"Chapter"|"Section"|"Subsection"|"Subsubsection"|"Text"|"Item"|"Subitem",Module[{txt,isClosed,tag},txt=ToString[content/. {TextData->Identity,BoxData->Identity,StyleBox[s_,___]:>s}];
-txt=StringTrim[txt];
-If[txt=!="",isClosed=MatchQ[Open/. opts,False];
-tag="(* ::"<>style<>If[isClosed,"::Closed:: *)",":: *)"];
-tag<>"\n(*"<>txt<>"*)",Nothing]],_,Nothing]],{item,rawCells}];
-(*3. Export to.wl file*)
-Export[wlPath,StringJoin["(* ::Package:: *)\n\n",StringRiffle[DeleteCases[processedCells,Nothing],"\n\n\n"]],"Text"];]]])};
+(* ::Input:: *)
+(*(*AutoExportWL[]:={{"MenuCommand","Save"}:>(NotebookSave[EvaluationNotebook[]];*)
+(*With[{nbPath=Quiet@NotebookFileName[EvaluationNotebook[]]},If[StringQ[nbPath],Module[{nbExpr,rawCells,processedCells,wlPath},nbExpr=NotebookGet[EvaluationNotebook[]];*)
+(*wlPath=StringReplace[nbPath,RegularExpression["\\.nb$"]->".wl"];*)
+(*(*1. Match genuine leaf cells*)rawCells=Cases[nbExpr,Cell[content_,style_String,opts___?OptionQ]:>{content,style,{opts}},Infinity];*)
+(*(*2. Convert each cell into text format*)processedCells=Table[With[{content=item[[1]],style=item[[2]],opts=item[[3]]},Switch[style,(*Drop outputs*)"Output"|"Print"|"Message",Nothing,(*Code/Input cells*)"Input"|"Code",Module[{codeText,lines},codeText=UsingFrontEnd@First@FrontEndExecute[FrontEnd`ExportPacket[Cell[If[Head[content]===BoxData,content,BoxData[content]],"Input"],"InputText"]];*)
+(*If[StringQ[codeText]&&StringTrim[codeText]=!="",lines=StringSplit[StringTrim[codeText],"\n"];*)
+(*StringRiffle[lines,"\n"],Nothing]],(*Structural headings*)"Title"|"Subtitle"|"Chapter"|"Section"|"Subsection"|"Subsubsection"|"Text"|"Item"|"Subitem",Module[{txt,isClosed,tag},txt=ToString[content/. {TextData->Identity,BoxData->Identity,StyleBox[s_,___]:>s}];*)
+(*txt=StringTrim[txt];*)
+(*If[txt=!="",isClosed=MatchQ[Open/. opts,False];*)
+(*tag="(* ::"<>style<>If[isClosed,"::Closed:: *)",":: *)"];*)
+(*tag<>"\n(*"<>txt<>"*)",Nothing]],_,Nothing]],{item,rawCells}];*)
+(*(*3. Export to.wl file*)*)
+(*Export[wlPath,StringJoin["(* ::Package:: *)\n\n",StringRiffle[DeleteCases[processedCells,Nothing],"\n\n\n"]],"Text"];]]])};*)*)
 
 
 (* ::Subsection:: *)
@@ -222,7 +222,7 @@ Print[Style["Collapse all with Ctrl+Alt+A, or Alt Gr+A.\n"(*<>
 "Auto-export to .wl enabled for this notebook on Ctrl+S."*),RGBColor[0, 0, Rational[2, 3]]]]];
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*PPrint[]*)
 
 
@@ -259,12 +259,12 @@ PPrint[textReplaceable_,var_,options:OptionsPattern[],textToKeep_:""]:=PPrint[{t
 
 
 (* ::Input:: *)
-(*{a,b};*)
+(*(*{a,b};*)
 (*(InString[$Line-1]//ToExpression)/.RowBox->List*)
-(*(Flatten[%]/. List->StringJoin)*)
+(*(Flatten[%]/. List->StringJoin)*)*)
 
 
-(* ::Title::Closed:: *)
+(* ::Title:: *)
 (*The end*)
 
 
