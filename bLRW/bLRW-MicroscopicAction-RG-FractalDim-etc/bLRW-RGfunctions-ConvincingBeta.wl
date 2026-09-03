@@ -723,11 +723,15 @@ Return[Normal[\[Gamma]f]]
 
 
 (* ::Input::Initialization:: *)
-replaceDiagrams={banana ->1/\[Epsilon],doubleBanana ->1/\[Epsilon]^2,hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon]),sunset->-1/(8\[Epsilon])}
+introduce\[Lambda]={bananag->bananag \[Lambda],banana\[Gamma]1->banana\[Gamma]1 \[Lambda],banana\[Gamma]2->banana\[Gamma]2 \[Lambda],banana\[Gamma]Paolo->banana\[Gamma]Paolo \[Lambda]^2,banana\[Gamma]Grad->banana\[Gamma]Grad \[Lambda]^2,bananaMultigCT->bananaMultigCT \[Lambda],bananaMultigCTGrad->bananaMultigCTGrad \[Lambda],banana\[Gamma]PlusCT->banana\[Gamma]PlusCT \[Lambda],banana\[Gamma]PaoloCT->banana\[Gamma]PaoloCT \[Lambda],banana\[Gamma]GradCT->banana\[Gamma]GradCT \[Lambda]^2,banana\[Gamma]MinusCT->banana\[Gamma]MinusCT \[Lambda],banana\[Gamma]2CT->banana\[Gamma]2CT \[Lambda]};
 
-hideSubDivs={bananag->banana,banana\[Gamma]1->banana,banana\[Gamma]2->banana, banana\[Gamma]Paolo->banana,banana\[Gamma]Grad->banana,bananaMultigCT->banana,banana\[Gamma]PlusCT->banana,banana\[Gamma]PaoloCT->banana,banana\[Gamma]GradCT->banana,banana\[Gamma]MinusCT->banana,banana\[Gamma]2CT->banana,
+hideSubDivs={bananag->banana,banana\[Gamma]1->banana,banana\[Gamma]2->banana, banana\[Gamma]Paolo->banana,banana\[Gamma]Grad->banana,bananaMultigCT->banana ,bananaMultigCTGrad->banana,banana\[Gamma]PlusCT->banana,banana\[Gamma]PaoloCT->banana,banana\[Gamma]GradCT->banana,banana\[Gamma]MinusCT->banana,banana\[Gamma]2CT->banana,
+
 doubleBananag->doubleBanana,doubleBanana\[Gamma]1g->doubleBanana,doubleBanana\[Gamma]Grad->doubleBanana,doubleBanana\[Gamma]Grad\[Gamma]2->doubleBanana,doubleBanana\[Gamma]Paolog-> doubleBanana,doubleBanana\[Gamma]2g-> doubleBanana,doubleBananaExtraGrad->doubleBanana,doubleBananaGradMultig->doubleBanana,doubleBananaGrad\[Gamma]Plus->doubleBanana,doubleBananaGrad\[Gamma]PlusNOsub->doubleBanana,doubleBananaGrad\[Gamma]2->doubleBanana,doubleBananaGrad\[Gamma]2NOsub->doubleBanana,doubleBananaGrad\[Gamma]MinusNOsub->doubleBanana,
-hatg->hat,hat\[Gamma]1->hat,hat\[Gamma]2->hat,hatg\[Gamma]1->hat, hat\[Gamma]1g->hat,hatg\[Gamma]2\[Gamma]1->hat,hat\[Gamma]Paolo->hat,hat\[Gamma]Grad->hat,hat\[Gamma]2g ->hat,hatg\[Gamma]2 ->hat,hat\[Gamma]1\[Gamma]2 ->hat,hat\[Gamma]Paolo\[Gamma]1 ->hat,hat\[Gamma]Paolo\[Gamma]2->hat,hat\[Gamma]Paolog ->hat,hat\[Gamma]Paolo\[Gamma]2g->hat,hatExtraGrad->hat,hatGradMultig->hat,hatMultigGrad->hat,hatGrad\[Gamma]Plus->hat,hatGrad\[Gamma]PlusNOsub->hat,hatMultig\[Gamma]Paolo->hat,hatGrad\[Gamma]2NOsub->hat,hatGrad\[Gamma]MinusNOsub->hat}
+
+hatg->hat,hat\[Gamma]1->hat,hat\[Gamma]2->hat,hatg\[Gamma]1->hat, hat\[Gamma]1g->hat,hatg\[Gamma]2\[Gamma]1->hat,hat\[Gamma]Paolo->hat,hat\[Gamma]Grad->hat,hat\[Gamma]2g ->hat,hatg\[Gamma]2 ->hat,hat\[Gamma]1\[Gamma]2 ->hat,hat\[Gamma]Paolo\[Gamma]1 ->hat,hat\[Gamma]Paolo\[Gamma]2->hat,hat\[Gamma]Paolog ->hat,hat\[Gamma]Paolo\[Gamma]2g->hat,hatExtraGrad->hat,hatGradMultig->hat,hatMultigGrad->hat,hatGrad\[Gamma]Plus->hat,hatGrad\[Gamma]PlusNOsub->hat,hatMultig\[Gamma]Paolo->hat,hatGrad\[Gamma]2NOsub->hat,hatGrad\[Gamma]MinusNOsub->hat};
+
+replaceDiagrams={banana ->1/\[Epsilon],doubleBanana ->1/\[Epsilon]^2,hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon]),sunset->-1/(8\[Epsilon])};
 
 
 (* ::Chapter::Closed:: *)
@@ -858,7 +862,7 @@ hatg->hat,hat\[Gamma]1->hat,hat\[Gamma]2->hat,hatg\[Gamma]1->hat, hat\[Gamma]1g-
 (*\[Section]\[Section] 2loop b>1*)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Rewritten to split into Zg, Z\[Gamma]1, Z\[Gamma]2*)
 
 
@@ -1220,6 +1224,7 @@ twoLoopZ\[Gamma]=twoLoopZ\[Gamma]/.(banana)^2->2(banana)^2/2;
 
 (* ::Input::Initialization:: *)
 replaceRule={GradImmediateIntNotAllowed:>0,h->1,h2->1,H->0,H2->0,a2->1-a-3/b,a->0,A2->1(*2+3/b-A*),A->1(*,K->1+3b/2*)};
+J->5/2+(5/2-11 b)(b-1)(*1/2 (27-22 b) b*)
 
 
 (* ::Input:: *)
@@ -1241,7 +1246,7 @@ replaceRule={GradImmediateIntNotAllowed:>0,h->1,h2->1,H->0,H2->0,a2->1-a-3/b,a->
 (**)
 (*\[CapitalGamma]g =(1-(2 b bananag-2 Hold[b-1]banana\[Gamma]Grad )g0 \[Mu]^-\[Epsilon]-g0^2 \[Mu]^(-2 \[Epsilon]) (1/b**)
 (*(-b^3 (2 doubleBananag+4 hatg+2 hatg\[Gamma]1+4 hat\[Gamma]1g+2 hatg\[Gamma]2+4 hat\[Gamma]2g)*)
-(*+(*ONLY \[Gamma]Grad 1) in my notes	.*)Hold[(b-1)]b(4 (doubleBananaGradMultig-1/2 bananaMultigCT^2-1/2 bananaMultigCT*banana\[Gamma]GradCT)+4 (hatMultigGrad-1/2 bananaMultigCT^2)+4 (hatGradMultig-1/2 bananaMultigCT^2))*)
+(*+(*ONLY \[Gamma]Grad 1) in my notes	.*)Hold[(b-1)]b(4 (doubleBananaGradMultig-1/2 bananaMultigCTGrad^2-1/2 bananaMultigCT*banana\[Gamma]GradCT)+4 (hatMultigGrad-1/2 bananaMultigCTGrad^2)+4 (hatGradMultig-1/2 bananaMultigCTGrad^2))*)
 (*+(*ONLY \[Gamma]Grad 2) in my notes	.*)*)
 (*6 Hold[(b-1)] b^2 hatExtraGrad*)
 (*+(*ONLY \[Gamma]Grad 3) in my notes	.*)*)
@@ -1312,7 +1317,7 @@ replaceRule={GradImmediateIntNotAllowed:>0,h->1,h2->1,H->0,H2->0,a2->1-a-3/b,a->
 (*ReleaseHold[%]//FS*)
 (**)
 (*RGeq2=Simplify[Normal[%]]==0;*)
-(*%%/.{J->-(1/2) (-16+11 b)}//Collect[#,g,FS]&*)
+(*%%/.{J->1/2 (27-22 b) b(*,J\[Rule]-(1/2) (-16+11 b)*)}//Collect[#,g,FS]&*)
 (*%/.b->1//Collect[#,g,FS]&(*This is if some explicit bananaCT are used*)*)
 (**)
 
@@ -1365,7 +1370,7 @@ replaceRule={GradImmediateIntNotAllowed:>0,h->1,h2->1,H->0,H2->0,a2->1-a-3/b,a->
 (*Solve[%==0,J]*)
 
 
-(* ::Item::Closed:: *)
+(* ::Item:: *)
 (*Check the subdivs*)
 
 
@@ -1398,22 +1403,28 @@ replaceRule={GradImmediateIntNotAllowed:>0,h->1,h2->1,H->0,H2->0,a2->1-a-3/b,a->
 
 
 (* ::Input:: *)
-(*(*Here I use K and J, and explicit bananaCT	.*)*)
-(*g \[Epsilon]+g^2 \[Epsilon] (-b (2 bananag+banana\[Gamma]1+banana\[Gamma]2)+banana\[Gamma]Paolo+2 banana\[Gamma]Grad Hold[b-1])-2 g^3 \[Epsilon] (-bananaMultigCT^2-(1+(3 b)/2) banana\[Gamma]PaoloCT^2+2 hatMultig\[Gamma]Paolo+b^2 ((2 bananag+banana\[Gamma]1)^2+(4 bananag+banana\[Gamma]1) banana\[Gamma]2+banana\[Gamma]2^2-2 doubleBananag-doubleBanana\[Gamma]1g-doubleBanana\[Gamma]2g-4 hatg-3 hatg\[Gamma]1-3 hatg\[Gamma]2-hatg\[Gamma]2\[Gamma]1-hat\[Gamma]1-4 hat\[Gamma]1g-hat\[Gamma]1\[Gamma]2-hat\[Gamma]2-4 hat\[Gamma]2g)+2 hat\[Gamma]Paolo+b (doubleBanana\[Gamma]Paolog+hat\[Gamma]Paolo\[Gamma]1+hat\[Gamma]Paolo\[Gamma]2+4 hat\[Gamma]Paolo\[Gamma]2g)-banana^2 J+Hold[b-1] (-6 bananaMultigCT^2-2 bananaMultigCT banana\[Gamma]GradCT+b (-4 (2 bananag+banana\[Gamma]1+banana\[Gamma]2) banana\[Gamma]Grad-2 banana\[Gamma]GradCT banana\[Gamma]MinusCT-4 banana\[Gamma]PlusCT^2+4 doubleBananaExtraGrad+doubleBanana\[Gamma]Grad+doubleBanana\[Gamma]Grad\[Gamma]2+10 hatExtraGrad)+2 (4 banana\[Gamma]GradCT banana\[Gamma]PlusCT+2 doubleBananaGradMultig-4 doubleBananaGrad\[Gamma]Plus+doubleBananaGrad\[Gamma]PlusNOsub+2 (hatGradMultig-hatGrad\[Gamma]PlusNOsub+hatMultigGrad))+4 banana\[Gamma]Grad^2 Hold[b-1]))/.banana\[Gamma]Grad^2->0;*)
+(*(*Here I use K and J, and explicit bananaCT	AND ADDED THE MISSING TERM.*)*)
+(*\[Epsilon] g+\[Epsilon] (-b (2 bananag+banana\[Gamma]1+banana\[Gamma]2)+banana\[Gamma]Paolo+2 banana\[Gamma]Grad Hold[b-1]) g^2-2 (\[Epsilon] (-bananaMultigCTGrad^2+banana\[Gamma]Paolo^2+2 hatMultig\[Gamma]Paolo+b^2 ((2 bananag+banana\[Gamma]1)^2+(4 bananag+banana\[Gamma]1) banana\[Gamma]2+banana\[Gamma]2^2-2 doubleBananag-doubleBanana\[Gamma]1g-doubleBanana\[Gamma]2g-4 hatg-3 hatg\[Gamma]1-3 hatg\[Gamma]2-hatg\[Gamma]2\[Gamma]1-hat\[Gamma]1-4 hat\[Gamma]1g-hat\[Gamma]1\[Gamma]2-hat\[Gamma]2-4 hat\[Gamma]2g)+2 hat\[Gamma]Paolo+b (-((4 bananag+banana\[Gamma]1+2 banana\[Gamma]2) banana\[Gamma]Paolo)+doubleBanana\[Gamma]Paolog+hat\[Gamma]Paolo\[Gamma]1+hat\[Gamma]Paolo\[Gamma]2+4 hat\[Gamma]Paolo\[Gamma]2g)-banana^2 J-banana\[Gamma]PaoloCT^2 K+Hold[b-1] (-6 bananaMultigCTGrad^2-2 bananaMultigCT banana\[Gamma]GradCT+b (-4 (2 bananag+banana\[Gamma]1+banana\[Gamma]2) banana\[Gamma]Grad-2 banana\[Gamma]GradCT (2 banana\[Gamma]2CT+banana\[Gamma]MinusCT)+2 doubleBananaExtraGrad+4 doubleBananaGrad\[Gamma]2-2 doubleBananaGrad\[Gamma]2NOsub-2 doubleBananaGrad\[Gamma]MinusNOsub+doubleBanana\[Gamma]Grad+doubleBanana\[Gamma]Grad\[Gamma]2+6 hatExtraGrad+4 (hatGrad\[Gamma]2NOsub+hatGrad\[Gamma]MinusNOsub))+2 (2 banana\[Gamma]Grad banana\[Gamma]Paolo+4 banana\[Gamma]GradCT banana\[Gamma]PlusCT+2 doubleBananaGradMultig-4 doubleBananaGrad\[Gamma]Plus+doubleBananaGrad\[Gamma]PlusNOsub+2 (hatGradMultig-hatGrad\[Gamma]PlusNOsub+hatMultigGrad))+4 banana\[Gamma]Grad^2 Hold[b-1]))) g^3+SeriesData[g, 0, {}, 1, 4, 1];*)
 (**)
 (*Collect[%,{\[Epsilon] ,g,b},FS];*)
-(*PPrint["\[Beta]",%,"style"->{FontSize->16}];*)
-(**)
+(*(*PPrint["\[Beta]",%,"style"->{FontSize\[Rule]16}];*)
+(**)*)
 (*(*ReleaseHold[%%];*)*)
 (*Series[%%,{\[Epsilon] ,0,1},{g,0,3}(*,{b,0,2}*)];*)
+(*%/.K->1+3b/2;*)
+(*Collect[#,{b},FS]&/@%;*)
 (*PPrint["\[Beta]",%,"style"->{FontSize->16}];*)
-(*%%/.hideSubDivs //FS*)
+(**)
+(*Replace[Normal[%%],a_/;!(FreeQ[a,g^3]):>(a/.(*banana\[Gamma]Grad*) banana\[Gamma]Paolo->0),{1}];*)
+(*%/.banana\[Gamma]Grad^2->0*)
+(**)
+(*%/.hideSubDivs //FS*)
 (*%/.replaceDiagrams//FullSimplify//Factor*)
 (*%//.replaceRule*)
 
 
 (* ::Subitem::Closed:: *)
-(*Order b^2*)
+(*Order b^2: Finite*)
 
 
 (* ::Input:: *)
@@ -1422,14 +1433,48 @@ replaceRule={GradImmediateIntNotAllowed:>0,h->1,h2->1,H->0,H2->0,a2->1-a-3/b,a->
 (*%//.replaceRule*)
 
 
+(* ::Input:: *)
+(*(*FINITE!*)*)
+
+
 (* ::Subitem:: *)
-(*Order b^1*)
+(*Order b^1: Not finite*)
+
+
+(* ::Subsubitem::Closed:: *)
+(*No b-1*)
 
 
 (* ::Input:: *)
-(*b (3 banana\[Gamma]PaoloCT^2-2 (doubleBanana\[Gamma]Paolog+hat\[Gamma]Paolo\[Gamma]1+hat\[Gamma]Paolo\[Gamma]2+4 hat\[Gamma]Paolo\[Gamma]2g)-2 (-4 (2 bananag+banana\[Gamma]1+banana\[Gamma]2) banana\[Gamma]Grad-2 banana\[Gamma]GradCT banana\[Gamma]MinusCT-4 banana\[Gamma]PlusCT^2+4 doubleBananaExtraGrad+doubleBanana\[Gamma]Grad+doubleBanana\[Gamma]Grad\[Gamma]2+10 hatExtraGrad) Hold[b-1]) /. hideSubDivs//FS*)
+(*2 b \[Epsilon] (-((4 bananag+banana\[Gamma]1+2 banana\[Gamma]2) banana\[Gamma]Paolo)-(3 banana\[Gamma]PaoloCT^2)/2+doubleBanana\[Gamma]Paolog+hat\[Gamma]Paolo\[Gamma]1+hat\[Gamma]Paolo\[Gamma]2+4 hat\[Gamma]Paolo\[Gamma]2g+(-4 (2 bananag+banana\[Gamma]1+banana\[Gamma]2) banana\[Gamma]Grad-2 banana\[Gamma]GradCT (2 banana\[Gamma]2CT+banana\[Gamma]MinusCT)+2 doubleBananaExtraGrad+4 doubleBananaGrad\[Gamma]2-2 doubleBananaGrad\[Gamma]2NOsub-2 doubleBananaGrad\[Gamma]MinusNOsub+doubleBanana\[Gamma]Grad+doubleBanana\[Gamma]Grad\[Gamma]2+6 hatExtraGrad+4 (hatGrad\[Gamma]2NOsub+hatGrad\[Gamma]MinusNOsub)) Hold[b-1])/. Hold[b-1]->0//Expand//Collect[#,{b,\[Epsilon]}]&*)
+(*%/. hideSubDivs//FS*)
 (*%/. replaceDiagrams//FullSimplify//Factor*)
-(*%//.replaceRule*)
+(*%//.replaceRule//Expand*)
+
+
+(* ::Subsubitem::Closed:: *)
+(*With b-1*)
+
+
+(* ::Input:: *)
+(*2 b \[Epsilon] (-((4 bananag+banana\[Gamma]1+2 banana\[Gamma]2) banana\[Gamma]Paolo)-(3 banana\[Gamma]PaoloCT^2)/2+doubleBanana\[Gamma]Paolog+hat\[Gamma]Paolo\[Gamma]1+hat\[Gamma]Paolo\[Gamma]2+4 hat\[Gamma]Paolo\[Gamma]2g+(-4 (2 bananag+banana\[Gamma]1+banana\[Gamma]2) banana\[Gamma]Grad-2 banana\[Gamma]GradCT (2 banana\[Gamma]2CT+banana\[Gamma]MinusCT)+2 doubleBananaExtraGrad+4 doubleBananaGrad\[Gamma]2-2 doubleBananaGrad\[Gamma]2NOsub-2 doubleBananaGrad\[Gamma]MinusNOsub+doubleBanana\[Gamma]Grad+doubleBanana\[Gamma]Grad\[Gamma]2+6 hatExtraGrad+4 (hatGrad\[Gamma]2NOsub+hatGrad\[Gamma]MinusNOsub)) Hold[b-1]);*)
+(*(%/2-(%/2/. Hold[b-1]->0)//Expand//Collect[#,{b,\[Epsilon],Hold[b-1]}]&)*2*)
+(*%/. hideSubDivs//FS*)
+(*%/. replaceDiagrams//FullSimplify//Factor*)
+(*%//.replaceRule//Expand*)
+
+
+(* ::Subitem:: *)
+(*Order b^0: Finite (the trick with \[Lambda] is not super accurate, it only works with \[Gamma]Grad I guess. \[Gamma]P has to be dealt with differently)*)
+
+
+(* ::Input:: *)
+(*-2 \[Epsilon] (-bananaMultigCTGrad^2+banana\[Gamma]Paolo^2-banana\[Gamma]PaoloCT^2+2 (hatMultig\[Gamma]Paolo+hat\[Gamma]Paolo)-banana^2 J+2 Hold[b-1] (-3 bananaMultigCTGrad^2-bananaMultigCT banana\[Gamma]GradCT+2 banana\[Gamma]Grad banana\[Gamma]Paolo+4 banana\[Gamma]GradCT banana\[Gamma]PlusCT+2 doubleBananaGradMultig-4 doubleBananaGrad\[Gamma]Plus+doubleBananaGrad\[Gamma]PlusNOsub+2 (hatGradMultig-hatGrad\[Gamma]PlusNOsub+hatMultigGrad)+2 banana\[Gamma]Grad^2 Hold[b-1])) /.J->0//FS;*)
+(*Series[%/. introduce\[Lambda],{\[Lambda],0,4}]*)
+(*Normal@Series[%,{\[Lambda],0,3}]/.\[Lambda]->1//Expand//Collect[#,{b,\[Epsilon],Hold[b-1]}]&*)
+(*%/.hideSubDivs//FS*)
+(*%/. replaceDiagrams//FullSimplify//Factor*)
+(*%//.replaceRule//FS*)
 
 
 (* ::Item:: *)
@@ -1437,7 +1482,7 @@ replaceRule={GradImmediateIntNotAllowed:>0,h->1,h2->1,H->0,H2->0,a2->1-a-3/b,a->
 (*NO, I THINK THAT banana\[Gamma]Paolo SHOULD BE USED TO MULTIPLY OTHER bananas IN CT*)
 
 
-(* ::Subsubsection:: *)
+(* ::Subsubsection::Closed:: *)
 (*g* at 2loop*)
 
 
@@ -1450,6 +1495,7 @@ replaceRule={GradImmediateIntNotAllowed:>0,h->1,h2->1,H->0,H2->0,a2->1-a-3/b,a->
 
 
 (* ::Input:: *)
+(*(*previously:*)*)
 (*\[Epsilon]/(1+2 b)+(b (1+5 b) \[Epsilon]^2)/(1+2 b)^3*)
 
 
@@ -1487,7 +1533,7 @@ replaceRule={GradImmediateIntNotAllowed:>0,h->1,h2->1,H->0,H2->0,a2->1-a-3/b,a->
 (*gstar2=Select[Normal@gstar2,(#/.\[Epsilon]->0)==0&][[1]]*)
 
 
-(* ::Subsubsection:: *)
+(* ::Subsubsection::Closed:: *)
 (*RG functions: \[CapitalGamma]\[Gamma]1 & Subscript[d, f]*)
 
 
@@ -1506,7 +1552,9 @@ replaceRule={GradImmediateIntNotAllowed:>0,h->1,h2->1,H->0,H2->0,a2->1-a-3/b,a->
 (*%/. replaceDiagrams//FullSimplify//Factor*)
 (*ReleaseHold[%]*)
 (**)
-(*%/.g->gstar2+O[\[Epsilon]]^3//FS*)
+(*Print[Style[Row[{"Replace with \!\(\*SuperscriptBox[\(g\), \(*\)]\)= ",gstar2}],RGBColor[0, 0, Rational[2, 3]]]]*)
+(*%%/.g->gstar2+O[\[Epsilon]]^3*)
+(*%//FS*)
 (**)
 (*2+Normal@%*)
 
@@ -1528,7 +1576,7 @@ replaceRule={GradImmediateIntNotAllowed:>0,h->1,h2->1,H->0,H2->0,a2->1-a-3/b,a->
 (*%/.g->gstar2+O[\[Epsilon]]^3//FS*)
 
 
-(* ::Subsubsection::Closed:: *)
+(* ::Subsubsection:: *)
 (*RG functions: \[CapitalGamma]\[Gamma]2		not finite (is this an observable of the theory?) THIS CANNOT WORK: I THINK I HAVE TO SPLIT THE PURE \[Gamma]L AND THE \[Gamma]PAOLO. THE REASON IS THAT I GET EXTRA, UNNECESSARY SUBTRACTION OF SUBDIVS, SUCH AS banana\[Gamma]Grad banana\[Gamma]Paolo		THIS WAY IT IS FINITE!!!!!*)
 
 
@@ -1556,7 +1604,56 @@ replaceRule={GradImmediateIntNotAllowed:>0,h->1,h2->1,H->0,H2->0,a2->1-a-3/b,a->
 (**)
 
 
-(* ::Item:: *)
+(* ::Input:: *)
+(*(*Without removal by hand: using \[Lambda]*)*)
+
+
+(* ::Input:: *)
+(*loopOrder=2;*)
+(**)
+(*(*replaceRule=Flatten@{GradImmediateIntNotAllowed->0,a2->-3/(b)+1-a,a->0,h->h,h2->h2};*)*)
+(*g=Normal[Series[\[CapitalGamma]gt,{g0,0,loopOrder+1}]]/.replaceRule;*)
+(**)
+(*(1+\[CapitalGamma]\[Gamma]2)/(\[CapitalGamma]\[Gamma])^0/.z[_]->1;*)
+(*FS/@(%/.replaceRule);*)
+(**)
+(*\[Gamma]Function[%,g,"print"->tTrue];*)
+(**)
+(*Replace[Normal[%],a_/;!(FreeQ[a,g^2]):>(a/.(*banana\[Gamma]Grad*) banana\[Gamma]Paolo->0),{1}]*)
+(*Normal@%%/. introduce\[Lambda]//Expand//Collect[#,{g,\[Epsilon],\[Lambda],Hold[b-1]},FS]&*)
+(*%/.\[Lambda]^n_/;n>3->0(*/.\[Lambda]->1*)*)
+(**)
+(*%%%-%//FS*)
+(*%/.\[Lambda]->1*)
+
+
+(* ::Input:: *)
+(*introduce\[Lambda]={bananag->bananag \[Lambda]^(3/2),banana\[Gamma]1->banana\[Gamma]1 \[Lambda]^(3/2),banana\[Gamma]2->banana\[Gamma]2 \[Lambda],banana\[Gamma]Paolo->banana\[Gamma]Paolo \[Lambda]^2,banana\[Gamma]Grad->banana\[Gamma]Grad \[Lambda]^2,bananaMultigCT->bananaMultigCT \[Lambda],bananaMultigCTGrad->bananaMultigCTGrad \[Lambda],banana\[Gamma]PlusCT->banana\[Gamma]PlusCT \[Lambda],banana\[Gamma]PaoloCT->banana\[Gamma]PaoloCT \[Lambda],banana\[Gamma]GradCT->banana\[Gamma]GradCT \[Lambda]^2,banana\[Gamma]MinusCT->banana\[Gamma]MinusCT \[Lambda],banana\[Gamma]2CT->banana\[Gamma]2CT \[Lambda]}*)
+
+
+(* ::Input:: *)
+(*loopOrder=2;*)
+(**)
+(*(*replaceRule=Flatten@{GradImmediateIntNotAllowed->0,a2->-3/(b)+1-a,a->0,h->h,h2->h2};*)*)
+(*g=Normal[Series[\[CapitalGamma]gt,{g0,0,loopOrder+1}]]/.replaceRule;*)
+(**)
+(*(1+\[CapitalGamma]\[Gamma]2)/(\[CapitalGamma]\[Gamma])^0/.z[_]->1;*)
+(*FS/@(%/.replaceRule)*)
+(**)
+(*\[Gamma]Function[%,g,"print"->tTrue]*)
+(**)
+(*Normal@%/. introduce\[Lambda]//Expand//Collect[#,{g,\[Epsilon],\[Lambda],Hold[b-1]},FS]&*)
+(*%/.\[Lambda]^n_/;n>3->0(*/.\[Lambda]->1*)*)
+(*%/.\[Lambda]->1*)
+(*(*%/.K->1+3b/2//FS *)*)
+(*(*%/.b->1*)%/.hideSubDivs //FS*)
+(*%/.replaceDiagrams//FullSimplify//Factor*)
+(*%//.replaceRule//FS*)
+(*ReleaseHold[%]//Collect[#,g,FS]&*)
+(*%/.b->1*)
+
+
+(* ::Item::Closed:: *)
 (*Try to separate \[Gamma]2 and \[Gamma]Paolo: IT KINDA WORKS!!!!!*)
 
 
@@ -1970,7 +2067,7 @@ dfSLE=1+3/(4(2b+1));
 (*PPrint[{#,"->"},#/.b->0/.\[Epsilon]->2]&/@{dfRG1L,dfRG1Lsimp,dfRG2Lsimp,dfRG2Lwf,dfRG2L,dfRG2Lsimp2};*)
 (**)
 (*Limit[{dfRG1L,dfRG1Lsimp,dfRG2Lsimp,dfRG2Lwf,dfRG2L,dfRG2Lsimp2},b->\[Infinity]]//Quiet*)
-(*%/.\[Epsilon]->1*)
+(*%/.\[Epsilon]->1.*)
 
 
 (* ::Subsubsection:: *)
