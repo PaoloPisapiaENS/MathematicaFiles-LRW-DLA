@@ -355,7 +355,7 @@ Return[Map[Expand,\[Beta]f]]]
 (*(*Nice, this is finite*)*)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*\[Gamma]Function[] Definitions*)
 
 
@@ -458,7 +458,7 @@ Print[" Bare coupling= \n ",gr];];*)
 
 gB=(g0+(g-gr)*\[Mu]^\[Epsilon]//Expand)+O[\[Gamma]]^(nLoop+1);
 
-gB=(gB/. {g->g  \[Gamma],g0->g0  \[Gamma]});
+gB=(gB/. {g->g  \[Gamma],g0->g0  \[Gamma],a_g:>a \[Gamma]});
 
 If[OptionValue["print"],Print[" Initial bare coupling: \n\t g0(g)=",gB,"\n"];];
 
@@ -729,7 +729,7 @@ hideSubDivs={bananag->banana,banana\[Gamma]1->banana,banana\[Gamma]2->banana, ba
 
 doubleBananag->doubleBanana,doubleBanana\[Gamma]1g->doubleBanana,doubleBanana\[Gamma]Grad->doubleBanana,doubleBanana\[Gamma]Grad\[Gamma]2->doubleBanana,doubleBanana\[Gamma]Paolog-> doubleBanana,doubleBanana\[Gamma]2g-> doubleBanana,doubleBananaExtraGrad->doubleBanana,doubleBananaGradMultig->doubleBanana,doubleBananaGrad\[Gamma]Plus->doubleBanana,doubleBananaGrad\[Gamma]PlusNOsub->doubleBanana,doubleBananaGrad\[Gamma]2->doubleBanana,doubleBananaGrad\[Gamma]2NOsub->doubleBanana,doubleBananaGrad\[Gamma]MinusNOsub->doubleBanana,
 
-hatg->hat,hat\[Gamma]1->hat,hat\[Gamma]2->hat,hatg\[Gamma]1->hat, hat\[Gamma]1g->hat,hatg\[Gamma]2\[Gamma]1->hat,hat\[Gamma]Paolo->hat,hat\[Gamma]Grad->hat,hat\[Gamma]2g ->hat,hatg\[Gamma]2 ->hat,hat\[Gamma]1\[Gamma]2 ->hat,hat\[Gamma]Paolo\[Gamma]1 ->hat,hat\[Gamma]Paolo\[Gamma]2->hat,hat\[Gamma]Paolog ->hat,hat\[Gamma]Paolo\[Gamma]2g->hat,hatExtraGrad->hat,hatGradMultig->hat,hatMultigGrad->hat,hatGrad\[Gamma]Plus->hat,hatGrad\[Gamma]PlusNOsub->hat,hatMultig\[Gamma]Paolo->hat,hatGrad\[Gamma]2NOsub->hat,hatGrad\[Gamma]MinusNOsub->hat};
+hatg->hat,hat\[Gamma]1->hat,hat\[Gamma]2->hat,hat\[Gamma]2\[Gamma]2->hat,hatg\[Gamma]1->hat, hat\[Gamma]1g->hat,hatg\[Gamma]2\[Gamma]1->hat,hat\[Gamma]Paolo->hat,hat\[Gamma]Grad->hat,hat\[Gamma]2g ->hat,hatg\[Gamma]2 ->hat,hat\[Gamma]1\[Gamma]2 ->hat,hat\[Gamma]Paolo\[Gamma]1 ->hat,hat\[Gamma]Paolo\[Gamma]2->hat,hat\[Gamma]Paolog ->hat,hat\[Gamma]Paolo\[Gamma]2g->hat,hatExtraGrad->hat,hatGradMultig->hat,hatMultigGrad->hat,hatGrad\[Gamma]Plus->hat,hatGrad\[Gamma]PlusNOsub->hat,hatMultig\[Gamma]Paolo->hat,hatGrad\[Gamma]2NOsub->hat,hatGrad\[Gamma]MinusNOsub->hat};
 
 replaceDiagrams={banana ->1/\[Epsilon],doubleBanana ->1/\[Epsilon]^2,hat ->1/(2\[Epsilon]^2)+1/(4\[Epsilon]),sunset->-1/(8\[Epsilon])};
 
@@ -862,7 +862,7 @@ replaceDiagrams={banana ->1/\[Epsilon],doubleBanana ->1/\[Epsilon]^2,hat ->1/(2\
 (*\[Section]\[Section] 2loop b>1*)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Rewritten to split into Zg, Z\[Gamma]1, Z\[Gamma]2*)
 
 
@@ -1237,7 +1237,7 @@ J->5/2+(5/2-11 b)(b-1)(*1/2 (27-22 b) b*)
 (*(*Logic change: I write A2 and H2 in front of the diagrams we obtain from the Grad term. Before,we used a2 and h2 to subtract these terms from the complete expression.*)*)
 (*\[CapitalGamma]\[Gamma]2small = - g0 \[Mu]^-\[Epsilon] (b-1)banana + g0^2 \[Mu]^(-2 \[Epsilon]) (2 b^2 hat - 2 hat + b(b-1)(a2 doubleBanana+h2 hat))z["\[Gamma]2"];*)
 (**)
-(*\[CapitalGamma]\[Gamma]2 =(-(b banana\[Gamma]2 - banana\[Gamma]Paolo)  g0 \[Mu]^-\[Epsilon]+g0^2 \[Mu]^(-2 \[Epsilon]) (b^2 doubleBanana\[Gamma]2g -b doubleBanana\[Gamma]Paolog -b Hold[b-1] A2 doubleBanana\[Gamma]Grad\[Gamma]2 +b^2 hatg\[Gamma]2+b^2 hat\[Gamma]1\[Gamma]2+b^2 hat\[Gamma]2*)
+(*\[CapitalGamma]\[Gamma]2 =(-(b banana\[Gamma]2 - banana\[Gamma]Paolo)  g0 \[Mu]^-\[Epsilon]+g0^2 \[Mu]^(-2 \[Epsilon]) (b^2 doubleBanana\[Gamma]2g -b doubleBanana\[Gamma]Paolog -b Hold[b-1] A2 doubleBanana\[Gamma]Grad\[Gamma]2 +b^2 hatg\[Gamma]2+b^2 hat\[Gamma]1\[Gamma]2+b^2 hat\[Gamma]2\[Gamma]2*)
 (*- b hat\[Gamma]Paolo\[Gamma]2-2 hat\[Gamma]Paolo+K banana\[Gamma]PaoloCT^2-b Hold[b-1]H2 hat\[Gamma]Grad) z["\[Gamma]2"]);(*K should be K=1+b: half SUBDIV b*doubleBanana\[Gamma]Paolog + SUBDIV IN b*hat\[Gamma]Paolo\[Gamma]2 + SUBDIV IN hat\[Gamma]Paolo	.*)*)
 (*(*HOWEVER, IF ONE DOES NOT ALLOW FOR banana*banana\[Gamma]Paolo, THEN THE VALUE OF K MUST BE K=1+3b/2! BECAUSE NOW ITS:*)
 (* FULL SUBDIV b*doubleBanana\[Gamma]Paolog + SUBDIV IN b*hat\[Gamma]Paolo\[Gamma]2 + SUBDIV IN hat\[Gamma]Paolo	.*)*)
@@ -1304,7 +1304,7 @@ J->5/2+(5/2-11 b)(b-1)(*1/2 (27-22 b) b*)
 (*g=Collect[(Series[\[CapitalGamma]gtProduct//.replaceRule,{g0,0,loopOrder+1}]//Normal),{g0},FS];*)
 (*PPrint[%,%]*)
 (*(*g=Series[g0 \[Mu]^-\[Epsilon] Zgt^(-1),{g0,0,2}]//Normal*)*)
-(*\[Beta]Function[g(*/.hideSubDivs*)  ,"print"->tTrue](*It's slow if the subDivs are not hidden directly in g, I think it's just because it's a long expression*)*)
+(*\[Beta]Function[g(*/.hideSubDivs*) ,"print"->tTrue](*It's slow if the subDivs are not hidden directly in g, I think it's just because it's a long expression*)*)
 (**)
 (*Replace[Normal[%],a_/;!(FreeQ[a,g^3]):>(a/.(*banana\[Gamma]Grad*) banana\[Gamma]Paolo->0),{1}];*)
 (*%/.banana\[Gamma]Grad^2->0*)
@@ -1370,8 +1370,8 @@ J->5/2+(5/2-11 b)(b-1)(*1/2 (27-22 b) b*)
 (*Solve[%==0,J]*)
 
 
-(* ::Item:: *)
-(*Check the subdivs*)
+(* ::Item::Closed:: *)
+(*Check the subdivs		TBD*)
 
 
 (* ::Input:: *)
@@ -1583,6 +1583,9 @@ J->5/2+(5/2-11 b)(b-1)(*1/2 (27-22 b) b*)
 (* ::Input:: *)
 (*loopOrder=2;*)
 (**)
+(*\[CapitalGamma]\[Gamma]2 =(-(b banana\[Gamma]2 - banana\[Gamma]Paolo)  g0 \[Mu]^-\[Epsilon]+g0^2 \[Mu]^(-2 \[Epsilon]) (b^2 doubleBanana\[Gamma]2g -b doubleBanana\[Gamma]Paolog -b Hold[b-1] A2 doubleBanana\[Gamma]Grad\[Gamma]2 +b^2 hatg\[Gamma]2+b^2 hat\[Gamma]1\[Gamma]2+b^2 hat\[Gamma]2\[Gamma]2*)
+(*- b hat\[Gamma]Paolo\[Gamma]2-2 hat\[Gamma]Paolo+K banana\[Gamma]PaoloCT^2-b Hold[b-1]H2 hat\[Gamma]Grad) z["\[Gamma]2"]);*)
+(**)
 (*(*replaceRule=Flatten@{GradImmediateIntNotAllowed->0,a2->-3/(b)+1-a,a->0,h->h,h2->h2};*)*)
 (*g=Normal[Series[\[CapitalGamma]gt,{g0,0,loopOrder+1}]]/.replaceRule;*)
 (**)
@@ -1604,8 +1607,8 @@ J->5/2+(5/2-11 b)(b-1)(*1/2 (27-22 b) b*)
 (**)
 
 
-(* ::Input:: *)
-(*(*Without removal by hand: using \[Lambda]*)*)
+(* ::Item::Closed:: *)
+(*Without removal by hand: using \[Lambda] (a bit messy, better think it through)*)
 
 
 (* ::Input:: *)
@@ -1653,40 +1656,57 @@ J->5/2+(5/2-11 b)(b-1)(*1/2 (27-22 b) b*)
 (*%/.b->1*)
 
 
-(* ::Item::Closed:: *)
-(*Try to separate \[Gamma]2 and \[Gamma]Paolo: IT KINDA WORKS!!!!!*)
+(* ::Item:: *)
+(*Try to separate \[Gamma]2 and \[Gamma]Paolo: IT  WORKS PERFECTLY!!!!! HOWEVER, NOTICE THAT \[Gamma]Paolo USES A DIFFERENT COUPLING!! (as it is expected, since it heavily contains green-blue interactions, and not just red-red)*)
 
 
 (* ::Input:: *)
-(*\[CapitalGamma]\[Gamma]2 =1+(-(b banana\[Gamma]2)  g0 \[Mu]^-\[Epsilon]+g0^2 \[Mu]^(-2 \[Epsilon]) (b^2 doubleBanana\[Gamma]2g  +b^2 hatg\[Gamma]2+b^2 hat\[Gamma]1\[Gamma]2+b^2 hat\[Gamma]2-b Hold[b-1] doubleBanana\[Gamma]Grad\[Gamma]2 ) );(*K should be K=1+b: half SUBDIV b*doubleBanana\[Gamma]Paolog + SUBDIV IN b*hat\[Gamma]Paolo\[Gamma]2 + SUBDIV IN hat\[Gamma]Paolo	.*)*)
+(*\[CapitalGamma]\[Gamma]2 =1+(-(b banana\[Gamma]2)  g0 \[Mu]^-\[Epsilon]+g0^2 \[Mu]^(-2 \[Epsilon]) (b^2 doubleBanana\[Gamma]2g  +b^2 hatg\[Gamma]2+b^2 hat\[Gamma]1\[Gamma]2+b^2 hat\[Gamma]2\[Gamma]2- b hat\[Gamma]Paolo\[Gamma]2-b Hold[b-1] doubleBanana\[Gamma]Grad\[Gamma]2 ) );(*K should be K=1+b: half SUBDIV b*doubleBanana\[Gamma]Paolog + SUBDIV IN b*hat\[Gamma]Paolo\[Gamma]2 + SUBDIV IN hat\[Gamma]Paolo	.*)*)
 (*(*HOWEVER, IF ONE DOES NOT ALLOW FOR banana*banana\[Gamma]Paolo, THEN THE VALUE OF K MUST BE K=1+3b/2! BECAUSE NOW ITS:*)
 (* FULL SUBDIV b*doubleBanana\[Gamma]Paolog + SUBDIV IN b*hat\[Gamma]Paolo\[Gamma]2 + SUBDIV IN hat\[Gamma]Paolo	.*)*)
-(*\[CapitalGamma]\[Gamma]Paolo=1+(-( - banana\[Gamma]Paolo)  g0 \[Mu]^-\[Epsilon]+g0^2 \[Mu]^(-2 \[Epsilon]) (- b hat\[Gamma]Paolo\[Gamma]2-2 hat\[Gamma]Paolo-b doubleBanana\[Gamma]Paolog +K banana^2) )/.K->(1+2*b/2);(*K should be K=1+b: half SUBDIV b*doubleBanana\[Gamma]Paolog + SUBDIV IN b*hat\[Gamma]Paolo\[Gamma]2 + SUBDIV IN hat\[Gamma]Paolo	.*)*)
+(**)
+(*(*This is the contribution to Subscript[g, \[Phi]\[Psi]], but actually, the observable for \[Gamma]Paolo tout court is the one below*)*)
+(*\[CapitalGamma]\[Gamma]Paolo=1+(-( - banana\[Gamma]Paolo)  g0 \[Mu]^-\[Epsilon]+g0^2 \[Mu]^(-2 \[Epsilon]) (-2 hat\[Gamma]Paolo-b doubleBanana\[Gamma]Paolog +K banana^2) )(*/.K->(1+2*b/2)*);(*K should be K=1+b: half SUBDIV b*doubleBanana\[Gamma]Paolog + SUBDIV IN b*hat\[Gamma]Paolo\[Gamma]2 + SUBDIV IN hat\[Gamma]Paolo	.*)*)
 (*(*HOWEVER, IF ONE DOES NOT ALLOW FOR banana*banana\[Gamma]Paolo, THEN THE VALUE OF K MUST BE K=1+3b/2! BECAUSE NOW ITS:*)
 (* FULL SUBDIV b*doubleBanana\[Gamma]Paolog + SUBDIV IN b*hat\[Gamma]Paolo\[Gamma]2 + SUBDIV IN hat\[Gamma]Paolo	.*)*)
+(**)
+(*(*This is the observable for \[Gamma]Paolo tout court. It's n-Loop correction will produce a n+1-Loop correction to the rest. THIS IS LIKE A COULING ITSELF, WHICH ACTUALLY IS: RED-GREEN COUPLING!!	!*)*)
+(*gPaolo=g0 \[Mu]^-\[Epsilon] (1+(-( - banana\[Gamma]Paolo)(b+2)  g0 \[Mu]^-\[Epsilon](*+g0^2\[Mu]^(-2 \[Epsilon]) (-2 hat\[Gamma]Paolo-b doubleBanana\[Gamma]Paolog +K banana^2) *)))(*/.K->(1+2*b/2)*);*)
 
 
 (* ::Input:: *)
+(**)
+(**)
+(**)
+
+
+(* ::Input:: *)
+(*(*RG\[Gamma]2 only: FINITE	!!!!*)*)
 (*loopOrder=2;*)
 (**)
 (*(*replaceRule=Flatten@{GradImmediateIntNotAllowed->0,a2->-3/(b)+1-a,a->0,h->h,h2->h2};*)*)
-(*g=Normal[Series[\[CapitalGamma]gt,{g0,0,loopOrder+1}]]/.replaceRule*)
+(*g=Normal[Series[\[CapitalGamma]gt,{g0,0,loopOrder+1}]]/.replaceRule;*)
 (**)
 (*(\[CapitalGamma]\[Gamma]2)/(\[CapitalGamma]\[Gamma])^0/.z[_]->1;*)
 (*FS/@(%/.replaceRule)*)
 (**)
-(*\[Gamma]Function[%,g,"print"->tTrue]*)
+(*\[Gamma]Function[%,g,"print"->True]*)
 (*(*Replace[Normal[%],a_/;!(FreeQ[a,g^2]):>(a/.(*banana\[Gamma]Grad*) banana\[Gamma]Paolo->0),{1}]*)*)
-(*%/.K->1+3b/2//FS (*THIS IS CORRECT!!! IF ONE DOES NOT ALLOW FOR banana*banana\[Gamma]Paolo, THEN THE VALUE OF K MUST BE K=1+3b/2	.*)*)
+(*(*%/.K->1+3b/2//FS*) (*THIS IS CORRECT!!! IF ONE DOES NOT ALLOW FOR banana*banana\[Gamma]Paolo, THEN THE VALUE OF K MUST BE K=1+3b/2	.*)*)
 (*(*%/.b->1*)%/.hideSubDivs //FS*)
 (*%/.replaceDiagrams//FullSimplify//Factor*)
 (*%//.replaceRule//FS*)
-(*ReleaseHold[%]//FS*)
+(*RG\[Gamma]2=ReleaseHold[%]//FS*)
 (*%/.b->1*)
 
 
 (* ::Input:: *)
+(*(*RG\[Gamma]Paolo only: FINITE!!!	!*)*)
+(**)
 (*loopOrder=2;*)
+(**)
+(**)
+(*\[CapitalGamma]\[Gamma]Paolo=1+(-( - banana\[Gamma]Paolo)  g0 \[Mu]^-\[Epsilon]+g0^2 \[Mu]^(-2 \[Epsilon]) (-2 hat\[Gamma]Paolo-b doubleBanana\[Gamma]Paolog +K banana^2) );*)
 (**)
 (*(*replaceRule=Flatten@{GradImmediateIntNotAllowed->0,a2->-3/(b)+1-a,a->0,h->h,h2->h2};*)*)
 (*g=g0 \[Mu]^-\[Epsilon](*Normal[Series[\[CapitalGamma]gt,{g0,0,loopOrder+1}]]/.replaceRule;*)*)
@@ -1696,26 +1716,95 @@ J->5/2+(5/2-11 b)(b-1)(*1/2 (27-22 b) b*)
 (**)
 (*\[Gamma]Function[%,g,"print"->True,"g0Order"->loopOrder]*)
 (*Replace[Normal[%],a_/;!(FreeQ[a,g^2]):>(a/.(*banana\[Gamma]Grad*) banana\[Gamma]Paolo->0),{1}]*)
-(*%/.K->1+3b/2//FS (*THIS IS CORRECT!!! IF ONE DOES NOT ALLOW FOR banana*banana\[Gamma]Paolo, THEN THE VALUE OF K MUST BE K=1+3b/2	.*)*)
+(*%/.K->1+2*b/2//FS (*THIS IS CORRECT!!! IF ONE DOES not ALLOW FOR banana*banana\[Gamma]Paolo, THEN THE VALUE OF K MUST BE K=1+b	.*)*)
 (*(*%/.b->1*)%/.hideSubDivs //FS*)
 (*%/.replaceDiagrams//FullSimplify//Factor*)
 (*%//.replaceRule//FS*)
-(*ReleaseHold[%]//Collect[#,g,FS]&*)
+(*RG\[Gamma]Paolo=ReleaseHold[%]//Collect[#,g,FS]&*)
+(*%/.b->1*)
+
+
+(* ::Input:: *)
+(*(*\[Gamma]Paolo as a coupling	\[Placeholder]*)*)
+(*loopOrder=1;*)
+(**)
+(*gPaolo=g0 \[Mu]^-\[Epsilon] (1+(-( - banana\[Gamma]Paolo)(b+2)  g0 \[Mu]^-\[Epsilon](*+g0^2\[Mu]^(-2 \[Epsilon]) (-2 hat\[Gamma]Paolo-b doubleBanana\[Gamma]Paolog +K banana^2) *)))(*/.K->(1+2*b/2)*);*)
+(*g=Collect[(Series[gPaolo//.replaceRule,{g0,0,loopOrder+1}]//Normal),{g0},FS];*)
+(*PPrint[%,%]*)
+(*(*g=Series[g0 \[Mu]^-\[Epsilon] Zgt^(-1),{g0,0,2}]//Normal*)*)
+(*\[Beta]Function[g(*/.hideSubDivs*) ,"print"->tTrue](*It's slow if the subDivs are not hidden directly in g, I think it's just because it's a long expression*)*)
+(**)
+(*(*Replace[Normal[%],a_/;!(FreeQ[a,g^3]):>(a/.(*banana\[Gamma]Grad*) banana\[Gamma]Paolo->0),{1}];*)
+(*%/.banana\[Gamma]Grad^2->0*)
+(*%/.K->1+3b/2*)
+(**)
+(*%//.replaceRule;*)
+(**)
+(*%/.hideSubDivs *)
+(*%/.replaceDiagrams//FullSimplify//Factor*)
+(*ReleaseHold[%]//FS*)
+(**)
+(*RGeq2=Simplify[Normal[%]]==0;*)
+(*%%/.{J\[Rule]1/2 (27-22 b) b(*,J\[Rule]-(1/2) (-16+11 b)*)}//Collect[#,g,FS]&*)
+(*%/.b->1//Collect[#,g,FS]&(*This is if some explicit bananaCT are used*)*)*)
+(**)
+
+
+(* ::Input:: *)
+(*(*RG\[Gamma]Paolo with gPaolo as coupling: FINITE???	!*)*)
+(**)
+(*loopOrder=2;*)
+(**)
+(*(*HOWEVER, NOTICE THAT THESE ARE NOT ALL THE SAME g0!! SOME OF THEM ARE Subscript[g\[Gamma], g], other Overscript[g, ~], other Subscript[g, \[Phi]\[Chi]]	!!*)*)
+(**)
+(*gPaolo=g0 \[Mu]^-\[Epsilon](1 - banana\[Gamma]Paolo(b+ 2) g0 \[Mu]^-\[Epsilon](*+g0^2\[Mu]^(-2 \[Epsilon]) (-2 hat\[Gamma]Paolo-b doubleBanana\[Gamma]Paolog +K banana^2) *));*)
+(**)
+(*gPaolo=g0 \[Mu]^-\[Epsilon](1 - banana\[Gamma]Paolo(b g[t]+2 g[\[Phi]\[Chi]])*\[Mu]^(-\[Epsilon]*0)(*+g0^2\[Mu]^(-2 \[Epsilon]) (-2 hat\[Gamma]Paolo-b doubleBanana\[Gamma]Paolog +K banana^2) *));*)
+(**)
+(*\[CapitalGamma]\[Gamma]Paolo=1-b( Hold[banana\[Gamma]Paolo]  g0 \[Mu]^-\[Epsilon]+g0^2 \[Mu]^(-2 \[Epsilon])  (-2 hat\[Gamma]Paolo-b doubleBanana\[Gamma]Paolog +K banana^2) )/.K->0;*)
+(**)
+(*\[CapitalGamma]\[Gamma]Paolo=1-b( Hold[banana\[Gamma]Paolo] g0 \[Mu]^-\[Epsilon]+g0  \[Mu]^(- 2\[Epsilon])  (-2 g[\[Phi]\[Chi]]hat\[Gamma]Paolo-b g[t]doubleBanana\[Gamma]Paolog +K banana^2) )/.K->0;*)
+(**)
+(*((\[CapitalGamma]\[Gamma]Paolo-1)+1)/(\[CapitalGamma]\[Gamma])^0/.z[_]->1;*)
+(*FS/@(%/.replaceRule)*)
+(**)
+(*\[Gamma]Function[%,gPaolo,"print"->True,"g0Order"->loopOrder]*)
+(*%/.g[_]:>g*)
+(*(Expand/@%)/.Hold[banana\[Gamma]Paolo]^2->Hold[banana\[Gamma]Paolo]^2//ReleaseHold*)
+(*(*Replace[Normal[%],a_/;!(FreeQ[a,g^2]):>(a/.(*banana\[Gamma]Grad*) banana\[Gamma]Paolo->0),{1}]*)
+(*%/.K->1+2*b/2//FS (*THIS IS CORRECT!!! IF ONE DOES not ALLOW FOR banana*banana\[Gamma]Paolo, THEN THE VALUE OF K MUST BE K=1+b	.*)*)
+(**)(*%/.b->1*)%/.hideSubDivs //FS*)
+(*%/.replaceDiagrams//FullSimplify//Factor*)
+(*%//.replaceRule//FS*)
+(*Series[%,{\[Epsilon],0,loopOrder}]*)
+(*RG\[Gamma]PaoloAsCoupling=ReleaseHold[%]//Collect[#,g,FS]&*)
 (*%/.b->1*)
 
 
 (* ::Subitem:: *)
-(*Compare with previous result*)
+(*Compare with previous result:  		IT WORKS!!!*)
 
 
 (* ::Input:: *)
+(*(*Now: With \[Gamma]Paolo as coupling*)*)
+(*RG\[Gamma]2*)
+(*RG\[Gamma]PaoloAsCoupling*)
+(*%%-(%/b)*)
+(*Normal[%]//Collect[#,g,FS]&*)
+(**)
 (*(*Previously*)*)
-(*(1-b) g+1/2 (-1+b) (2+3 b) g^2*)
+(*(1-b) g+1/2 (-1+b) (2+3 b) g^2===%*)
 
 
 (* ::Input:: *)
-(*(*Now*)*)
-(*Normal[SeriesData[g, 0, {-b, Rational[3, 2] b^2 + b/\[Epsilon]}, 1, 3, 1]+(g+g^2 (-1-(b (2+\[Epsilon]))/(2 \[Epsilon])))]//Collect[#,g,FS]&*)
+(*(*Now: With \[Gamma]Paolo not ass coupling (subdivs removal by hand)*)*)
+(*RG\[Gamma]2*)
+(*RG\[Gamma]Paolo*)
+(*%%+(%)*)
+(*Normal[%]//Collect[#,g,FS]&*)
+(**)
+(*(*Previously*)*)
+(*(1-b) g+1/2 (-1+b) (2+3 b) g^2===%*)
 
 
 (* ::Subsubsection::Closed:: *)
@@ -1954,7 +2043,7 @@ dfSLE=1+3/(4(2b+1));
 (*%/.\[Epsilon]->2*)
 
 
-(* ::Subsubsection::Closed:: *)
+(* ::Subsubsection:: *)
 (*Plots*)
 
 
@@ -2070,7 +2159,7 @@ dfSLE=1+3/(4(2b+1));
 (*%/.\[Epsilon]->1.*)
 
 
-(* ::Subsubsection:: *)
+(* ::Subsubsection::Closed:: *)
 (*Extra data from my simulations*)
 
 
@@ -2117,12 +2206,12 @@ dfSLE=1+3/(4(2b+1));
 
 (* ::Input:: *)
 (*inRange=0;*)
-(*endRange=5;*)
+(*endRange=15;*)
 (**)
 (**)
 (*Simulation3d=ListPlot[{{1,1.624}(*{0,2},{1,1.624},{2,Around[1.511,0.039]},{3,Around[1.483,0.028]},{4,Around[1.431,0.016]},{5,Around[1.436,0.016]}*)(*,{10,}*)},PlotStyle->{RGBColor[1, 0, 0],PointSize[0.015]},PlotLegends->Placed[{Style["Result by David Wilson"(* (Gemini-opt1)"*),FontFamily->"Times"]},{Right,Top}]];*)
 (**)
-(*Simulation3dGemini=ListPlot[{{0,Around[2,0.02]},{1,Around[1.61133,0.03]},{2,Around[1.511,0.039]},{3,Around[1.483,0.028]},{4,Around[1.431,0.036]},{5,Around[1.436,0.036]}(*,{10,}*)}(*{(*{0,1.753\[PlusMinus]0.006},*){2,Around[1.51,0.01]}(*,{3,1.1073\[PlusMinus]0.0024},{4,1.0737\[PlusMinus]0.0018},{5,1.0670\[PlusMinus]0.0012},{10,1.0251\[PlusMinus]0.0012}*)}*),PlotStyle->{RGBColor[0, 0.66, 0],PointSize[0.01]},PlotLegends->Placed[{Style["Simulated Data \!\(\**)
+(*Simulation3dGemini=ListPlot[{{0,Around[2,0.02]},{1,Around[1.61133,0.03]},{2,Around[1.511,0.039]},{3,Around[1.483,0.028]},{4,Around[1.431,0.036]},{5,Around[1.436,0.036]},{15,Around[1.2932879741937668`, 0.003437148447463247]}(*,{10,}*)}(*{(*{0,1.753\[PlusMinus]0.006},*){2,Around[1.51,0.01]}(*,{3,1.1073\[PlusMinus]0.0024},{4,1.0737\[PlusMinus]0.0018},{5,1.0670\[PlusMinus]0.0012},{10,1.0251\[PlusMinus]0.0012}*)}*),PlotStyle->{RGBColor[0, 0.66, 0],PointSize[0.01]},PlotLegends->Placed[{Style["Simulated Data \!\(\**)
 (*StyleBox[\"d\",\nFontSlant->\"Italic\"]\)=3"(* (Gemini-opt1)"*),FontFamily->"Times"]},{Right,Top}]];*)
 (**)
 (*plotRG1L=Plot[#/.\[Epsilon]->1,{b,inRange,endRange},PlotStyle->GrayLevel[0.5],PlotRange->All,PlotLegends->Placed[{Row[{"OLD 1-Loop: ",TraditionalForm[#]}]},{Right,Top}]]&@dfRG1L;*)
@@ -2146,15 +2235,21 @@ dfSLE=1+3/(4(2b+1));
 (*,plotRG2Lsimp2(*,plotRG2Lwf,plotRG2L*)(*,fitPlot*)*)
 (*,Simulation3d*)
 (*,Simulation3dGemini(*,Graphics[{Red,Text[Style["Result \nby David Wilson"(* (Gemini-opt1)"*),FontFamily->"Times"],{1,1.45}]}]*)*)
-(*},PlotRange->{{0,5},{1.3,2}},AxesLabel->{b,Subscript[d, f]},AxesOrigin->{0,1.3},ImageSize->Large,PlotLabel->Row[{"d = 3"}](*,AspectRatio->1*)]*)
+(*},PlotRange->{{0,endRange},{1.2,2}},AxesLabel->{b,Subscript[d, f]},AxesOrigin->{0,1.3},ImageSize->Large,PlotLabel->Row[{"d = 3"}],GridLines->{None,(Limit[{dfRG1L,dfRG1Lsimp,dfRG2Lsimp,dfRG2L,dfRG2Lsimp2},b->\[Infinity]]/.\[Epsilon]->1.//Quiet)}(*,AspectRatio->1*)]*)
 
 
 (* ::Text:: *)
-(*THIS LOOKS VERY PROMISING!!! I'M USING THE REPLACEMENT rule {GradImmediateIntNotAllowed:>0,h->1,h2->1,a2->1-a-3/b,a->0,h->h,h2->h2}*)
+(*THIS LOOKS VERY PROMISING!!! I'M USING THE REPLACEMENT rule {GradImmediateIntNotAllowed:>0,h->1,h2->1,H->0,H2->0,a2->1-a-3/b,a->0,A2->1,A->1}*)
 
 
 (* ::Input:: *)
-(*fitFunc/.b->3*)
+(*dfRG2Lsimp2/.b->15./.\[Epsilon]->1*)
+(*dfRG2Lsimp/. b->15./. \[Epsilon]->1*)
+(*(*WHICH ONE IS IT????	????*)*)
+
+
+(* ::Input:: *)
+(**)
 
 
 (* ::Subsection:: *)
@@ -2210,16 +2305,15 @@ dfSLE=1+3/(4(2b+1));
 
 (* ::Input:: *)
 (*(*3D	!*)*)
-(*plotpadeDf=Plot[#/.t->1,{b,0,5},PlotStyle->RGBColor[Rational[2, 3], 0.33333333333333337`, 0],PlotRange->All,PlotLegends->Placed[{Style[Row[{"FT@2-Loop PadeAppr: \!\(\*SubscriptBox[\(d\), \(f\)]\) = ",TraditionalForm[#],"\!\(\*SubscriptBox[\(|\), \(\[Epsilon] = 1\)]\)"}],FontFamily->"Times"]},{Right,Top}]]&@padeDf;*)
-(**)
-(**)
 (*inRange=0;*)
-(*endRange=5;*)
+(*endRange=15;*)
 (**)
+(*plotpadeDf=Plot[#/.t->1,{b,0,endRange},PlotStyle->RGBColor[Rational[2, 3], 0.33333333333333337`, 0],PlotRange->All,PlotLegends->Placed[{Style[Row[{"FT@2-Loop PadeAppr: \!\(\*SubscriptBox[\(d\), \(f\)]\) = ",TraditionalForm[#],"\!\(\*SubscriptBox[\(|\), \(t = 1\)]\)"}],FontFamily->"Times"]},{Right,Top}]]&@padeDf;*)
 (**)
-(*Simulation3d=ListPlot[{{1,1.624}(*{0,2},{1,1.624},{2,Around[1.511,0.039]},{3,Around[1.483,0.028]},{4,Around[1.431,0.016]},{5,Around[1.436,0.016]}*)(*,{10,}*)},PlotStyle->{RGBColor[1, 0, 0],PointSize[0.015]},PlotLegends->Placed[{Style["Result by David Wilson"(* (Gemini-opt1)"*),FontFamily->"Times"]},{Right,Top}]];*)
+(*(**)
+(*Simulation3d=ListPlot[{{1,1.624}(*{0,2},{1,1.624},{2,Around[1.511,0.039]},{3,Around[1.483,0.028]},{4,Around[1.431,0.016]},{5,Around[1.436,0.016]}*)(*,{10,}*)},PlotStyle->{,PointSize[0.015]},PlotLegends->Placed[{Style["Result by David Wilson"(* (Gemini-opt1)"*),FontFamily->"Times"]},{Right,Top}]];*)*)
 (**)
-(*Simulation3dGemini=ListPlot[{{0,Around[2,0.02]},{1,Around[1.61133,0.03]},{2,Around[1.511,0.039]},{3,Around[1.483,0.028]},{4,Around[1.431,0.036]},{5,Around[1.436,0.036]}(*,{10,}*)}(*{(*{0,1.753\[PlusMinus]0.006},*){2,Around[1.51,0.01]}(*,{3,1.1073\[PlusMinus]0.0024},{4,1.0737\[PlusMinus]0.0018},{5,1.0670\[PlusMinus]0.0012},{10,1.0251\[PlusMinus]0.0012}*)}*),PlotStyle->{RGBColor[0, 0.66, 0],PointSize[0.01]},PlotLegends->Placed[{Style["Simulated Data \!\(\*StyleBox[\"d\",FontSlant->\"Italic\"]\)=3"(* (Gemini-opt1)"*),FontFamily->"Times"]},{Right,Top}]];*)
+(*(*Simulation3dGemini=ListPlot[{{0,Around[2,0.02]},{1,Around[1.61133,0.03]},{2,Around[1.511,0.039]},{3,Around[1.483,0.028]},{4,Around[1.431,0.036]},{5,Around[1.436,0.036]}(*,{10,}*)}(*{(*{0,1.753\[PlusMinus]0.006},*){2,Around[1.51,0.01]}(*,{3,1.1073\[PlusMinus]0.0024},{4,1.0737\[PlusMinus]0.0018},{5,1.0670\[PlusMinus]0.0012},{10,1.0251\[PlusMinus]0.0012}*)}*),PlotStyle->{,PointSize[0.01]},PlotLegends->Placed[{Style["Simulated Data \!\(\*StyleBox[\"d\",FontSlant->\"Italic\"]\)=3"(* (Gemini-opt1)"*),FontFamily->"Times"]},{Right,Top}]];*)*)
 (**)
 (*plotRG1L=Plot[#/.\[Epsilon]->1,{b,inRange,endRange},PlotStyle->GrayLevel[0.5],PlotRange->All,PlotLegends->Placed[{Row[{"OLD 1-Loop: ",TraditionalForm[#]}]},{Right,Top}]]&@dfRG1L;*)
 (**)
@@ -2243,7 +2337,7 @@ dfSLE=1+3/(4(2b+1));
 (*,Simulation3d*)
 (*,Simulation3dGemini(*,Graphics[{Red,Text[Style["Result \nby David Wilson"(* (Gemini-opt1)"*),FontFamily->"Times"],{1,1.45}]}]*)*)
 (*,plotpadeDf*)
-(*},PlotRange->{{0,5},{1.3,2}},AxesLabel->{b,Subscript[d, f]},AxesOrigin->{0,1.3},ImageSize->Large,PlotLabel->Row[{"d = 3"}](*,AspectRatio->1*)]*)
+(*},PlotRange->{{0,endRange},{1.3,2}},AxesLabel->{b,Subscript[d, f]},AxesOrigin->{0,1.3},ImageSize->Large,PlotLabel->Row[{"d = 3"}](*,AspectRatio->1*)]*)
 
 
 (* ::Input:: *)

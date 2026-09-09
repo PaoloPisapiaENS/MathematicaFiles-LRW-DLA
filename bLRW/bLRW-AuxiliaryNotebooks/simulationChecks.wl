@@ -1964,7 +1964,7 @@ Reverse[SortBy[First[currentTallies],Last]]
 ];
 
 
-(* ::Title:: *)
+(* ::Title::Closed:: *)
 (*b=0.5*)
 
 
@@ -4161,11 +4161,11 @@ Reverse[SortBy[First[currentTallies],Last]]
 (*Graphics[{Style[Circle[{center,center},center-1],Red],Thick,MapIndexed[{ColorData[97][#2[[1]]],Line[#1]}&,paths[[All]]],Point[{center,center}]},Frame->True,Axes->False,ImageSize->500,FrameLabel->{"X Coordinate","Y Coordinate"},PlotRange->All,GridLines->{Range[0,center*2],Range[0,center*2]}]*)
 
 
-(* ::Chapter::Closed:: *)
+(* ::Chapter:: *)
 (*Checking parameters with hybrid strategy*)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Path Lengths histograms (b=1.0_LRW-2d-square-lattice-data-41_repeat-500000_tol-1e-10-HybridSq-LogSpacing-LogBC-UpdatedLatStruct-padding-nOver1.csv)		*)
 
 
@@ -4209,7 +4209,12 @@ Reverse[SortBy[First[currentTallies],Last]]
 
 
 (* ::Input:: *)
-(*(*3. Generate the BarChart with values on top and unique symmetry families on the bottom*)barChartnOver1=BarChart[symmetricProbabilitiesnOver1[[#]],ChartLabels->Placed[pathDistr2nOver1,Axis],LabelingFunction->(Placed[Row[{NumberForm[100.*#1,{5,2}],"%"}],Above]&),Frame->True,FrameLabel->{"Path Length","Relative Occurrence (Probability)"},PlotLabel->Row[{"Path Distribution nOver1"}],ChartStyle->RGBColor[0.87,0.71,0.34],ImageSize->900(*,PlotRange->{All,{0,Max[symmetricProbabilities]*1.15}}*)]&@Span[10,50]*)
+(*newdata=Prepend[symmetricProbabilitiesnOver1,0];*)
+(*newdistr=Prepend[pathDistr2nOver1,19];*)
+
+
+(* ::Input:: *)
+(*(*3. Generate the BarChart with values on top and unique symmetry families on the bottom*)barChartnOver1=BarChart[newdata[[#]],ChartLabels->Placed[newdistr,Axis],(*LabelingFunction->(Placed[Row[{NumberForm[100.*#1,{5,2}],"%"}],Above]&),*)Frame->True,FrameLabel->{"Path Length","Relative Occurrence (Probability)"},PlotLabel->Row[{"Path Distribution nOver1"}],ScalingFunctions->"Log",ChartStyle->RGBColor[0.87, 0.71, 0.34],ImageSize->900(*,PlotRange->{All,{0,Max[symmetricProbabilities]*1.15}}*)]&@Span[All]*)
 
 
 (* ::Subsection:: *)
@@ -4268,7 +4273,7 @@ Reverse[SortBy[First[currentTallies],Last]]
 (*Since there seems to be an odd-even effect, I try to split them			TBD*)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Path Lengths histograms (b=1.0_LRW-2d-square-lattice-data-41_repeat-500000_tol-1e-10-HybridSq-LogSpacing-LogBC-UpdatedLatStruct-padding-nOver3.csv)		*)
 
 
@@ -4312,7 +4317,7 @@ Reverse[SortBy[First[currentTallies],Last]]
 
 
 (* ::Input:: *)
-(*(*3. Generate the BarChart with values on top and unique symmetry families on the bottom*)barChartnOver3=BarChart[symmetricProbabilitiesnOver3[[#]],ChartLabels->Placed[pathDistr2nOver3,Axis],LabelingFunction->(Placed[Row[{NumberForm[100.*#1,{5,2}],"%"}],Above]&),Frame->True,FrameLabel->{"Path Length","Relative Occurrence (Probability)"},PlotLabel->Row[{"Path Distribution nOver3"}],ChartStyle->RGBColor[0.87,0.71,0.34],ImageSize->900(*,PlotRange->{All,{0,Max[symmetricProbabilities]*1.15}}*)]&@Span[10,50]*)
+(*(*3. Generate the BarChart with values on top and unique symmetry families on the bottom*)barChartnOver3=BarChart[symmetricProbabilitiesnOver3[[#]],ChartLabels->Placed[pathDistr2nOver3,Axis],(*LabelingFunction->(Placed[Row[{NumberForm[100.*#1,{5,2}],"%"}],Above]&),*)Frame->True,FrameLabel->{"Path Length","Relative Occurrence (Probability)"},PlotLabel->Row[{"Path Distribution nOver3"}],ChartStyle->{Directive[Opacity[0.3],RGBColor[0.35000000000000003`, 0.71, 1]]},ScalingFunctions->"Log",ImageSize->900(*,PlotRange->{All,{0,Max[symmetricProbabilities]*1.15}}*)]&@Span[All]*)
 
 
 (* ::Subsection:: *)
@@ -4525,7 +4530,7 @@ Reverse[SortBy[First[currentTallies],Last]]
 (*Since there seems to be an odd-even effect, I try to split them			TBD*)
 
 
-(* ::Section::Closed:: *)
+(* ::Section:: *)
 (*Comparison*)
 
 
@@ -4537,6 +4542,16 @@ Reverse[SortBy[First[currentTallies],Last]]
 (*,barChartnOver5(**)
 (*,barChartnOver6*)*)
 (*,barChartnOver7}/.(ImageSize->a_)->(ImageSize->Large),2]*)
+
+
+(* ::Input:: *)
+(*Show[{barChartnOver1*)
+(*(*,barChartnOver2*)*)
+(*,barChartnOver3*)
+(*(*,barChartnOver4*)
+(*,barChartnOver5(**)
+(*,barChartnOver6*)*)
+(*,barChartnOver7*)}]*)
 
 
 (* ::Input:: *)
@@ -4558,7 +4573,7 @@ Reverse[SortBy[First[currentTallies],Last]]
 (*2*Round[Exp[7.3]]+1*)
 
 
-(* ::Title::Closed:: *)
+(* ::Title:: *)
 (*b=4*)
 
 
@@ -5228,7 +5243,7 @@ Print[\[Phi]sol];
 denominator=Sum[locWeights[[Position[locVertices,path[[i,1]]][[1,1]],y]]*(Select[\[Phi]sol,#[[1]]==\[CapitalPhi][locVertices[[y]]] &][[1,2]])^b,{y,Length[locIndices]}];
 (*Print[denominator];*)
 
-tempProb=1/denominatorlocWeights[[Position[locVertices,path[[i,1]]][[1,1]],Position[locVertices,path[[i,2]]][[1,1]]]]*(Select[\[Phi]sol,#[[1]]==\[CapitalPhi][path[[i,2]]] &][[1,2]])^b//FullSimplify;
+tempProb=1/denominator locWeights[[Position[locVertices,path[[i,1]]][[1,1]],Position[locVertices,path[[i,2]]][[1,1]]]]*(Select[\[Phi]sol,#[[1]]==\[CapitalPhi][path[[i,2]]] &][[1,2]])^b//FullSimplify;
 
 If[OptionValue["print"],
 Print["#####  Transition probability "<>ToString[path[[i,1]]]<>" to "<>ToString[path[[i,2]]]<>"  #####"];
@@ -5452,7 +5467,7 @@ Print[\[Phi]sol];
 denominator=Sum[locWeights[[Position[locVertices,path[[i,1]]][[1,1]],y]]*(Select[\[Phi]sol,#[[1]]==\[CapitalPhi][locVertices[[y]]] &][[1,2]])^b,{y,Length[locIndices]}];
 (*Print[denominator];*)
 
-tempProb=1/denominatorlocWeights[[Position[locVertices,path[[i,1]]][[1,1]],Position[locVertices,path[[i,2]]][[1,1]]]]*(Select[\[Phi]sol,#[[1]]==\[CapitalPhi][path[[i,2]]] &][[1,2]])^b//FullSimplify;
+tempProb=1/denominator locWeights[[Position[locVertices,path[[i,1]]][[1,1]],Position[locVertices,path[[i,2]]][[1,1]]]]*(Select[\[Phi]sol,#[[1]]==\[CapitalPhi][path[[i,2]]] &][[1,2]])^b//FullSimplify;
 
 If[OptionValue["print"],
 Print["#####  Transition probability "<>ToString[path[[i,1]]]<>" to "<>ToString[path[[i,2]]]<>"  #####"];
