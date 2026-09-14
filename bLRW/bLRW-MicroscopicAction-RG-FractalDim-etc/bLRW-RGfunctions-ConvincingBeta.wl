@@ -1,6 +1,6 @@
 (* ::Package:: *)
 
-(* ::Title::Closed:: *)
+(* ::Title:: *)
 (*Initialization*)
 
 
@@ -355,7 +355,7 @@ Return[Map[Expand,\[Beta]f]]]
 (*(*Nice, this is finite*)*)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*\[Gamma]Function[] Definitions*)
 
 
@@ -727,7 +727,7 @@ introduce\[Lambda]={bananag->bananag \[Lambda],banana\[Gamma]1->banana\[Gamma]1 
 
 hideSubDivs={bananag->banana,banana\[Gamma]1->banana,banana\[Gamma]2->banana, banana\[Gamma]Paolo->banana,banana\[Gamma]Grad->banana,bananaMultigCT->banana ,bananaMultigCTGrad->banana,banana\[Gamma]PlusCT->banana,banana\[Gamma]PaoloCT->banana,banana\[Gamma]GradCT->banana,banana\[Gamma]MinusCT->banana,banana\[Gamma]2CT->banana,
 
-doubleBananag->doubleBanana,doubleBanana\[Gamma]1g->doubleBanana,doubleBanana\[Gamma]Grad->doubleBanana,doubleBanana\[Gamma]Grad\[Gamma]2->doubleBanana,doubleBanana\[Gamma]Paolog-> doubleBanana,doubleBanana\[Gamma]2g-> doubleBanana,doubleBananaExtraGrad->doubleBanana,doubleBananaGradMultig->doubleBanana,doubleBananaGrad\[Gamma]Plus->doubleBanana,doubleBananaGrad\[Gamma]PlusNOsub->doubleBanana,doubleBananaGrad\[Gamma]2->doubleBanana,doubleBananaGrad\[Gamma]2NOsub->doubleBanana,doubleBananaGrad\[Gamma]MinusNOsub->doubleBanana,
+doubleBananag->doubleBanana,doubleBanana\[Gamma]1g->doubleBanana,doubleBanana\[Gamma]Grad->doubleBanana,doubleBanana\[Gamma]Grad\[Gamma]2->doubleBanana,doubleBanana\[Gamma]Paolog-> doubleBanana,doubleBanana\[Gamma]2g-> doubleBanana,doubleBananaExtraGrad->doubleBanana,doubleBananaGradMultig->doubleBanana,doubleBananaGrad\[Gamma]Plus->doubleBanana,doubleBananaGrad\[Gamma]PlusNOsub->doubleBanana,doubleBananaGrad\[Gamma]2->doubleBanana,doubleBananaGrad\[Gamma]2NOsub->doubleBanana,doubleBananaGrad\[Gamma]MinusNOsub->doubleBanana,doubleBanana\[Gamma]1\[Gamma]2->doubleBanana,doubleBanana\[Gamma]1\[Gamma]Paolo->doubleBanana,
 
 hatg->hat,hat\[Gamma]1->hat,hat\[Gamma]2->hat,hat\[Gamma]2\[Gamma]2->hat,hatg\[Gamma]1->hat, hat\[Gamma]1g->hat,hatg\[Gamma]2\[Gamma]1->hat,hat\[Gamma]Paolo->hat,hat\[Gamma]Grad->hat,hat\[Gamma]2g ->hat,hatg\[Gamma]2 ->hat,hat\[Gamma]1\[Gamma]2 ->hat,hat\[Gamma]Paolo\[Gamma]1 ->hat,hat\[Gamma]Paolo\[Gamma]2->hat,hat\[Gamma]Paolog ->hat,hat\[Gamma]Paolo\[Gamma]2g->hat,hatExtraGrad->hat,hatGradMultig->hat,hatMultigGrad->hat,hatGrad\[Gamma]Plus->hat,hatGrad\[Gamma]PlusNOsub->hat,hatMultig\[Gamma]Paolo->hat,hatGrad\[Gamma]2NOsub->hat,hatGrad\[Gamma]MinusNOsub->hat};
 
@@ -1281,7 +1281,12 @@ J->5/2+(5/2-11 b)(b-1)(*1/2 (27-22 b) b*)
 (*\[CapitalGamma]gtsmall=(g0 \[Mu]^-\[Epsilon] \[CapitalGamma]\[Gamma]1small +g0 \[Mu]^-\[Epsilon] \[CapitalGamma]\[Gamma]2small+g0 \[Mu]^-\[Epsilon] \[CapitalGamma]g )/\[CapitalGamma]\[Gamma] ^2/.z[_]->1(*//.replaceRule*);*)
 (**)
 (*\[CapitalGamma]gt=g0 \[Mu]^-\[Epsilon] (\[CapitalGamma]\[Gamma]1 + \[CapitalGamma]\[Gamma]2+\[CapitalGamma]g +\[CapitalGamma]\[Gamma]1*\[CapitalGamma]\[Gamma]2)/\[CapitalGamma]\[Gamma] ^2/.z[_]->1(*//.replaceRule*);*)
-(*\[CapitalGamma]gtProduct=g0 \[Mu]^-\[Epsilon] ((1+\[CapitalGamma]\[Gamma]1) (1+ \[CapitalGamma]\[Gamma]2)+\[CapitalGamma]g-1)/\[CapitalGamma]\[Gamma] ^2/.z[_]->1(*//.replaceRule*); (*I should also multiply \[CapitalGamma]g, right? Maybe after having removed some cross terms	.*)*)
+(*\[CapitalGamma]gtPartialProd=g0 \[Mu]^-\[Epsilon] ((1+\[CapitalGamma]\[Gamma]1) (1+ \[CapitalGamma]\[Gamma]2)+\[CapitalGamma]g-1)/\[CapitalGamma]\[Gamma] ^2/.z[_]->1(*//.replaceRule*); *)
+(**)
+(*\[CapitalGamma]gtProduct=g0 \[Mu]^-\[Epsilon] ((1+\[CapitalGamma]\[Gamma]1) (1+ \[CapitalGamma]\[Gamma]2)\[CapitalGamma]g)/\[CapitalGamma]\[Gamma] ^2/.z[_]->1(*//.replaceRule*);*)
+(**)
+(*(*I should also multiply \[CapitalGamma]g, right? Maybe after having removed some cross terms	.*)*)
+(*(*Or should I maybe not multiply anything at all and add the bananaEmit*bananaAbsorb into \[CapitalGamma]g, since it's not decomposable	??*)*)
 (**)
 (*FS/@(Series[%,{g0,0,loopOrder+1}]);*)
 (*Normal[%]/.hideSubDivs ;*)
@@ -1289,7 +1294,7 @@ J->5/2+(5/2-11 b)(b-1)(*1/2 (27-22 b) b*)
 
 (* ::Input:: *)
 (*\[CapitalGamma]gtProduct//.replaceRule//Series[#,{g0,0,3}]&*)
-(*\[CapitalGamma]gtsmall//.replaceRule//Series[#,{g0,0,3}]&*)
+(*\[CapitalGamma]gt//.replaceRule//Series[#,{g0,0,3}]&*)
 (*%%-%//FS*)
 (*ReleaseHold[%]/.hideSubDivs//FS*)
 (**)
@@ -1301,10 +1306,48 @@ J->5/2+(5/2-11 b)(b-1)(*1/2 (27-22 b) b*)
 
 
 (* ::Input:: *)
-(*g=Collect[(Series[\[CapitalGamma]gtProduct//.replaceRule,{g0,0,loopOrder+1}]//Normal),{g0},FS];*)
+(*\[CapitalGamma]g =(1-(2 b bananag-2 Hold[b-1]banana\[Gamma]Grad )g0 \[Mu]^-\[Epsilon]-g0^2 \[Mu]^(-2 \[Epsilon]) (1/b**)
+(*(-b^3 (2 doubleBananag+4 hatg+2 hatg\[Gamma]1+4 hat\[Gamma]1g+2 hatg\[Gamma]2+4 hat\[Gamma]2g)*)
+(*+(*ONLY \[Gamma]Grad 1) in my notes	.*)Hold[(b-1)]b(4 (doubleBananaGradMultig-1/2 bananaMultigCTGrad^2-1/2 bananaMultigCT*banana\[Gamma]GradCT)+4 (hatMultigGrad-1/2 bananaMultigCTGrad^2)+4 (hatGradMultig-1/2 bananaMultigCTGrad^2))*)
+(*+(*ONLY \[Gamma]Grad 2) in my notes	.*)*)
+(*6 Hold[(b-1)] b^2 hatExtraGrad*)
+(*+(*ONLY \[Gamma]Grad 3) in my notes	.*)*)
+(*2 Hold[(b-1)] b GradImmediateIntNotAllowed hatExtraGrad*)
+(*-(* \[Gamma]Grad \[Gamma]Plus 1) in my notes	.*)*)
+(*Hold[(b-1)]b (4 (doubleBananaGrad\[Gamma]Plus-banana\[Gamma]PlusCT*banana\[Gamma]GradCT(*These are actually 2 different diagrams with 1/2 in front*))-2doubleBananaGrad\[Gamma]PlusNOsub+4 hatGrad\[Gamma]PlusNOsub)*)
+(*-(* \[Gamma]Grad \[Gamma]Plus 2) in my notes	.*)*)
+(*4 Hold[(b-1)] b (doubleBananaGrad\[Gamma]Plus-banana\[Gamma]PlusCT*banana\[Gamma]GradCT)*)
+(*+(* \[Gamma]Grad \[Gamma]Minus 1) in my notes	.*)*)
+(*Hold[(b-1)] b^2 (4 (doubleBananaGrad\[Gamma]2-banana\[Gamma]2CT*banana\[Gamma]GradCT(*These are actually 2 different diagrams with 1/2 in front*))-2doubleBananaGrad\[Gamma]2NOsub+4 hatGrad\[Gamma]2NOsub)*)
+(*+(* \[Gamma]Grad \[Gamma]Minus 2) in my notes	.*)*)
+(*2 Hold[(b-1)] b^2 (doubleBananaExtraGrad-banana\[Gamma]MinusCT*banana\[Gamma]GradCT)*)
+(*+(* \[Gamma]Grad \[Gamma]Minus "MISSING:" in my notes	.*)*)
+(* Hold[(b-1)] b^2 (4 hatGrad\[Gamma]MinusNOsub-2 doubleBananaGrad\[Gamma]MinusNOsub)*)
+(*+(* \[Gamma]Grad \[Gamma]Minus 2bis) in my notes	.*)*)
+(*2  Hold[(b-1)]b^2 hatExtraGrad GradImmediateIntNotAllowed*)
+(*+(* ONLY \[Gamma]Paolo 1) in my notes	.*)*)
+(*2 b (hatMultig\[Gamma]Paolo-1/2 bananaMultigCT^2)*)
+(*+(* \[Gamma]Paolo \[Gamma]Minus 1) in my notes	.*)*)
+(*4 b^2 hat\[Gamma]Paolo\[Gamma]2g*)
+(*(*THESE ARE THE EXTRA DOUBLE BANANAS THAT COME FROM ONE BANANA IN THE EMITTER AND ONE IN THE ABSORBER	\[Placeholder] *)*)
+(*-b^3 doubleBanana\[Gamma]1\[Gamma]2+b^2 doubleBanana\[Gamma]1\[Gamma]Paolo*)
+(*- J*b* banana^2 )));*)
+(*\[CapitalGamma]gt=g0 \[Mu]^-\[Epsilon] (\[CapitalGamma]\[Gamma]1+ \[CapitalGamma]\[Gamma]2+\[CapitalGamma]g)/\[CapitalGamma]\[Gamma] ^2/.z[_]->1(*//.replaceRule*);*)
+(*%//.replaceRule//Series[#,{g0,0,3}]&;*)
+
+
+(* ::Input:: *)
+(*\[CapitalGamma]gtPartialProd//.replaceRule//Series[#,{g0,0,3}]&*)
+(*\[CapitalGamma]gt//.replaceRule//Series[#,{g0,0,3}]&*)
+(*%%-%//FS*)
+(*ReleaseHold[%]/.hideSubDivs/.replaceDiagrams//FS*)
+
+
+(* ::Input:: *)
+(*g=Collect[(Series[\[CapitalGamma]gtPartialProd//.replaceRule,{g0,0,loopOrder+1}]//Normal),{g0},FS];*)
 (*PPrint[%,%]*)
 (*(*g=Series[g0 \[Mu]^-\[Epsilon] Zgt^(-1),{g0,0,2}]//Normal*)*)
-(*\[Beta]Function[g(*/.hideSubDivs*) ,"print"->tTrue](*It's slow if the subDivs are not hidden directly in g, I think it's just because it's a long expression*)*)
+(*\[Beta]Function[g/.hideSubDivs ,"print"->tTrue](*It's slow if the subDivs are not hidden directly in g, I think it's just because it's a long expression*)*)
 (**)
 (*Replace[Normal[%],a_/;!(FreeQ[a,g^3]):>(a/.(*banana\[Gamma]Grad*) banana\[Gamma]Paolo->0),{1}];*)
 (*%/.banana\[Gamma]Grad^2->0*)
@@ -1317,7 +1360,7 @@ J->5/2+(5/2-11 b)(b-1)(*1/2 (27-22 b) b*)
 (*ReleaseHold[%]//FS*)
 (**)
 (*RGeq2=Simplify[Normal[%]]==0;*)
-(*%%/.{J->1/2 (27-22 b) b(*,J\[Rule]-(1/2) (-16+11 b)*)}//Collect[#,g,FS]&*)
+(*%%/.{J->1/2 (27-22 b) b(*,J\[Rule]-(1/2) (-16+11 b),J\[Rule]1/2 (2+5 b-14 b^2)*)}//Collect[#,g,FS]&*)
 (*%/.b->1//Collect[#,g,FS]&(*This is if some explicit bananaCT are used*)*)
 (**)
 
@@ -1328,6 +1371,14 @@ J->5/2+(5/2-11 b)(b-1)(*1/2 (27-22 b) b*)
 
 (* ::Input:: *)
 (*(*This looks even more promising!!!!!	!!!*)*)
+
+
+(* ::Input:: *)
+(*g ((1+2 b) g (-1+2 b g)+(g^2 (-2-5 b+14 b^2+2 J))/\[Epsilon]+\[Epsilon])/.{J->1/2 (2+5 b-14 b^2)}//Collect[#,g,FS]&*)
+
+
+(* ::Input:: *)
+(*1/2 (2+5 b-14 b^2)-1/2 (27-22 b) b//FS*)
 
 
 (* ::Item::Closed:: *)
@@ -1366,6 +1417,13 @@ J->5/2+(5/2-11 b)(b-1)(*1/2 (27-22 b) b*)
 (* ::Input:: *)
 (*(*This is WITHOUT any explicit bananaCT^2*)*)
 (*(2 J+b (-4+b (9+\[Epsilon]+5 b \[Epsilon])))//Collect[#,\[Epsilon],FS]&*)
+(*%/. {\[Epsilon]->0,H2->0}*)
+(*Solve[%==0,J]*)
+
+
+(* ::Input:: *)
+(*(* This is WITH EVERYTHING IN SUM and explicit doubleBanana\[Gamma]1\[Gamma]2 etc*)*)
+(*-2-5 b+14 b^2+2 J//Collect[#,\[Epsilon],FS]&*)
 (*%/. {\[Epsilon]->0,H2->0}*)
 (*Solve[%==0,J]*)
 
@@ -1580,6 +1638,10 @@ J->5/2+(5/2-11 b)(b-1)(*1/2 (27-22 b) b*)
 (*RG functions: \[CapitalGamma]\[Gamma]2		not finite (is this an observable of the theory?) THIS CANNOT WORK: I THINK I HAVE TO SPLIT THE PURE \[Gamma]L AND THE \[Gamma]PAOLO. THE REASON IS THAT I GET EXTRA, UNNECESSARY SUBTRACTION OF SUBDIVS, SUCH AS banana\[Gamma]Grad banana\[Gamma]Paolo		THIS WAY IT IS FINITE!!!!!*)
 
 
+(* ::Item:: *)
+(*Together with manual simplification*)
+
+
 (* ::Input:: *)
 (*loopOrder=2;*)
 (**)
@@ -1678,9 +1740,6 @@ J->5/2+(5/2-11 b)(b-1)(*1/2 (27-22 b) b*)
 (**)
 (**)
 (**)
-
-
-(* ::Input:: *)
 (*(*RG\[Gamma]2 only: FINITE	!!!!*)*)
 (*loopOrder=2;*)
 (**)
@@ -1725,7 +1784,7 @@ J->5/2+(5/2-11 b)(b-1)(*1/2 (27-22 b) b*)
 
 
 (* ::Input:: *)
-(*(*\[Gamma]Paolo as a coupling	\[Placeholder]*)*)
+(*(*\[Gamma]Paolo as a coupling	!*)*)
 (*loopOrder=1;*)
 (**)
 (*gPaolo=g0 \[Mu]^-\[Epsilon] (1+(-( - banana\[Gamma]Paolo)(b+2)  g0 \[Mu]^-\[Epsilon](*+g0^2\[Mu]^(-2 \[Epsilon]) (-2 hat\[Gamma]Paolo-b doubleBanana\[Gamma]Paolog +K banana^2) *)))(*/.K->(1+2*b/2)*);*)
@@ -1747,11 +1806,10 @@ J->5/2+(5/2-11 b)(b-1)(*1/2 (27-22 b) b*)
 (*RGeq2=Simplify[Normal[%]]==0;*)
 (*%%/.{J\[Rule]1/2 (27-22 b) b(*,J\[Rule]-(1/2) (-16+11 b)*)}//Collect[#,g,FS]&*)
 (*%/.b->1//Collect[#,g,FS]&(*This is if some explicit bananaCT are used*)*)*)
-(**)
 
 
 (* ::Input:: *)
-(*(*RG\[Gamma]Paolo with gPaolo as coupling: FINITE???	!*)*)
+(*(*RG\[Gamma]Paolo with gPaolo as coupling: FINITE!!!	!*)*)
 (**)
 (*loopOrder=2;*)
 (**)
@@ -1763,7 +1821,7 @@ J->5/2+(5/2-11 b)(b-1)(*1/2 (27-22 b) b*)
 (**)
 (*\[CapitalGamma]\[Gamma]Paolo=1-b( Hold[banana\[Gamma]Paolo]  g0 \[Mu]^-\[Epsilon]+g0^2 \[Mu]^(-2 \[Epsilon])  (-2 hat\[Gamma]Paolo-b doubleBanana\[Gamma]Paolog +K banana^2) )/.K->0;*)
 (**)
-(*\[CapitalGamma]\[Gamma]Paolo=1-b( Hold[banana\[Gamma]Paolo] g0 \[Mu]^-\[Epsilon]+g0  \[Mu]^(- 2\[Epsilon])  (-2 g[\[Phi]\[Chi]]hat\[Gamma]Paolo-b g[t]doubleBanana\[Gamma]Paolog +K banana^2) )/.K->0;*)
+(*\[CapitalGamma]\[Gamma]Paolo=1-b (g0 \[Mu]^-\[Epsilon] Hold[banana\[Gamma]Paolo]+ g0 \[Mu]^(-2 \[Epsilon]) (-b doubleBanana\[Gamma]Paolog g[t]-2 hat\[Gamma]Paolo g[\[Phi]\[Chi]]));*)
 (**)
 (*((\[CapitalGamma]\[Gamma]Paolo-1)+1)/(\[CapitalGamma]\[Gamma])^0/.z[_]->1;*)
 (*FS/@(%/.replaceRule)*)
@@ -1778,6 +1836,41 @@ J->5/2+(5/2-11 b)(b-1)(*1/2 (27-22 b) b*)
 (*%//.replaceRule//FS*)
 (*Series[%,{\[Epsilon],0,loopOrder}]*)
 (*RG\[Gamma]PaoloAsCoupling=ReleaseHold[%]//Collect[#,g,FS]&*)
+(*%/.\[Mu]->1*)
+(*%/.b->1*)
+
+
+(* ::Input:: *)
+(*(*\[CapitalGamma]\[Gamma]2\[Phi]\[Psi] COMPLETELY as coupling: FINITE??	!*)*)
+(**)
+(*loopOrder=2;*)
+(**)
+(*(*HOWEVER, NOTICE THAT THESE ARE NOT ALL THE SAME g0!! SOME OF THEM ARE Subscript[g\[Gamma], g], other Overscript[g, ~], other Subscript[g, \[Phi]\[Chi]]	!!*)*)
+(**)
+(*gPaolo=g0 \[Mu]^-\[Epsilon](1 - banana\[Gamma]Paolo(b+ 2) g0 \[Mu]^-\[Epsilon](*+g0^2\[Mu]^(-2 \[Epsilon]) (-2 hat\[Gamma]Paolo-b doubleBanana\[Gamma]Paolog +K banana^2) *));*)
+(**)
+(*gPaolo=g0 \[Mu]^-\[Epsilon](1 - banana\[Gamma]Paolo(b g[t]+2 g[\[Phi]\[Chi]])*\[Mu]^(-\[Epsilon]*0)(*+g0^2\[Mu]^(-2 \[Epsilon]) (-2 hat\[Gamma]Paolo-b doubleBanana\[Gamma]Paolog +K banana^2) *));*)
+(**)
+(*\[CapitalGamma]\[Gamma]Paolo=1-b( Hold[banana\[Gamma]Paolo]  g0 \[Mu]^-\[Epsilon]+g0^2 \[Mu]^(-2 \[Epsilon])  (-2 hat\[Gamma]Paolo-b doubleBanana\[Gamma]Paolog +K banana^2) )/.K->0;*)
+(**)
+(*\[CapitalGamma]\[Gamma]Paolo=1-b (g0 \[Mu]^-\[Epsilon] Hold[banana\[Gamma]Paolo]+ g0 \[Mu]^(-2 \[Epsilon]) (-b doubleBanana\[Gamma]Paolog g[t]-2 hat\[Gamma]Paolo g[\[Phi]\[Chi]]));*)
+(**)
+(*\[CapitalGamma]\[Gamma]2 =1+(-(b banana\[Gamma]2)  g0 \[Mu]^-\[Epsilon]+g0^2 \[Mu]^(-2 \[Epsilon]) (b^2 doubleBanana\[Gamma]2g  +b^2 hatg\[Gamma]2+b^2 hat\[Gamma]1\[Gamma]2+b^2 hat\[Gamma]2\[Gamma]2- b hat\[Gamma]Paolo\[Gamma]2-b Hold[b-1] doubleBanana\[Gamma]Grad\[Gamma]2 ) );*)
+(**)
+(*((\[CapitalGamma]\[Gamma]Paolo-1)+1)/(\[CapitalGamma]\[Gamma])^0/.z[_]->1;*)
+(*FS/@(%/.replaceRule)*)
+(**)
+(*\[Gamma]Function[%,gPaolo,"print"->True,"g0Order"->loopOrder]*)
+(*%/.g[_]:>g*)
+(*(Expand/@%)/.Hold[banana\[Gamma]Paolo]^2->Hold[banana\[Gamma]Paolo]^2//ReleaseHold*)
+(*(*Replace[Normal[%],a_/;!(FreeQ[a,g^2]):>(a/.(*banana\[Gamma]Grad*) banana\[Gamma]Paolo->0),{1}]*)
+(*%/.K->1+2*b/2//FS (*THIS IS CORRECT!!! IF ONE DOES not ALLOW FOR banana*banana\[Gamma]Paolo, THEN THE VALUE OF K MUST BE K=1+b	.*)*)
+(**)(*%/.b->1*)%/.hideSubDivs //FS*)
+(*%/.replaceDiagrams//FullSimplify//Factor*)
+(*%//.replaceRule//FS*)
+(*Series[%,{\[Epsilon],0,loopOrder}]*)
+(*RG\[Gamma]PaoloAsCoupling=ReleaseHold[%]//Collect[#,g,FS]&*)
+(*%/.\[Mu]->1*)
 (*%/.b->1*)
 
 
@@ -1789,7 +1882,7 @@ J->5/2+(5/2-11 b)(b-1)(*1/2 (27-22 b) b*)
 (*(*Now: With \[Gamma]Paolo as coupling*)*)
 (*RG\[Gamma]2*)
 (*RG\[Gamma]PaoloAsCoupling*)
-(*%%-(%/b)*)
+(*%%-(%/b/.\[Mu]->1)*)
 (*Normal[%]//Collect[#,g,FS]&*)
 (**)
 (*(*Previously*)*)
@@ -2068,6 +2161,7 @@ dfSLE=1+3/(4(2b+1));
 (**)
 (*plotRG2Lsimp2=Plot[#/.\[Epsilon]->2,{b,0,endRange},PlotStyle->RGBColor[0.64, 0, 1],PlotRange->All,PlotLegends->Placed[{Style[Row[{"FT@2-Loop LATEST: \!\(\*SubscriptBox[\(d\), \(f\)]\) = ",TraditionalForm[#],"\!\(\*SubscriptBox[\(|\), \(\[Epsilon] = 2\)]\)"}],FontFamily->"Times"]},{Right,Top}]]&@dfRG2Lsimp2;*)
 (**)
+(**)
 (*(*plotRG2Lwf=Plot[dfRG2Lwf/.\[Epsilon]->2/.a->+3,{b,0,endRange},PlotStyle->,PlotRange->All];*)*)
 (*(*plotRG2L=Plot[dfRG2L/.\[Epsilon]->2,{b,0,endRange},PlotStyle->,PlotRange->All];*)*)
 (**)
@@ -2080,7 +2174,7 @@ dfSLE=1+3/(4(2b+1));
 (*,Simulation2dGemini*)
 (*(*,plotRG2Lwf*)
 (*,plotRG2L*)}*)
-(*,PlotRange->All,AxesLabel->{b,Subscript[d, f]},AxesOrigin->{0,1},PlotLabel->Row[{"d = 2"}](*,PlotLegends->Placed["AllExpressions", {Right,Top}]*),ImageSize->700, AspectRatio->0.7*)
+(*,PlotRange->{All,{All,2}},AxesLabel->{b,Subscript[d, f]},AxesOrigin->{0,1},PlotLabel->Row[{"d = 2"}](*,PlotLegends->Placed["AllExpressions", {Right,Top}]*),ImageSize->700, AspectRatio->0.7*)
 (*]*)
 
 
@@ -2088,7 +2182,7 @@ dfSLE=1+3/(4(2b+1));
 (*(* The errors are under hestimated *)*)
 
 
-(* ::Item::Closed:: *)
+(* ::Item:: *)
 (*Plot for Kay*)
 
 
@@ -2159,7 +2253,7 @@ dfSLE=1+3/(4(2b+1));
 (*%/.\[Epsilon]->1.*)
 
 
-(* ::Subsubsection::Closed:: *)
+(* ::Subsubsection:: *)
 (*Extra data from my simulations*)
 
 
@@ -2277,25 +2371,51 @@ dfSLE=1+3/(4(2b+1));
 
 (* ::Input:: *)
 (*dfRG2Lsimp2*)
-(*%/.\[Epsilon]^n_.:>t^n(*/(n!)*)*)
-(*padeDf=PadeApproximant[% ,{t,0,{0,2}}]*)
+(*%/.\[Epsilon]^n_.:>\[Epsilon]^n(*/(n!)*)*)
+(*padeDf=PadeApproximant[% ,{\[Epsilon],0,{0,2}}]*)
 (*%//FS*)
 (*Series[%,{t,0,2}]*)
 
 
 (* ::Input:: *)
+(*Around[1.274522584835579, 0.008333817846449225]*Around[1,0.005]*)
+
+
+(* ::Input:: *)
 (*(*2D	!*)*)
-(*plotpadeDf=Plot[#/.t->2,{b,0,5},PlotStyle->RGBColor[Rational[2, 3], 0.33333333333333337`, 0],PlotRange->All,PlotLegends->Placed[{Style[Row[{"FT@2-Loop PadeAppr: \!\(\*SubscriptBox[\(d\), \(f\)]\) = ",TraditionalForm[#],"\!\(\*SubscriptBox[\(|\), \(\[Epsilon] = 2\)]\)"}],FontFamily->"Times"]},{Right,Top}]]&@padeDf;*)
+(*endRange=5;*)
+(*plotpadeDf=Plot[#/.\[Epsilon]->2,{b,0,5},PlotStyle->RGBColor[Rational[2, 3], Rational[2, 3], 0],PlotRange->All,PlotLegends->Placed[{Style[Row[{"FT@2-Loop PadeAppr: \!\(\*SubscriptBox[\(d\), \(f\)]\) = ",TraditionalForm[#],"\!\(\*SubscriptBox[*)
+(*StyleBox[\"|\",\nFontSize->24], \(\[Epsilon] = 2\)]\)"}],FontFamily->"Times"]},{Right,Top}]]&@padeDf;*)
 (**)
-(*Show[{plotSLE*)
+(**)
+(*Simulation2dGemini=ListPlot[{{0,Around[1.7534581201029278`, 0.0060679884624822]*Around[1,0.015]},{0.5,Around[1.3994368838209397`, 0.032318425149532204`]},{1,Around[1.274522584835579, 0.008333817846449225]*Around[1,0.015]},{2,Around[1.1658669951861733`, 0.001939947142635663]*Around[1,0.015]},{3,Around[1.1073336136072602`, 0.002384187792543366]*Around[1,0.015]},{4,Around[1.0737383484918805`, 0.0017665587042004246`]*Around[1,0.015]},{5,Around[1.0670481729478147`, 0.001216345239817617]*Around[1,0.015]}(*,{10,1.0251\[PlusMinus]0.0012}*)},PlotStyle->{RGBColor[0, 0.66, 0],PointSize[0.005]},(*PlotMarkers->X,*)PlotLegends->Placed[{Style["Simulation Data ",FontFamily->"Times"]},{Right,Top}]];*)
+(**)
+(*plotSLE=Plot[dfSLE,{b,0,endRange},PlotStyle->RGBColor[1, 0, 0],PlotRange->All, PlotLegends->Placed[{Style[Row[{"SLE: \!\(\*SubscriptBox[\(d\), \(f\)]\) = ",TraditionalForm[#]}],FontFamily->"Times"]},{Right,Top}]]&@dfSLE;*)
+(**)
+(*plotRG1Lsimp=Plot[#/.\[Epsilon]->2,{b,0,endRange},PlotStyle->RGBColor[0, 0, 1],PlotRange->All,PlotLegends->Placed[{Style[Row[{"FT@1-Loop: \!\(\*SubscriptBox[\(d\), \(f\)]\) = ",TraditionalForm[#],"\!\(\*SubscriptBox[*)
+(*StyleBox[\"|\",\nFontSize->24], \(\[Epsilon] = 2\)]\)"}],FontFamily->"Times"]},{Right,Top}]]&@dfRG1Lsimp;*)
+(**)
+(**)
+(**)
+(*plotRG2Lsimp2=Plot[#/.\[Epsilon]->2,{b,0,endRange},PlotStyle->RGBColor[0.64, 0, 1],PlotRange->All,PlotLegends->Placed[{Style[Row[{"FT@2-Loop: \!\(\*SubscriptBox[\(d\), \(f\)]\) = ",TraditionalForm[#],"\!\(\*SubscriptBox[*)
+(*StyleBox[\"|\",\nFontSize->24], \(\[Epsilon] = 2\)]\)"}],FontFamily->"Times"]},{Right,Top}]]&@dfRG2Lsimp2;*)
+(**)
+(**)
+(*(*plotRG2Lwf=Plot[dfRG2Lwf/.\[Epsilon]->2/.a->+3,{b,0,endRange},PlotStyle->,PlotRange->All];*)*)
+(*(*plotRG2L=Plot[dfRG2L/.\[Epsilon]->2,{b,0,endRange},PlotStyle->,PlotRange->All];*)*)
+(**)
+(**)
+(*Show[{*)
 (*(*,plotRG1L*)*)
-(*,plotRG1Lsimp*)
+(*plotRG1Lsimp*)
 (*(*,plotRG2Lsimp*)*)
 (*,plotRG2Lsimp2*)
-(*,Simulation2d*)
+(*(*,Simulation2d*)*)
+(*,plotpadeDf*)
+(*,plotSLE*)
 (*,Simulation2dGemini*)
-(*,plotpadeDf}*)
-(*,PlotRange->All,AxesLabel->{b,Subscript[d, f]},AxesOrigin->{0,1},PlotLabel->Row[{"d = 2"}](*,PlotLegends->Placed["AllExpressions", {Right,Top}]*),ImageSize->700, AspectRatio->0.7,PlotLegends->Placed[Automatic, Right]*)
+(*}*)
+(*,PlotRange->All,AxesLabel->{Style[b,Italic],Style[Subscript[d, f],Italic]},AxesOrigin->{0,1},PlotLabel->Row[{"d = 2"}](*,PlotLegends->Placed["AllExpressions", {Right,Top}]*),ImageSize->700, (*AspectRatio->0.7,*)PlotLegends->Placed[Automatic, Right]*)
 (*]*)
 
 
@@ -2306,22 +2426,26 @@ dfSLE=1+3/(4(2b+1));
 (* ::Input:: *)
 (*(*3D	!*)*)
 (*inRange=0;*)
-(*endRange=15;*)
+(*endRange=5;*)
 (**)
-(*plotpadeDf=Plot[#/.t->1,{b,0,endRange},PlotStyle->RGBColor[Rational[2, 3], 0.33333333333333337`, 0],PlotRange->All,PlotLegends->Placed[{Style[Row[{"FT@2-Loop PadeAppr: \!\(\*SubscriptBox[\(d\), \(f\)]\) = ",TraditionalForm[#],"\!\(\*SubscriptBox[\(|\), \(t = 1\)]\)"}],FontFamily->"Times"]},{Right,Top}]]&@padeDf;*)
+(*plotpadeDf=Plot[#/.\[Epsilon]->1,{b,0,endRange},PlotStyle->RGBColor[Rational[2, 3], Rational[2, 3], 0],PlotRange->All,PlotLegends->Placed[{Style[Row[{"FT@2-Loop PadeAppr: \!\(\*SubscriptBox[\(d\), \(f\)]\) = ",TraditionalForm[#],"\!\(\*SubscriptBox[*)
+(*StyleBox[\"|\",\nFontSize->24], \(\[Epsilon] = 1\)]\)"}],FontFamily->"Times"]},{Right,Top}]]&@padeDf;*)
 (**)
-(*(**)
-(*Simulation3d=ListPlot[{{1,1.624}(*{0,2},{1,1.624},{2,Around[1.511,0.039]},{3,Around[1.483,0.028]},{4,Around[1.431,0.016]},{5,Around[1.436,0.016]}*)(*,{10,}*)},PlotStyle->{,PointSize[0.015]},PlotLegends->Placed[{Style["Result by David Wilson"(* (Gemini-opt1)"*),FontFamily->"Times"]},{Right,Top}]];*)*)
 (**)
-(*(*Simulation3dGemini=ListPlot[{{0,Around[2,0.02]},{1,Around[1.61133,0.03]},{2,Around[1.511,0.039]},{3,Around[1.483,0.028]},{4,Around[1.431,0.036]},{5,Around[1.436,0.036]}(*,{10,}*)}(*{(*{0,1.753\[PlusMinus]0.006},*){2,Around[1.51,0.01]}(*,{3,1.1073\[PlusMinus]0.0024},{4,1.0737\[PlusMinus]0.0018},{5,1.0670\[PlusMinus]0.0012},{10,1.0251\[PlusMinus]0.0012}*)}*),PlotStyle->{,PointSize[0.01]},PlotLegends->Placed[{Style["Simulated Data \!\(\*StyleBox[\"d\",FontSlant->\"Italic\"]\)=3"(* (Gemini-opt1)"*),FontFamily->"Times"]},{Right,Top}]];*)*)
+(*Simulation3d=ListPlot[{{1,1.624}(*{0,2},{1,1.624},{2,Around[1.511,0.039]},{3,Around[1.483,0.028]},{4,Around[1.431,0.016]},{5,Around[1.436,0.016]}*)(*,{10,}*)},PlotStyle->{RGBColor[1, 0, 0],PointSize[0.01]},PlotLegends->Placed[{Style["Result by David Wilson"(* (Gemini-opt1)"*),FontFamily->"Times"]},{Right,Top}]];*)
+(**)
+(*Simulation3dGemini=ListPlot[{{0,Around[2,0.02]},{0.5,Around[1.7397436370342432`, 0.035796700707508546`]},{1,Around[1.61133,0.03]},{2,Around[1.511,0.039]},{3,Around[1.483,0.028]},{4,Around[1.431,0.036]},{5,Around[1.436,0.036]}(*,{10,}*)}(*{(*{0,1.753\[PlusMinus]0.006},*){2,Around[1.51,0.01]}(*,{3,1.1073\[PlusMinus]0.0024},{4,1.0737\[PlusMinus]0.0018},{5,1.0670\[PlusMinus]0.0012},{10,1.0251\[PlusMinus]0.0012}*)}*),PlotStyle->{RGBColor[0, 0.66, 0],PointSize[0.01]},(*PlotMarkers->X,*)PlotLegends->Placed[{Style["Simulated Data "(* (Gemini-opt1)"*),FontFamily->"Times"]},{Right,Top}]];*)
 (**)
 (*plotRG1L=Plot[#/.\[Epsilon]->1,{b,inRange,endRange},PlotStyle->GrayLevel[0.5],PlotRange->All,PlotLegends->Placed[{Row[{"OLD 1-Loop: ",TraditionalForm[#]}]},{Right,Top}]]&@dfRG1L;*)
 (**)
-(*plotRG1Lsimp=Plot[#/.\[Epsilon]->1,{b,inRange,endRange},PlotStyle->RGBColor[0, 0, 1],PlotRange->All,PlotLegends->Placed[{Style[Row[{"FT@1-Loop: \!\(\*SubscriptBox[\(d\), \(f\)]\) = ",TraditionalForm[#],"\!\(\*SubscriptBox[\(|\), \(\[Epsilon] = 1\)]\)"}],FontFamily->"Times"]},{Right,Top}]]&@dfRG1Lsimp;*)
+(*plotRG1Lsimp=Plot[#/.\[Epsilon]->1,{b,inRange,endRange},PlotStyle->RGBColor[0, 0, 1],PlotRange->All,PlotLegends->Placed[{Style[Row[{"FT@1-Loop: \!\(\*SubscriptBox[\(d\), \(f\)]\) = ",TraditionalForm[#],"\!\(\*SubscriptBox[*)
+(*StyleBox[\"|\",\nFontSize->24], \(\[Epsilon] = 1\)]\)"}],FontFamily->"Times"]},{Right,Top}]]&@dfRG1Lsimp;*)
 (**)
-(*plotRG2Lsimp=Plot[#/.\[Epsilon]->1,{b,0,endRange},PlotStyle->RGBColor[0, 1, 1],PlotRange->All,PlotLegends->Placed[{Style[Row[{"FT@2-Loop: \!\(\*SubscriptBox[\(d\), \(f\)]\) = ",TraditionalForm[#],"\!\(\*SubscriptBox[\(|\), \(\[Epsilon] = 1\)]\)"}],FontFamily->"Times"]},{Right,Top}]]&@dfRG2Lsimp;*)
+(*plotRG2Lsimp=Plot[#/.\[Epsilon]->1,{b,0,endRange},PlotStyle->RGBColor[0, 1, 1],PlotRange->All,PlotLegends->Placed[{Style[Row[{"FT@2-Loop: \!\(\*SubscriptBox[\(d\), \(f\)]\) = ",TraditionalForm[#],"\!\(\*SubscriptBox[*)
+(*StyleBox[\"|\",\nFontSize->24], \(\[Epsilon] = 1\)]\)"}],FontFamily->"Times"]},{Right,Top}]]&@dfRG2Lsimp;*)
 (**)
-(*plotRG2Lsimp2=Plot[#/.\[Epsilon]->1,{b,0,endRange},PlotStyle->RGBColor[0.64, 0, 1],PlotRange->All,PlotLegends->Placed[{Style[Row[{"FT@2-Loop LATEST: \!\(\*SubscriptBox[\(d\), \(f\)]\) = ",TraditionalForm[#],"\!\(\*SubscriptBox[\(|\), \(\[Epsilon] = 1\)]\)"}],FontFamily->"Times"]},{Right,Top}]]&@dfRG2Lsimp2;*)
+(*plotRG2Lsimp2=Plot[#/.\[Epsilon]->1,{b,0,endRange},PlotStyle->RGBColor[0.64, 0, 1],PlotRange->All,PlotLegends->Placed[{Style[Row[{"FT@2-Loop: \!\(\*SubscriptBox[\(d\), \(f\)]\) = ",TraditionalForm[#],"\!\(\*SubscriptBox[*)
+(*StyleBox[\"|\",\nFontSize->24], \(\[Epsilon] = 1\)]\)"}],FontFamily->"Times"]},{Right,Top}]]&@dfRG2Lsimp2;*)
 (**)
 (*(*plotRG2Lwf=Plot[dfRG2Lwf/.\[Epsilon]->1/.a->+3,{b,inRange,endRange},PlotStyle->,PlotRange->All];*)
 (*plotRG2L=Plot[dfRG2L/.\[Epsilon]->1,{b,inRange,endRange},PlotStyle->,PlotRange->All];*)*)
@@ -2332,12 +2456,21 @@ dfSLE=1+3/(4(2b+1));
 (**)
 (*Show[{(*plotRG1L*)
 (*,*)plotRG1Lsimp*)
-(*,plotRG2Lsimp*)
+(*(*,plotRG2Lsimp*)*)
 (*,plotRG2Lsimp2(*,plotRG2Lwf,plotRG2L*)(*,fitPlot*)*)
+(*,plotpadeDf*)
 (*,Simulation3d*)
 (*,Simulation3dGemini(*,Graphics[{Red,Text[Style["Result \nby David Wilson"(* (Gemini-opt1)"*),FontFamily->"Times"],{1,1.45}]}]*)*)
-(*,plotpadeDf*)
-(*},PlotRange->{{0,endRange},{1.3,2}},AxesLabel->{b,Subscript[d, f]},AxesOrigin->{0,1.3},ImageSize->Large,PlotLabel->Row[{"d = 3"}](*,AspectRatio->1*)]*)
+(**)
+(*},PlotRange->{{0,endRange},{1.3,2}},AxesLabel->{Style[b,Italic],Style[Subscript[d, f],Italic]},AxesOrigin->{0,1.3},PlotLabel->Row[{"d = 3"}],ImageSize->700(*,AspectRatio->1*)]*)
+
+
+(* ::Input:: *)
+(**)
+
+
+(* ::Input:: *)
+(*I*)
 
 
 (* ::Input:: *)
