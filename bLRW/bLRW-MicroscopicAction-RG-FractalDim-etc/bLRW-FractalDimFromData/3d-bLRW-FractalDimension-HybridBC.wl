@@ -3568,21 +3568,20 @@ $Assumptions=b>0
 (*b=15;*)
 (**)
 (*rawData=Import["data15-3d-HybridSq.mx"];*)
-(*Length[rawData]*)
-
-
-(* ::Input:: *)
-(*rawData=Pick[rawData,Unitize[Length/@rawData],1];*)
+(*rawData2=Import["data15-3d-Halo.mx"];*)
 (**)
 (*Length[rawData]*)
+(*Length[rawData2]*)
 
 
 (* ::Input:: *)
-(*rawData=Pick[rawData,Length/@rawData,2];*)
+(*rawData=Join[rawData,rawData2];*)
+(**)
+(*rawData=Developer`ToPackedArray[rawData];*)
 (*Length[rawData]*)
 
 
-(* ::Item:: *)
+(* ::Item::Closed:: *)
 (*Run once to export MX file*)
 
 
@@ -3592,21 +3591,25 @@ $Assumptions=b>0
 (*rawData=Developer`ToPackedArray[rawData];*)
 (* (* MODIFY FILE NAME *)*)
 (*Length[rawData]*)
-
-
-(* ::Input:: *)
-(*rawData=Pick[rawData,Unitize[Length/@rawData],1];*)
 (**)
-(*Length[rawData]*)
-
-
-(* ::Input:: *)
 (*rawData=Pick[rawData,Length/@rawData,2];*)
 (*Length[rawData]*)
 
 
 (* ::Input:: *)
+(*rawData2=(*data15=*)Import["D:\\Offline_Documents\\University\\PhD_Paris\\PhD_work\\Simulations\\bLRW\\b-LRWdata\\3d-FromCluster\\b15-3d-clean_merged_data-Halo.csv","CSV"];*)
+(*(*Immediately lock it into a Packed Array*)*)
+(*rawData2=Developer`ToPackedArray[rawData2];*)
+(* (* MODIFY FILE NAME *)*)
+(*Length[rawData2]*)
+(**)
+(*rawData2=Pick[rawData2,Length/@rawData2,2];*)
+(*Length[rawData2]*)
+
+
+(* ::Input:: *)
 (*Export["data15-3d-HybridSq.mx",rawData,"MX"](* MODIFY FILE NAME *)*)
+(*Export["data15-3d-Halo.mx",rawData2,"MX"](* MODIFY FILE NAME *)*)
 
 
 (* ::Subsection:: *)
@@ -3649,13 +3652,14 @@ $Assumptions=b>0
 (*stdDevsOnMean=(1/Sqrt[Length[#]]&/@yGroups)*stdDevs;*)
 (**)
 (*(* Maximum deviation*)*)
-(*maxDevs=MapThread[Max[Abs[#1-#2]]&,{means//N,yGroups}]/. 0.->1.0`*^-8;*)
+(*maxDevsPlus=MapThread[Max[#2-#1]&,{means//N,yGroups}]/. 0.->1.0`*^-8;*)
+(*maxDevsMinus=MapThread[Min[#2-#1]&,{means//N,yGroups}]/. 0.->1.0`*^-8;*)
 (**)
 (*(*5. Combine them using the Threaded Around wrapper*)*)
 (*averaged=Transpose[{xValues,means}];*)
 (*averagedWithErrors=Transpose[{xValues,MapThread[Around,{means,stdDevs}]}];*)
 (*averagedWithErrorsOnMean=Transpose[{xValues,MapThread[Around,{means,stdDevsOnMean}]}];*)
-(*averagedWithMaxDev=Transpose[{xValues,MapThread[Around,{means,maxDevs}]}];*)
+(*averagedWithMaxDev=Transpose[{xValues,MapThread[Around,{means,Transpose[{maxDevsMinus,maxDevsPlus}]}]}];*)
 
 
 (* ::Input:: *)
@@ -3688,7 +3692,7 @@ $Assumptions=b>0
 
 
 (* ::Input:: *)
-(*(*exluded=9;*)
+(*exluded=5;*)
 (**)
 (*averaged=Select[averaged,#[[1]]=!=""&&#[[1]]>exluded&];*)
 (*averagedWithErrors=Select[averagedWithErrors,#[[1]]=!=""&&#[[1]]>exluded&];*)
@@ -3698,7 +3702,7 @@ $Assumptions=b>0
 (**)
 (*averagedWithMaxDev=Select[averagedWithMaxDev,#[[1]]=!=""&&#[[1]]>exluded&];*)
 (*(*averagedWithEstimatedStdDevs=Select[averagedWithEstimatedStdDevs,#[[1]]=!=""&];*)
-(*averagedWithEstimatedStdDevsOnMean=Select[averagedWithEstimatedStdDevsOnMean,#[[1]]=!=""&];*)*)*)
+(*averagedWithEstimatedStdDevsOnMean=Select[averagedWithEstimatedStdDevsOnMean,#[[1]]=!=""&];*)*)
 
 
 (* ::Input:: *)
@@ -3743,6 +3747,10 @@ $Assumptions=b>0
 (*,PlotLabel->Row[{" b = ",b}],PlotRange->{All,{0,Log[maxy]}},AxesOrigin->{1,0},ImageSize->700]*)*)
 (**)
 (**)
+
+
+(* ::Input:: *)
+(*Exp[0.1]*)
 
 
 (* ::Subsection:: *)
@@ -4218,7 +4226,7 @@ $Assumptions=b>0
 (*nlmAveragedWithErrorsOnMeanGlobalPurged["ANOVATable"][[1,1,3,3]]*)
 
 
-(* ::Subsection:: *)
+(* ::Subsection::Closed:: *)
 (*Drop both first and/or last few 		WORKS PRETTY WELL (LACKING STATISTICS AT BIG L)???*)
 
 

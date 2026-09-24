@@ -1261,6 +1261,113 @@ SetOptions[EvaluationNotebook[],CommonDefaultFormatTypes->{"Output"->StandardFor
 (*padding=n/4 seems the best here. Now checking with bigger systems*)
 
 
+(* ::Chapter:: *)
+(*Validating Claude's optimization: unit8 & solving around a smaller region with padding scaling with n (n=25)*)
+
+
+(* ::Section:: *)
+(*reference_n25_b15_1e6reps.csv		*)
+
+
+(* ::Input:: *)
+(*n=9;*)
+(*(*1. Read as text and split by double carriage returns/newlines*)rawBlocks=Import["D:\\Offline_Documents\\University\\PhD_Paris\\PhD_work\\Simulations\\bLRW\\b-LRWdata\\3d-FromCluster\\verificationFromClaude\\reference_n25_b15_1e6reps.csv","CSV"];*)
+(**)
+(*(*2. Convert each separate text block cleanly into an array of coordinate pairs*)*)
+(*paths=Developer`ToPackedArray[rawBlocks];*)
+(*paths[[1]]*)
+(*Length[paths]*)
+
+
+(* ::Input:: *)
+(*pathDistrnOver1=Rest[paths];*)
+(*Length@pathDistrnOver1*)
+
+
+(* ::Input:: *)
+(*(*1. Calculate relative frequencies ("probabilities")*)*)
+(*Sort@Tally[pathDistrnOver1];*)
+(*{pathDistr2nOver1,symmetricCountsnOver1}=Transpose[%]*)
+
+
+(* ::Input:: *)
+(*pathDistr2nOver1==Sort@DeleteDuplicates@pathDistrnOver1*)
+
+
+(* ::Input:: *)
+(*meannOver1=Mean[pathDistrnOver1]//N *)
+(*stdDevnOver1=StandardDeviation[pathDistrnOver1]//N*)
+
+
+(* ::Input:: *)
+(*totalPathsnOver1=Length[pathDistrnOver1];*)
+(*symmetricProbabilitiesnOver1=symmetricCountsnOver1/totalPathsnOver1;*)
+(**)
+
+
+(* ::Input:: *)
+(*(*3. Generate the BarChart with values on top and unique symmetry families on the bottom*)barChartnOver1=BarChart[symmetricProbabilitiesnOver1[[#]],ChartLabels->Placed[pathDistr2nOver1,Axis],(*LabelingFunction->(Placed[Row[{NumberForm[100.*#1,{5,2}],"%"}],Above]&),*)Frame->True,FrameLabel->{"Path Length","Relative Occurrence (Probability)"},PlotLabel->Row[{"Reference Path Distribution"}],ChartStyle->RGBColor[0.87, 0.71, 0.34],ScalingFunctions->"Log",ImageSize->900(*,PlotRange->{All,{0,Max[symmetricProbabilities]*1.15}}*)]&@Span[All]*)
+
+
+(* ::Section:: *)
+(*optimized_n25_b15_1e6reps . csv*)
+
+
+(* ::Input:: *)
+(*n=9;*)
+(*(*1. Read as text and split by double carriage returns/newlines*)rawBlocks=Import["D:\\Offline_Documents\\University\\PhD_Paris\\PhD_work\\Simulations\\bLRW\\b-LRWdata\\3d-FromCluster\\verificationFromClaude\\optimized_n25_b15_1e6reps.csv","CSV"];*)
+(**)
+(*(*2. Convert each separate text block cleanly into an array of coordinate pairs*)*)
+(*paths=Developer`ToPackedArray[rawBlocks];*)
+(*paths[[1]]*)
+(*Length[paths]*)
+
+
+(* ::Input:: *)
+(*optpathDistrnOver1=Rest[paths];*)
+(*Length@optpathDistrnOver1*)
+
+
+(* ::Input:: *)
+(*(*1. Calculate relative frequencies ("probabilities")*)*)
+(*Sort@Tally[optpathDistrnOver1];*)
+(*{optpathDistr2nOver1,optsymmetricCountsnOver1}=Transpose[%]*)
+
+
+(* ::Input:: *)
+(*optpathDistr2nOver1==Sort@DeleteDuplicates@optpathDistrnOver1*)
+
+
+(* ::Input:: *)
+(*optmeannOver1=Mean[optpathDistrnOver1]//N *)
+(*optstdDevnOver1=StandardDeviation[optpathDistrnOver1]//N*)
+
+
+(* ::Input:: *)
+(*opttotalPathsnOver1=Length[optpathDistrnOver1];*)
+(*optsymmetricProbabilitiesnOver1=optsymmetricCountsnOver1/opttotalPathsnOver1;*)
+(**)
+
+
+(* ::Input:: *)
+(*(*3. Generate the BarChart with values on top and unique symmetry families on the bottom*)optbarChartnOver1=BarChart[optsymmetricProbabilitiesnOver1[[#]],ChartLabels->Placed[optpathDistr2nOver1,Axis],(*LabelingFunction->(Placed[Row[{NumberForm[100.*#1,{5,2}],"%"}],Above]&),*)Frame->True,FrameLabel->{"Path Length","Relative Occurrence (Probability)"},PlotLabel->Row[{"Optimized Path Distribution"}],ChartStyle->{Directive[Opacity[0.2],RGBColor[0.35000000000000003`, 0.71, 1]]},ScalingFunctions->"Log",ImageSize->900(*,PlotRange->{All,{0,Max[symmetricProbabilities]*1.15}}*)]&@Span[All]*)
+
+
+(* ::Section:: *)
+(*Comparison*)
+
+
+(* ::Input:: *)
+(*Show[barChartnOver1,optbarChartnOver1]*)
+
+
+(* ::Input:: *)
+(*DataLength=Sqrt[1000000];*)
+(*{{1,Around[meannOver1[[1]],stdDevnOver1[[1]]/DataLength]}*)
+(*,{2,Around[optmeannOver1[[1]],optstdDevnOver1[[1]]/DataLength]}}*)
+(*ListPlot[%,PlotRange->All]*)
+
+
 (* ::Title:: *)
 (*Automated solver of the Laplace equation*)
 
@@ -2865,3 +2972,6 @@ bLaplacianRW[graph_,path__,options:OptionsPattern[]]:=bLaplacianRW[graph,path,op
 
 (* ::Text:: *)
 (*Compared to Symmetric paths: 43.3036% from the BC=1 everywhere!!!!!*)
+
+
+
