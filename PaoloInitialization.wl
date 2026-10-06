@@ -130,7 +130,7 @@ SetDirectory[notebookdirectory];
 ]
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*myNotebookEventActions[]: CollapseAll & AutoExportWL *)
 
 
@@ -234,6 +234,8 @@ SetAttributes[PPrint,HoldAll];
 Options[PPrint]={"style"->{FontFamily->$Paolofont,FontSize->$Paolofontsize}};
 
 PPrint[textReplaceable_,var_,options:OptionsPattern[]]:=PPrint[textReplaceable,var,options,""];
+
+PPrint[textReplaceable_List,var_List,options:OptionsPattern[],textToKeep_]:=Module[{i},For[i=1,i<=Length@var,i++,PPrint[textReplaceable,var[[i]],options,textToKeep] ]];
 
 PPrint[textReplaceable_List,var_,OptionsPattern[],textToKeep_]:=Module[{varName,evalVar,textReplaced,textKept,prevInput},
 
