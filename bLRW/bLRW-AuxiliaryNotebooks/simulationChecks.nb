@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[  22338074,     414487]
+NotebookDataLength[  22338039,     414486]
 NotebookOptionsPosition[  22111631,     410852]
-NotebookOutlinePosition[  22112167,     410872]
-CellTagsIndexPosition[  22112124,     410869]
+NotebookOutlinePosition[  22112132,     410871]
+CellTagsIndexPosition[  22112089,     410868]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -410851,9 +410851,8 @@ Cell[BoxData["4.570158674347508`"], "Output",
 }, Open  ]]
 },
 NotebookAutoSave->False,
-WindowSize->{1152, 579.6},
-WindowMargins->{{
-  Automatic, -5.399999999999864}, {-5.399999999999977, Automatic}},
+WindowSize->{1141.2, 573.6},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
 WindowStatusArea->"Auto-saved: 09:53:56",
 Magnification:>1. Inherited,
 FrontEndVersion->"14.0 for Microsoft Windows (64-bit) (December 12, 2023)",

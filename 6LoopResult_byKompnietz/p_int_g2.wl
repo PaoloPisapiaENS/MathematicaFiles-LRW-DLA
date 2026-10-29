@@ -2,8 +2,8 @@
 
 (* pIntg2[loop number,graph number] = {Nickel index, eps-expansion (in G-scheme)} *)
 (* CONVENTION: d = 4 - 2*eps. To convert to 4-\[Epsilon], one needs to eps->\[Epsilon]/2 
-and since it is normalized wrt Banana=1/eps, one also needs an extra Normalization factor 2^(-Loops).
-e.g. pIntg2[2,1]=-1/4/eps -> -1/4 (2/\[Epsilon]) 2^-2 = -1/8*)
+	and since it is normalized wrt Banana=1/eps, one also needs an extra Normalization factor 2^(-Loops).
+	e.g. pIntg2[2,1]=-1/4/eps -> -1/4 (2/\[Epsilon]) 2^-2 = -1/8*)
 
 (* 1 graphs with 2 loops: *)
 pIntg2[2,1] = {"e111|e|", Series[-1/4/eps-5/8-27/16*eps+3/2*eps^2*Zeta[3]-153/32*eps^2+15/4*eps^3*Zeta[3]-891/64*eps^3+1/40*Pi^4*eps^3+O[eps]^4,{eps,0,3}]}

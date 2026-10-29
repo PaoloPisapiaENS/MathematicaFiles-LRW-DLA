@@ -1368,7 +1368,7 @@ Directory[]
 
 
 (* ::Title:: *)
-(*b=2		MISSING HYBRID&HALO*)
+(*b=2		MISSING HYBRID*)
 
 
 (* ::Input:: *)
@@ -1394,7 +1394,7 @@ Directory[]
 (*rawDataHalo=.*)
 
 
-(* ::Item:: *)
+(* ::Item::Closed:: *)
 (*Run once to export MX file*)
 
 
@@ -1436,7 +1436,7 @@ Directory[]
 (*Export["data2Sqaure-Halo.mx",rawDataHalo,"MX"]*)
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*GatherBy x values*)
 
 
@@ -1486,15 +1486,23 @@ Directory[]
 (*averagedWithMaxDev=Transpose[{xValues,MapThread[Around,{means,Transpose[{maxDevsMinus,maxDevsPlus}]}]}];*)
 
 
-(* ::Subsection::Closed:: *)
-(*Take the Log*)
-
-
 (* ::Input:: *)
 (*(*Drop points with low statistic*)*)
 (*Length[averagedWithErrorsOnMean]*)
 (*averagedWithErrorsOnMeanPurged=Delete[averagedWithErrorsOnMean,Rest[Position[yGroups,_?(Length[#]<500&),{1}]]];*)
 (*Length[averagedWithErrorsOnMeanPurged]*)
+
+
+(* ::Input:: *)
+(*Export["averaged-b2.mx",{averaged,averagedWithErrors,averagedWithErrorsOnMean,averagedWithErrorsOnMeanPurged,averagedWithMaxDev,b},"MX"] *)
+
+
+(* ::Subsection::Closed:: *)
+(*Take the Log*)
+
+
+(* ::Input:: *)
+(*{averaged,averagedWithErrors,averagedWithErrorsOnMean,averagedWithErrorsOnMeanPurged,averagedWithMaxDev,b}=Import["averaged-b2.mx"];*)
 
 
 (* ::Input:: *)
@@ -1588,7 +1596,7 @@ Directory[]
 (*fit["ParameterTable"][[1,1,-1,3]](*Slope Error*),*)
 (*fit["ANOVATableEntries"][[2,2]]/fit["ANOVATableEntries"][[2,1]](*Reduced Chi^2*)}]*)
 (*]],*)
-(*{shiftValue,2,4,0.1}];*)
+(*{shiftValue,-10,10,1}];*)
 
 
 (* ::Input:: *)
@@ -1643,7 +1651,101 @@ Directory[]
 (*AxesLabel->{"x","Residuals (y - y_fit)"},PlotLabel->"FitResiduals - nlmAveragedWithStdDevsUnconstrainedGlobalPurged",ImageSize->Large]*)
 
 
-(* ::Title:: *)
+(* ::Subsubsection::Closed:: *)
+(*Check for best shift using \[Chi]^2 to test linearity Dropping some too*)
+
+
+(* ::Input:: *)
+(*(*dataPurged=Delete[SortBy[averagedWithErrorsOnMeanPurged,First],{{1},{2},{3},{4}(*,{5},{6},{7},{8},{9}*)}];*)*)
+(*(*dataPurged=Drop[SortBy[averagedWithErrorsOnMeanPurged,First],8];*)*)
+(**)
+(*fitFunc=a+0c Exp[-x]+df  x;*)
+(*fitPar={a,(*c,*)df};*)
+(**)
+(*averagedWithErrorsOnMeanPurgedSorted=SortBy[averagedWithErrorsOnMeanPurged,First];*)
+(*(*Scan across cutoff values xMin*)*)
+(*scanResultsRaw=*)
+(*ParallelTable[With[{dataPurged=Drop[averagedWithErrorsOnMeanPurgedSorted,dropFirstn]},*)
+(*Table[With[{shift:=Plus[{-shiftValue,0},#]&},*)
+(*With[{shiftedData=Log[Select[shift/@dataPurged,#[[1]]>0&]](*/. 0->Around[1.0`*^-6,1.0`*^-6]*)},*)
+(*Module[*)
+(*{fit=LinearModelFit[shiftedData,x,x,Weights->Automatic,VarianceEstimatorFunction->(1&)]},*)
+(**)
+(*{shiftValue,*)
+(*fit["ParameterTable"][[1,1,3,2]](*Slope*),*)
+(*fit["ParameterTable"][[1,1,3,3]](*Slope Error*),*)
+(*fit["ANOVATableEntries"][[2,2]]/fit["ANOVATableEntries"][[2,1]](*Reduced Chi^2*),*)
+(*dropFirstn}]*)
+(*]],*)
+(*{shiftValue,-4,5,0.1}]],*)
+(*{dropFirstn,4,Length[averagedWithErrorsOnMeanPurgedSorted]-7}];*)
+(**)
+(*scanResults=Flatten[scanResultsRaw,1];*)
+
+
+(* ::Input:: *)
+(*Mean[Around[#[[1]],#[[2]]*3]&/@(MinimalBy[scanResults(*[[All,{1,4}]]*),Abs[#[[4]]-1]&,5][[All,{2,3}]])]*)
+
+
+(* ::Input:: *)
+(*MinimalBy[scanResults(*[[All,{1,4}]]*),Abs[#[[4]]-1]&,20]*)
+(*minBy\[Chi]=%[[1]]*)
+(*{min\[Chi]position,associatedSlope,min\[Chi]}=%[[{1,2,4}]](*Flatten@MinimalBy[scanResults[[All,{1,4}]],#[[2]]&]*)*)
+(**)
+(*(*1. Plot Reduced Chi^2 vs xMin*)*)
+(*ListLinePlot[#[[All,All,{1,4}]],AxesLabel->{"shift","Reduced Chi^2"},PlotRange->{All,{0,100}},GridLines->{{min\[Chi]position},{1}},PlotLegends->LineLegend[#[[All,1,5]],LegendLabel->"Dropped:"],ScalingFunctions->"Log"(*,PlotLabel->{Row[{"Dropped first ",#[[5]]}]}*)]&@scanResultsRaw*)
+(**)
+(*(*2. Plot Fitted Slope vs xMin with error bands*)*)
+(*ListPlot[Table[{r[[1]],Around[r[[2]],r[[3]]]},{r,#}]&/@#,AxesLabel->{"shift","Slope"},PlotRange->All,GridLines->{{min\[Chi]position},{associatedSlope}},PlotLegends->LineLegend[#[[All,1,5]],LegendLabel->"Dropped:"]]&@scanResultsRaw*)
+
+
+(* ::Input:: *)
+(*(*MinimalBy[scanResults(*[[All,{1,4}]]*),#[[4]]&]*)*)
+(**)
+(*shift:=Plus[{-minBy\[Chi][[1]],0},#]&; (*In the code, the stopping condition is with R-1*)*)
+(**)
+(*logAveragedWithMaxDevShifted=Log[shift/@averagedWithMaxDev](*/. 0->Around[1.0`*^-6,1.0`*^-6]*);*)
+(*logAveragedWithErrorsOnMeanShifted=Log[shift/@averagedWithErrorsOnMean](*/. 0->Around[1.0`*^-6,1.0`*^-6]*);*)
+(**)
+(*dataPurged=Drop[SortBy[averagedWithErrorsOnMeanPurged,First],minBy\[Chi][[5]]];*)
+(*logAveragedWithErrorsOnMeanPurgedShifted=Log[shift/@dataPurged](*/. 0->Around[1.0`*^-6,1.0`*^-6]*);*)
+(**)
+(**)
+(*fitFunc=a+0c Exp[-x]+df  x;*)
+(*fitPar={a,(*c,*)df};*)
+(**)
+(**)
+(*nlmAveragedWithStdDevsUnconstrainedGlobalPurged=Quiet[NonlinearModelFit[logAveragedWithErrorsOnMeanPurgedShifted,fitFunc,fitPar,x,MaxIterations->1000,Method->"NMinimize"],NonlinearModelFit::lmnl];*)
+(**)
+(*maxx=Max[averaged[[All,1]]];*)
+(*maxy=Max[averaged[[All,2]]];*)
+(**)
+(*thresholdBelow=0;*)
+(*thresholdAbove=maxx-0;*)
+(**)
+(*Show[{ListPlot[logAveragedWithMaxDevShifted,PlotStyle->{GrayLevel[0],Directive[Opacity[0.3]],PointSize->0.001},AxesLabel->{"Log[L]","Log[N]"}]*)
+(*,ListPlot[logAveragedWithErrorsOnMeanPurgedShifted,PlotStyle->{RGBColor[0, 0.78, 1],PointSize->0.01},PlotLegends->PointLegend[{"logAveragedWithErrorsOnMeanPurgedShifted"},LegendMarkerSize->10,LegendMarkers->Graphics[Disk[]]]]*)
+(*,ListPlot[logAveragedWithErrorsOnMeanShifted,PlotStyle->{RGBColor[1, 0.55, 1],Directive[Opacity[0.6]],PointSize->0.005},PlotLegends->PointLegend[{"logAveragedWithErrorsOnMeanShifted"},LegendMarkerSize->10,LegendMarkers->Graphics[Disk[]]]]*)
+(*,*)
+(*Plot[ReleaseHold[#][x],{x,Log[thresholdBelow+1],Log[thresholdAbove]},PlotStyle->{RGBColor[0.24, 0.68, 0.8],Thickness->0.002},PlotLegends->Placed[SwatchLegend[{Row[{#,":\n ",TraditionalForm[ReleaseHold[#][x]]}]}],Right]]&@HoldForm[nlmAveragedWithStdDevsUnconstrainedGlobalPurged]*)
+(*,Plot[#,{x,Log[thresholdBelow+1],Log[thresholdAbove]},PlotStyle->{RGBColor[0, 0, 1],Dashed},PlotLegends->Placed[SwatchLegend[{Row[{"SLE: ",TraditionalForm[#]}]}],Right]]&@(*sleFit[x]*)(x (dfSLE/.bb->N[b])-1)*)
+(*}*)
+(*,PlotLabel->Row[{" b = ",b}]*)
+(*,PlotRange->{All,{0,All}},AxesOrigin->{1,0},ImageSize->700]*)
+(**)
+(**)
+
+
+(* ::Input:: *)
+(*measuredb2=Around[nlmAveragedWithStdDevsUnconstrainedGlobalPurged["ParameterTable"][[1,1,-1,2]],nlmAveragedWithStdDevsUnconstrainedGlobalPurged["ParameterTable"][[1,1,-1,3]]*4]*)
+
+
+(* ::Input:: *)
+(*ListPlot[Transpose[{logAveragedWithErrorsOnMeanPurgedShifted[[All,1]],nlmAveragedWithStdDevsUnconstrainedGlobalPurged["FitResiduals"]}],Filling->Axis,*)
+(*AxesLabel->{"x","Residuals (y - y_fit)"},PlotLabel->"FitResiduals - nlmAveragedWithStdDevsUnconstrainedGlobalPurged",ImageSize->Large]*)
+
+
+(* ::Title::Closed:: *)
 (*b=4		MISSING some big L*)
 
 
@@ -1708,7 +1810,7 @@ Directory[]
 (*Export["data4Sqaure-Halo.mx",rawDataHalo,"MX"]*)
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*GatherBy x values*)
 
 
@@ -1980,6 +2082,346 @@ Directory[]
 
 (* ::Input:: *)
 (*ListPlot[Transpose[{logAveragedWithErrorsOnMeanPurged[[All,1]],nlmAveragedWithStdDevsUnconstrainedGlobalPurged["FitResiduals"]}],Filling->Axis,*)
+(*AxesLabel->{"x","Residuals (y - y_fit)"},PlotLabel->"FitResiduals - nlmAveragedWithStdDevsUnconstrainedGlobalPurged",ImageSize->Large]*)
+
+
+(* ::Title:: *)
+(*b=4		TRIANGULAR*)
+
+
+(* ::Input:: *)
+(*b=4;*)
+(**)
+(*rawDataTriang=Import["data4Sqaure-Triang.mx"];*)
+(**)
+(*Developer`PackedArrayQ[rawDataTriang]*)
+(*Length[rawDataTriang]*)
+
+
+(* ::Input:: *)
+(*rawData=rawDataTriang;*)
+(*Developer`PackedArrayQ[rawData]*)
+(**)
+(*Length[rawData]*)
+
+
+(* ::Item::Closed:: *)
+(*Run once to export MX file*)
+
+
+(* ::Input:: *)
+(*rawDataTriang=Import["D:\\Offline_Documents\\University\\PhD_Paris\\PhD_work\\Simulations\\bLRW\\b-LRWdata\\2d-FromCluster\\b4-clean_merged_data-triangular.csv",{"Data",All},"EmptyLines"->False];(* MODIFY FILE NAME *)*)
+(*rawDataTriang=Developer`ToPackedArray[rawDataTriang];*)
+(**)
+(*(*Strip headers/strings or select only numeric pairs*)*)
+(*Length[rawDataTriang]*)
+(*rawDataTriang=Cases[rawDataTriang,{_?NumericQ,_?NumericQ}];*)
+(*Length[rawDataTriang]*)
+(*rawDataTriang=Developer`ToPackedArray[rawDataTriang];*)
+(*Developer`PackedArrayQ[rawDataTriang]*)
+(* *)
+(*Length[rawDataTriang]*)
+
+
+(* ::Input:: *)
+(*Export["data4Sqaure-Triang.mx",rawDataTriang,"MX"]*)
+
+
+(* ::Subsection::Closed:: *)
+(*GatherBy x values*)
+
+
+(* ::Input:: *)
+(*(*1. Gather rows by their first element (x) at C-speed*)*)
+(*gathered=GatherBy[rawData,First];*)
+(**)
+(*(*2. Extract the unique X values directly from the gathered groups*)*)
+(*xValues=gathered[[All,1,1]];*)
+(**)
+(*(*3. Extract the Y values for each group*)*)
+(*yGroups=gathered[[All,All,2]];*)
+(**)
+(*(*4. Map Mean and StandardDeviation across the groups in bulk*)*)
+(*means=Mean/@yGroups/. 0.->1.0`*^-8;*)
+(**)
+(*(*Standard deviation throws an error/indeterminacy if length is 1,so we replace Indeterminate with 0 globally at the end*)*)
+(*stdDevs=Check[StandardDeviation[#],missing](*/Sqrt[Length[#]]*)&/@yGroups(*/. Indeterminate->1.0`*^-8*);*)
+
+
+(* ::Input:: *)
+(*(*Position[yGroups,_?(Length[#]<50&),1]*)
+(*yGroups[[Rest[Flatten@%]]]*)*)
+
+
+(* ::Input:: *)
+(*missingIndices=Flatten@Position[stdDevs,missing]*)
+(**)
+(*Part[#,missingIndices]&/@{means,stdDevs}*)
+(*Times@@%*)
+(*stdDevs[[missingIndices]]=%/.missing->Mean[Select[stdDevs/means//N,FreeQ[#,missing]&]]//N*)
+
+
+(* ::Input:: *)
+(*stdDevs=stdDevs/. 0.->1.0`*^-8;*)
+(*(* stdDev on mean*)*)
+(*stdDevsOnMean=(1/Sqrt[Length[#]]&/@yGroups)*stdDevs;*)
+(**)
+(*(* Maximum deviation*)*)
+(*maxDevsPlus=MapThread[Max[#2-#1]&,{means//N,yGroups}]/. 0.->1.0`*^-8;*)
+(*maxDevsMinus=MapThread[Min[#2-#1]&,{means//N,yGroups}]/. 0.->1.0`*^-8;*)
+(**)
+(*(*5. Combine them using the Threaded Around wrapper*)*)
+(*averaged=Transpose[{xValues,means}];*)
+(*averagedWithErrors=Transpose[{xValues,MapThread[Around,{means,stdDevs}]}];*)
+(*averagedWithErrorsOnMean=Transpose[{xValues,MapThread[Around,{means,stdDevsOnMean}]}];*)
+(*averagedWithMaxDev=Transpose[{xValues,MapThread[Around,{means,Transpose[{maxDevsMinus,maxDevsPlus}]}]}];*)
+
+
+(* ::Subsection::Closed:: *)
+(*Take the Log*)
+
+
+(* ::Input:: *)
+(*(*Drop points with low statistic*)*)
+(*Length[averagedWithErrorsOnMean]*)
+(*averagedWithErrorsOnMeanPurged=Delete[averagedWithErrorsOnMean,Rest[Position[yGroups,_?(Length[#]<500&),{1}]]];*)
+(*Length[averagedWithErrorsOnMeanPurged]*)
+
+
+(* ::Input:: *)
+(*exluded=5;*)
+(**)
+(*averaged=Select[averaged,#[[1]]=!=""&&#[[1]]>exluded&&#[[1]]=!=8&];*)
+(*averagedWithErrors=Select[averagedWithErrors,#[[1]]=!=""&&#[[1]]>exluded&&#[[1]]=!=8&];*)
+(**)
+(*averagedWithErrorsOnMean=Select[averagedWithErrorsOnMean,#[[1]]=!=""&&#[[1]]>exluded&&#[[1]]=!=8&];*)
+(*averagedWithErrorsOnMeanPurged=Select[averagedWithErrorsOnMeanPurged,#[[1]]=!=""&&#[[1]]>exluded&&#[[1]]=!=8&];*)
+(**)
+(*averagedWithMaxDev=Select[averagedWithMaxDev,#[[1]]=!=""&&#[[1]]>exluded&&#[[1]]=!=8&];*)
+(*(*averagedWithEstimatedStdDevs=Select[averagedWithEstimatedStdDevs,#[[1]]=!=""&];*)
+(*averagedWithEstimatedStdDevsOnMean=Select[averagedWithEstimatedStdDevsOnMean,#[[1]]=!=""&];*)*)
+
+
+(* ::Input:: *)
+(*logAveraged=Log[averaged];*)
+(*logAveragedWithErrors=Log[averagedWithErrors](*/. 0->Around[1.0`*^-6,1.0`*^-6]*);*)
+(**)
+(*logAveragedWithErrorsOnMean=Log[averagedWithErrorsOnMean](*/. 0->Around[1.0`*^-6,1.0`*^-6]*);*)
+(*logAveragedWithErrorsOnMeanPurged=Log[averagedWithErrorsOnMeanPurged](*/. 0->Around[1.0`*^-6,1.0`*^-6]*);*)
+(**)
+(*logAveragedWithMaxDev=Log[averagedWithMaxDev](*/. 0->Around[1.0`*^-6,1.0`*^-6]*);*)
+(*(*logAveragedWithEstimatedStdDevs=Log[averagedWithEstimatedStdDevs]/. 0->Around[1.0`*^-6,1.0`*^-6];*)
+(*logAveragedWithEstimatedStdDevsOnMean=Log[averagedWithEstimatedStdDevsOnMean]/. 0->Around[1.0`*^-6,1.0`*^-6];*)*)
+
+
+(* ::Input:: *)
+(*maxx=Max[averaged[[All,1]]];*)
+(*maxy=Max[averaged[[All,2]]];*)
+(* *)
+(*Show[{ListPlot[logAveragedWithMaxDev,PlotStyle->{GrayLevel[0],Directive[Opacity[0.3]],PointSize->0.001},AxesLabel->{"Log[L]","Log[N]"}]*)
+(*,ListPlot[logAveragedWithErrorsOnMeanPurged,PlotStyle->{RGBColor[0, 0.78, 1],PointSize->0.01},PlotLegends->PointLegend[{"logAveragedWithErrorsOnMeanPurged"},LegendMarkerSize->10,LegendMarkers->Graphics[Disk[]]]]*)
+(*,ListPlot[logAveragedWithErrorsOnMean,PlotStyle->{RGBColor[1, 0.55, 1],Directive[Opacity[0.6]],PointSize->0.005},PlotLegends->PointLegend[{"logAveragedWithErrorsOnMean"},LegendMarkerSize->10,LegendMarkers->Graphics[Disk[]]]]*)
+(*,Plot[#,{x,Log[0+1],Log[maxx]},PlotStyle->{RGBColor[0, 0, 1],Dashed},PlotLegends->Placed[SwatchLegend[{TraditionalForm[#]}],Right]]&@(x (dfSLE/. bb->N[b])-0.7)*)
+(*}*)
+(*,PlotLabel->Row[{" b = ",b}],PlotRange->{All,{0,Log[maxy]}},AxesOrigin->{1,0},ImageSize->700]*)
+(**)
+(*(*Show[{ListPlot[logAveragedWithMaxDev,PlotStyle->{,Directive[Opacity[0.3]],PointSize->0.001},AxesLabel->{"Log[L]","Log[N]"}]*)
+(*,ListPlot[logAveragedWithEstimatedStdDevs,PlotStyle->{,Directive[Opacity[0.8]],PointSize->0.008},PlotLegends->PointLegend[{"logAveragedWithEstimatedStdDevs"},LegendMarkerSize->10,LegendMarkers->Graphics[Disk[]]]]*)
+(*,ListPlot[logAveragedWithEstimatedStdDevsOnMean,PlotStyle->{,Directive[Opacity[0.6]],PointSize->0.005},PlotLegends->PointLegend[{"logAveragedWithEstimatedStdDevsOnMean"},LegendMarkerSize->10,LegendMarkers->Graphics[Disk[]]]]*)
+(*,Plot[#,{x,Log[0+1],Log[maxx]},PlotStyle->{,Dashed},PlotLegends->Placed[SwatchLegend[{TraditionalForm[#]}],Right]]&@(x (dfSLE/. bb->N[b])-0.9)*)
+(*}*)
+(*,PlotLabel->Row[{" b = ",b}],PlotRange->{All,{0,Log[maxy]}},AxesOrigin->{1,0},ImageSize->700]*)*)
+(**)
+(**)
+
+
+(* ::Subsection:: *)
+(*Take the Log WITH A SHIFT*)
+
+
+(* ::Subsubsection::Closed:: *)
+(*Check for best shift using \[Chi]^2 to test fit *)
+
+
+(* ::Input:: *)
+(*shift:=Plus[{+3,0},#]&; (*In the code, the stopping condition is with R-1*)*)
+(**)
+(*logAveragedWithErrorsOnMeanPurgedShifted=Log[shift/@averagedWithErrorsOnMeanPurged](*/. 0->Around[1.0`*^-6,1.0`*^-6]*);*)
+(**)
+(*fitFunc=a+c Exp[-x]+df  x*)
+(**)
+(*fit=Quiet[NonlinearModelFit[logAveragedWithErrorsOnMeanPurgedShifted,fitFunc,{a,c,df(*,{df,1.024}*)},x,MaxIterations->1000,Method->"NMinimize"],NonlinearModelFit::lmnl];*)
+(**)
+(*fit["ParameterTable"]*)
+(*fit["ANOVATable"]*)
+(*%[[1,1(*,2,2*)]]*)
+(*fit["ANOVATableEntries"]*)
+(**)
+(*{fit["ParameterTable"][[1,1,-1,2]](*Slope*),*)
+(*fit["ParameterTable"][[1,1,-1,3]](*Slope Error*),*)
+(*fit["ANOVATableEntries"][[2,2]]/fit["ANOVATableEntries"][[2,1]](*Reduced Chi^2*)}*)
+(*Clear[fit]*)
+
+
+(* ::Input:: *)
+(*(*Sort data ascending by x*)*)
+(*(*dataSorted=SortBy[logAveragedWithErrorsOnMeanPurged,First];*)*)
+(**)
+(*(*Scan across cutoff values xMin*)*)
+(*scanResults=ParallelTable[With[{shift:=Plus[{-shiftValue,0},#]&},*)
+(*With[{shiftedData=Log[shift/@averagedWithErrorsOnMeanPurged],fitFunc=a+0c Exp[-x]+df  x},*)
+(*Module[*)
+(*{fit=Quiet[NonlinearModelFit[shiftedData,fitFunc,{a,(*c,*)df},x,MaxIterations->1000,Method->"NMinimize",VarianceEstimatorFunction->(1&)],NonlinearModelFit::lmnl]},*)
+(**)
+(*{shiftValue,fit["ParameterTable"][[1,1,-1,2]](*Slope*),*)
+(*fit["ParameterTable"][[1,1,-1,3]](*Slope Error*),*)
+(*fit["ANOVATableEntries"][[2,2]]/fit["ANOVATableEntries"][[2,1]](*Reduced Chi^2*)}]*)
+(*]],*)
+(*{shiftValue,2,4,0.1}];*)
+
+
+(* ::Input:: *)
+(*{min\[Chi]position,min\[Chi]}=Flatten@MinimalBy[scanResults[[All,{1,4}]],#[[2]]&]*)
+(**)
+(*(*1. Plot Reduced Chi^2 vs xMin*)*)
+(*ListLinePlot[scanResults[[All,{1,4}]],AxesLabel->{"shift","Reduced Chi^2"},PlotRange->All,GridLines->{{min\[Chi]position},{1}}]*)
+(**)
+(*(*2. Plot Fitted Slope vs xMin with error bands*)*)
+(*ListPlot[Table[{r[[1]],Around[r[[2]],r[[3]]]},{r,scanResults}],AxesLabel->{"shift","Slope"},PlotRange->All,GridLines->{{min\[Chi]position},None}]*)
+
+
+(* ::Input:: *)
+(*MinimalBy[scanResults(*[[All,{1,4}]]*),Last]*)
+(**)
+(*shift:=Plus[{-MinimalBy[scanResults(*[[All,{1,4}]]*),Last][[1,1]],0},#]&; (*In the code, the stopping condition is with R-1*)*)
+(**)
+(*logAveragedWithMaxDevShifted=Log[shift/@averagedWithMaxDev](*/. 0->Around[1.0`*^-6,1.0`*^-6]*);*)
+(*logAveragedWithErrorsOnMeanShifted=Log[shift/@averagedWithErrorsOnMean](*/. 0->Around[1.0`*^-6,1.0`*^-6]*);*)
+(*logAveragedWithErrorsOnMeanPurgedShifted=Log[shift/@averagedWithErrorsOnMeanPurged](*/. 0->Around[1.0`*^-6,1.0`*^-6]*);*)
+(**)
+(*fitFunc=a+0c Exp[-x]+df  x;*)
+(**)
+(*nlmAveragedWithStdDevsUnconstrainedGlobalPurged=Quiet[NonlinearModelFit[logAveragedWithErrorsOnMeanPurgedShifted,fitFunc,{a,(*c,*)df},x,MaxIterations->1000,Method->"NMinimize"],NonlinearModelFit::lmnl];*)
+(**)
+(*maxx=Max[averaged[[All,1]]];*)
+(*maxy=Max[averaged[[All,2]]];*)
+(**)
+(*thresholdBelow=0;*)
+(*thresholdAbove=maxx-0;*)
+(**)
+(*Show[{ListPlot[logAveragedWithMaxDevShifted,PlotStyle->{GrayLevel[0],Directive[Opacity[0.3]],PointSize->0.001},AxesLabel->{"Log[L]","Log[N]"}]*)
+(*,ListPlot[logAveragedWithErrorsOnMeanPurgedShifted,PlotStyle->{RGBColor[0, 0.78, 1],PointSize->0.01},PlotLegends->PointLegend[{"logAveragedWithErrorsOnMeanPurgedShifted"},LegendMarkerSize->10,LegendMarkers->Graphics[Disk[]]]]*)
+(*,ListPlot[logAveragedWithErrorsOnMeanShifted,PlotStyle->{RGBColor[1, 0.55, 1],Directive[Opacity[0.6]],PointSize->0.005},PlotLegends->PointLegend[{"logAveragedWithErrorsOnMeanShifted"},LegendMarkerSize->10,LegendMarkers->Graphics[Disk[]]]]*)
+(*,*)
+(*Plot[ReleaseHold[#][x],{x,Log[thresholdBelow+1],Log[thresholdAbove]},PlotStyle->{RGBColor[0.24, 0.68, 0.8],Thickness->0.002},PlotLegends->Placed[SwatchLegend[{Row[{#,":\n ",TraditionalForm[ReleaseHold[#][x]]}]}],Right]]&@HoldForm[nlmAveragedWithStdDevsUnconstrainedGlobalPurged]*)
+(*,Plot[#,{x,Log[thresholdBelow+1],Log[thresholdAbove]},PlotStyle->{RGBColor[0, 0, 1],Dashed},PlotLegends->Placed[SwatchLegend[{Row[{"SLE: ",TraditionalForm[#]}]}],Right]]&@(*sleFit[x]*)(x (dfSLE/.bb->N[b])-1)*)
+(*}*)
+(*,PlotLabel->Row[{" b = ",b}]*)
+(*,PlotRange->{All,{0,All}},AxesOrigin->{1,0},ImageSize->700]*)
+(**)
+(**)
+
+
+(* ::Input:: *)
+(*measuredb4=Around[nlmAveragedWithStdDevsUnconstrainedGlobalPurged["ParameterTable"][[1,1,-1,2]],nlmAveragedWithStdDevsUnconstrainedGlobalPurged["ParameterTable"][[1,1,-1,3]]*\[Pi]]*)
+
+
+(* ::Input:: *)
+(*ListPlot[Transpose[{logAveragedWithErrorsOnMeanPurged[[All,1]],nlmAveragedWithStdDevsUnconstrainedGlobalPurged["FitResiduals"]}],Filling->Axis,*)
+(*AxesLabel->{"x","Residuals (y - y_fit)"},PlotLabel->"FitResiduals - nlmAveragedWithStdDevsUnconstrainedGlobalPurged",ImageSize->Large]*)
+
+
+(* ::Subsubsection:: *)
+(*Check for best shift using \[Chi]^2 to test linearity Dropping some too*)
+
+
+(* ::Input:: *)
+(*(*dataPurged=Delete[SortBy[averagedWithErrorsOnMeanPurged,First],{{1},{2},{3},{4}(*,{5},{6},{7},{8},{9}*)}];*)*)
+(*(*dataPurged=Drop[SortBy[averagedWithErrorsOnMeanPurged,First],8];*)*)
+(**)
+(*fitFunc=a+0c Exp[-x]+df  x;*)
+(*fitPar={a,(*c,*)df};*)
+(**)
+(*averagedWithErrorsOnMeanPurgedSorted=SortBy[averagedWithErrorsOnMeanPurged,First];*)
+(*(*Scan across cutoff values xMin*)*)
+(*scanResultsRaw=*)
+(*ParallelTable[With[{dataPurged=Drop[averagedWithErrorsOnMeanPurgedSorted,dropFirstn]},*)
+(*Table[With[{shift:=Plus[{-shiftValue,0},#]&},*)
+(*With[{shiftedData=Log[Select[shift/@dataPurged,#[[1]]>0&]](*/. 0->Around[1.0`*^-6,1.0`*^-6]*)},*)
+(*Module[*)
+(*{fit=LinearModelFit[shiftedData,x,x,Weights->Automatic(*,VarianceEstimatorFunction->(1&)*)]},*)
+(**)
+(*{shiftValue,*)
+(*fit["ParameterTable"][[1,1,3,2]](*Slope*),*)
+(*fit["ParameterTable"][[1,1,3,3]](*Slope Error*),*)
+(*fit["ANOVATableEntries"][[2,2]]/fit["ANOVATableEntries"][[2,1]](*Reduced Chi^2*),*)
+(*dropFirstn}]*)
+(*]],*)
+(*{shiftValue,-4,5,0.1}]],*)
+(*{dropFirstn,4,Length[averagedWithErrorsOnMeanPurgedSorted]-10}];*)
+(**)
+(*scanResults=Flatten[scanResultsRaw,1];*)
+
+
+(* ::Input:: *)
+(*Mean[Around[#[[1]],#[[2]]*3]&/@(MinimalBy[scanResults(*[[All,{1,4}]]*),Abs[#[[4]]-1]&,5][[All,{2,3}]])]*)
+
+
+(* ::Input:: *)
+(*MinimalBy[scanResults(*[[All,{1,4}]]*),Abs[#[[4]]-1]&,20]*)
+(*minBy\[Chi]=%[[1]]*)
+(*{min\[Chi]position,associatedSlope,min\[Chi]}=%[[{1,2,4}]](*Flatten@MinimalBy[scanResults[[All,{1,4}]],#[[2]]&]*)*)
+(**)
+(*(*1. Plot Reduced Chi^2 vs xMin*)*)
+(*ListLinePlot[#[[All,All,{1,4}]],AxesLabel->{"shift","Reduced Chi^2"},PlotRange->{All,{0,100}},GridLines->{{min\[Chi]position},{1}},PlotLegends->LineLegend[#[[All,1,5]],LegendLabel->"Dropped:"],ScalingFunctions->"Log"(*,PlotLabel->{Row[{"Dropped first ",#[[5]]}]}*)]&@scanResultsRaw*)
+(**)
+(*(*2. Plot Fitted Slope vs xMin with error bands*)*)
+(*ListPlot[Table[{r[[1]],Around[r[[2]],r[[3]]]},{r,#}]&/@#,AxesLabel->{"shift","Slope"},PlotRange->All,GridLines->{{min\[Chi]position},{associatedSlope}},PlotLegends->LineLegend[#[[All,1,5]],LegendLabel->"Dropped:"]]&@scanResultsRaw*)
+
+
+(* ::Input:: *)
+(*(*MinimalBy[scanResults(*[[All,{1,4}]]*),#[[4]]&]*)*)
+(**)
+(*shift:=Plus[{-minBy\[Chi][[1]],0},#]&; (*In the code, the stopping condition is with R-1*)*)
+(**)
+(*logAveragedWithMaxDevShifted=Log[shift/@averagedWithMaxDev](*/. 0->Around[1.0`*^-6,1.0`*^-6]*);*)
+(*logAveragedWithErrorsOnMeanShifted=Log[shift/@averagedWithErrorsOnMean](*/. 0->Around[1.0`*^-6,1.0`*^-6]*);*)
+(**)
+(*dataPurged=Drop[SortBy[averagedWithErrorsOnMeanPurged,First],minBy\[Chi][[5]]];*)
+(*logAveragedWithErrorsOnMeanPurgedShifted=Log[shift/@dataPurged](*/. 0->Around[1.0`*^-6,1.0`*^-6]*);*)
+(**)
+(**)
+(*fitFunc=a+0c Exp[-x]+df  x;*)
+(*fitPar={a,(*c,*)df};*)
+(**)
+(**)
+(*nlmAveragedWithStdDevsUnconstrainedGlobalPurged=Quiet[NonlinearModelFit[logAveragedWithErrorsOnMeanPurgedShifted,fitFunc,fitPar,x,MaxIterations->1000,Method->"NMinimize"],NonlinearModelFit::lmnl];*)
+(**)
+(*maxx=Max[averaged[[All,1]]];*)
+(*maxy=Max[averaged[[All,2]]];*)
+(**)
+(*thresholdBelow=0;*)
+(*thresholdAbove=maxx-0;*)
+(**)
+(*Show[{ListPlot[logAveragedWithMaxDevShifted,PlotStyle->{GrayLevel[0],Directive[Opacity[0.3]],PointSize->0.001},AxesLabel->{"Log[L]","Log[N]"}]*)
+(*,ListPlot[logAveragedWithErrorsOnMeanPurgedShifted,PlotStyle->{RGBColor[0, 0.78, 1],PointSize->0.01},PlotLegends->PointLegend[{"logAveragedWithErrorsOnMeanPurgedShifted"},LegendMarkerSize->10,LegendMarkers->Graphics[Disk[]]]]*)
+(*,ListPlot[logAveragedWithErrorsOnMeanShifted,PlotStyle->{RGBColor[1, 0.55, 1],Directive[Opacity[0.6]],PointSize->0.005},PlotLegends->PointLegend[{"logAveragedWithErrorsOnMeanShifted"},LegendMarkerSize->10,LegendMarkers->Graphics[Disk[]]]]*)
+(*,*)
+(*Plot[ReleaseHold[#][x],{x,Log[thresholdBelow+1],Log[thresholdAbove]},PlotStyle->{RGBColor[0.24, 0.68, 0.8],Thickness->0.002},PlotLegends->Placed[SwatchLegend[{Row[{#,":\n ",TraditionalForm[ReleaseHold[#][x]]}]}],Right]]&@HoldForm[nlmAveragedWithStdDevsUnconstrainedGlobalPurged]*)
+(*,Plot[#,{x,Log[thresholdBelow+1],Log[thresholdAbove]},PlotStyle->{RGBColor[0, 0, 1],Dashed},PlotLegends->Placed[SwatchLegend[{Row[{"SLE: ",TraditionalForm[#]}]}],Right]]&@(*sleFit[x]*)(x (dfSLE/.bb->N[b])-1)*)
+(*}*)
+(*,PlotLabel->Row[{" b = ",b}]*)
+(*,PlotRange->{All,{0,All}},AxesOrigin->{1,0},ImageSize->700]*)
+(**)
+(**)
+
+
+(* ::Input:: *)
+(*measuredb4triang=Around[nlmAveragedWithStdDevsUnconstrainedGlobalPurged["ParameterTable"][[1,1,-1,2]],nlmAveragedWithStdDevsUnconstrainedGlobalPurged["ParameterTable"][[1,1,-1,3]]*4]*)
+
+
+(* ::Input:: *)
+(*ListPlot[Transpose[{logAveragedWithErrorsOnMeanPurgedShifted[[All,1]],nlmAveragedWithStdDevsUnconstrainedGlobalPurged["FitResiduals"]}],Filling->Axis,*)
 (*AxesLabel->{"x","Residuals (y - y_fit)"},PlotLabel->"FitResiduals - nlmAveragedWithStdDevsUnconstrainedGlobalPurged",ImageSize->Large]*)
 
 

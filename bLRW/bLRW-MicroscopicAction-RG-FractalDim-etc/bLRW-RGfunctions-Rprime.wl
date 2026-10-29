@@ -184,7 +184,7 @@ Return[\[Beta]f//FS]
 (*Series[%,{g0,0,6}]*)
 
 
-(* ::Subsection:: *)
+(* ::Subsection::Closed:: *)
 (*\[Beta]FunctionFromZ: I can write \[Beta] as  *)
 (*\!\(TraditionalForm\`\[Beta] == \[Epsilon] \**)
 (*SubscriptBox[*)
@@ -586,6 +586,60 @@ Return[Normal[\[Gamma]f]]
 
 
 (* ::Title:: *)
+(*\[Section] 1-Loop with Rprime: splitting the contributions of the coupled couplings *)
+
+
+(* ::Section:: *)
+(*Let me solve a putative system of eqs for the fix point*)
+
+
+(* ::Text:: *)
+(*What I get without this splitting is *)
+(*							gts = \[Epsilon]/(1+2 b)*)
+
+
+(* ::Input:: *)
+(*Assuming[\[Epsilon]>0&&b>0,*)
+(*SolveValues[{\[Epsilon] gt - (gt^2 4b -g^2 (2b -1))==0,b gt + 2 g==\[Epsilon]},{gt,g}]//FS];*)
+(*%/.{\[Epsilon]->Zeta[3],b->1}*)
+(*Select[%%,(#[[1]]/.{\[Epsilon]->Zeta[3],g->Zeta[3],b->1})>0&][[1]]*)
+(*{gts,gs}=%*)
+(*%/.b->1/.g->1*)
+
+
+(* ::Input:: *)
+(*Limit[{(2+b-2 b^2+2 Sqrt[1-3 b+6 b^2])/(b (16+b-2 b^2)),1/(1+2 b)},b->0]*)
+
+
+(* ::Input:: *)
+(*Plot[{(2+b-2 b^2+2 Sqrt[1-3 b+6 b^2])/(b (16+b-2 b^2)),1/(1+2 b)},{b,0,2}(*,PlotStyle->{Blue,Red}*)]*)
+
+
+(* ::Input:: *)
+(*gts+gs//FS*)
+(*gts-gs//FS*)
+(*gts/gs//FS*)
+
+
+(* ::Subsubsection:: *)
+(*Plugged in the prediction for df*)
+
+
+(* ::Input:: *)
+(*-b g/.g->gts*)
+(*dfFunny=2+%*)
+
+
+(* ::Input:: *)
+(*dfFunny/.b->0*)
+(*Limit[dfFunny,b->\[Infinity]]*)
+
+
+(* ::Input:: *)
+(*Plot[{dfFunny/.\[Epsilon]->1},{b,0,10}(*,PlotStyle->{Blue,Red}*)]*)
+
+
+(* ::Title:: *)
 (*\[Section] 2-Loop after Simplification *)
 
 
@@ -859,14 +913,15 @@ replaceRule={GradImmediateIntNotAllowed:>1,h->0,h2->0,H->1,H2->1,(*a2\[Rule]1-a-
 (*+g0^2 \[Mu]^(-2 \[Epsilon]) (b^2 doubleBanana\[Gamma]2g -b doubleBanana\[Gamma]Paolog -b Hold[b-1] A2 doubleBanana\[Gamma]Grad\[Gamma]2 +b^2 hatg\[Gamma]2+b^2 hat\[Gamma]1\[Gamma]2+b^2 hat\[Gamma]2\[Gamma]2*)
 (*- b hat\[Gamma]Paolo\[Gamma]2-2 hat\[Gamma]Paolo+K banana\[Gamma]PaoloCT^2-b Hold[b-1]H2 (hat\[Gamma]Grad-banana\[Gamma]GradProp^2/2)*)
 (*-(* MISSING INT ABOVE 2) in my notes	. THESE SHOULD PROBABLY GO IN \[CapitalGamma]2 ACTUALLY*)*)
-(* Hold[b-1]( hatMissing GradImmediateIntNotAllowed + (-doubleBananaMissingNOsub + 2 hatMissingNOsub))(*2 independent diagams, verified *)) z["\[Gamma]2"]);(*K should be K=1+b: half SUBDIV b*doubleBanana\[Gamma]Paolog + SUBDIV IN b*hat\[Gamma]Paolo\[Gamma]2 + SUBDIV IN hat\[Gamma]Paolo	.*)*)
+(* Hold[b-1]( hatMissing GradImmediateIntNotAllowed + (-doubleBananaMissingNOsub + 2 hatMissingNOsub))(*2 independent diagams, verified *)) z["\[Gamma]2"]);*)
+(*(*K should be K=1+b: half SUBDIV b*doubleBanana\[Gamma]Paolog + SUBDIV IN b*hat\[Gamma]Paolo\[Gamma]2 + SUBDIV IN hat\[Gamma]Paolo	.*)*)
 (*(*HOWEVER, IF ONE DOES NOT ALLOW FOR banana*banana\[Gamma]Paolo, THEN THE VALUE OF K MUST BE K=1+3b/2! BECAUSE NOW ITS:*)
 (* FULL SUBDIV b*doubleBanana\[Gamma]Paolog + SUBDIV IN b*hat\[Gamma]Paolo\[Gamma]2 + SUBDIV IN hat\[Gamma]Paolo	.*)*)
 (*PPrint[{%," = "},%,{"\n=",\[CapitalGamma]\[Gamma]2//.replaceRule,"\n"}]*)
+(**)
 (*(*\[CapitalGamma]g =g0 \[Mu]^-\[Epsilon](1-(2 b bananag-2 (b-1)banana\[Gamma]Grad )g0 \[Mu]^-\[Epsilon]-g0^2\[Mu]^(-2 \[Epsilon]) (-4 (-1+b) doubleBanana+2 (-1+b) b doubleBanana+b^2 doubleBanana+2  hat+4 b hat+8 (-1+b) b hat+2 (-1+b)  GradImmediateIntNotAllowed hat-(-1+b) (2 doubleBanana+4 hat)+(-1+b) b (2 doubleBanana+4 hat)-b^2 (doubleBanana+6 hat)+(-1+b)(4 doubleBanana+8 hat)-b^2 (2 doubleBanana+10 hat))  z["g"]);*)*)
 (**)
-(*\[CapitalGamma]g =(1-(2 b bananag-2 Hold[b-1]banana\[Gamma]Grad )g0 \[Mu]^-\[Epsilon]*)
-(*-g0^2 \[Mu]^(-2 \[Epsilon]) (1/b**)
+(*\[CapitalGamma]g =1-(2 b bananag-2 Hold[b-1]banana\[Gamma]Grad )g0 \[Mu]^-\[Epsilon]-g0^2 \[Mu]^(-2 \[Epsilon]) (1/b**)
 (*(-b^3 (2 doubleBananag+4 hatg+2 hatg\[Gamma]1+4 hat\[Gamma]1g+2 hatg\[Gamma]2+4 hat\[Gamma]2g)(*Total of 18, verified*)*)
 (*+(*ONLY \[Gamma]Grad 1) in my notes	.*)Hold[(b-1)]b(4 (doubleBananaGradMultig-1/2 bananaMultigCTGrad^2-1/2 bananaMultigCT*banana\[Gamma]GradCT)+4 (hatMultigGrad-1/2 bananaMultigCTGrad^2)+4 (hatGradMultig-1/2 bananaMultigCTGrad^2))(*6 independent diagams, verified*)*)
 (*+(*ONLY \[Gamma]Grad 2) in my notes	.*)*)
@@ -893,8 +948,7 @@ replaceRule={GradImmediateIntNotAllowed:>1,h->0,h2->0,H->1,H2->1,(*a2\[Rule]1-a-
 (*4 b^2 hat\[Gamma]Paolo\[Gamma]2g (*4 independent diagams, verified *)*)
 (*+(* MISSING INT ABOVE 1) in my notes	.*)*)
 (*2b Hold[b-1] doubleBananaMissing (*2 independent diagams, verified *)*)
-(*- J*b* bananaJ^2 ))); (* TOTAL OF 53+4 THAT WERE MISSING, VERIFIED *)*)
-(**)
+(*- J*b* bananaJ^2 )); (* TOTAL OF 53+4 THAT WERE MISSING, VERIFIED *)*)
 (*PPrint[{%," = "},%,"\n"]*)
 (**)
 (*\[CapitalGamma]\[Gamma] =1- g0^2 \[Mu]^(-2 \[Epsilon]) (b^2 sunset - b sunsetPaolo (*THESE ARE ACTUALLY ALWAYS PRESENT	!!!*)*)
@@ -911,12 +965,13 @@ replaceRule={GradImmediateIntNotAllowed:>1,h->0,h2->0,H->1,H2->1,(*a2\[Rule]1-a-
 (**)
 (*\[CapitalGamma]gtProduct=g0 \[Mu]^-\[Epsilon] ((1+\[CapitalGamma]\[Gamma]1) (1+ \[CapitalGamma]\[Gamma]2)\[CapitalGamma]g)/(\[CapitalGamma]\[Gamma]^2)/.z[_]->1/.\[Epsilon]->0(*//.replaceRule*);*)
 (**)
-(*\[CapitalGamma]gtPartialProd=g0 \[Mu]^-\[Epsilon] (((1+\[CapitalGamma]\[Gamma]1) (1+ \[CapitalGamma]\[Gamma]2)+\[CapitalGamma]g-1))/(\[CapitalGamma]\[Gamma]^2)/.z[_]->1(*//.replaceRule*)/.\[Epsilon]->0; *)
+(*\[CapitalGamma]gtPartialProd=g0 \[Mu]^-\[Epsilon] (((1+\[CapitalGamma]\[Gamma]1) (1+ \[CapitalGamma]\[Gamma]2)+\[CapitalGamma]g-1))/(\[CapitalGamma]\[Gamma]^2)/.z[_]->1(*//.replaceRule*);*)
+(**)
 (**)
 (*(*I should also multiply \[CapitalGamma]g, right? Maybe after having removed some cross terms	.*)*)
 (*(*Or should I maybe not multiply anything at all and add the bananaEmit*bananaAbsorb into \[CapitalGamma]g, since it's not decomposable	??*)*)
 (**)
-(*FS/@(Series[%,{g0,0,loopOrder+1}]);*)
+(*FS/@(Series[%,{g0,0,loopOrder+1}])*)
 (*Normal[%]/.hideSubDivs ;*)
 
 
@@ -925,7 +980,7 @@ replaceRule={GradImmediateIntNotAllowed:>1,h->0,h2->0,H->1,H2->1,(*a2\[Rule]1-a-
 
 
 (* ::Input:: *)
-(*Zg=Collect[(Series[\[CapitalGamma]gtPartialProd//.replaceRule,{g0,0,loopOrder+1}]//Normal),{g0},FS];*)
+(*Zg=Collect[(Series[\[CapitalGamma]gtPartialProd//.replaceRule,{g0,0,loopOrder+1}]//Normal),{g0},FS]/.\[Epsilon]->0; ;*)
 (*PPrint[%,%]*)
 (*(*g=Series[g0 \[Mu]^-\[Epsilon] Zgt^(-1),{g0,0,2}]//Normal*)*)
 (**)
@@ -1075,20 +1130,35 @@ replaceRule={GradImmediateIntNotAllowed:>1,h->0,h2->0,H->1,H2->1,(*a2\[Rule]1-a-
 
 
 (* ::Input:: *)
-(*(* WITH GRAD AND THE 4 DIAGS I WAS MISSING	!!!*)*)
-(*RGeq2/. J->1/2 (-5+10 b-12 b^2)(*banana\[Gamma]MinusCT->1/\[Epsilon]}*)//Collect[#,g,FS]&*)
-(*gstar2=Select[Flatten@SolveValues[%,g],#=!=0&];*)
+(*g=Collect[(Series[\[CapitalGamma]gtPartialProd/.z[_]->1//.replaceRule,{g0,0,loopOrder+1}]//Normal),{g0},FS];*)
+(*PPrint[%,%]*)
+(*(*g=Series[g0 \[Mu]^-\[Epsilon] Zgt^(-1),{g0,0,2}]//Normal*)*)
 (**)
-(*gstar2=Series[gstar2,{\[Epsilon],0,loopOrder},Assumptions->b>0]//Expand*)
-(*%/.\[Epsilon]->0*)
-(*gstar2=Select[Normal@gstar2,(#/.\[Epsilon]->0)==0&][[1]]*)
-(*gstar2=Factor/@gstar2*)
-(*%/.b->1*)
+(*\[Beta]Function[g/.hideSubDivs ,"print"->tTrue](*It's slow if the subDivs are not hidden directly in g, I think it's just because it's a long expression*)*)
+(**)
+(*Replace[Normal[%],a_/;!(FreeQ[a,g^3]):>(a/.(*banana\[Gamma]Grad*) banana\[Gamma]Paolo->0),{1}];*)
+(*%/.banana\[Gamma]Grad^2->0*)
+(*%/.K->1+3b/2*)
+(**)
+(*%//.replaceRule;*)
+(**)
+(*%/.hideSubDivs *)
+(*%/.replaceDiagrams//FullSimplify//Factor*)
+(*ReleaseHold[%]//FS*)
+(**)
+(*RGeq2=Simplify[Normal[%]]==0;*)
+(**)
+(*Expand[%%]/.{J->1/2 (-5+10 b-12 b^2),J->1/2 (-2+9 b-14 b^2)*)
+(*(*CHOOSE BASED ON WITH OR WITHOUT GRAD:*)
+(* with:  J\[Rule]1/2 (-5+10 b-12 b^2)(*THIS IS WITH THE 4 DIAGS I WAS MISSING!!!*), J\[Rule]-(1/2) b (-5+12 b)*)
+(*without:J\[Rule]1/2 (-2+9 b-14 b^2)(*THIS IS WITH THE 4 DIAGS I WAS MISSING!!!*),J\[Rule]1/2 (2+5 b-14 b^2), J\[Rule]1/2 (27-22 b)b (NO WF at all (wrong)),J\[Rule]-(1/2) (-16+11 b),J\[Rule]1/2 (2+5 b-14 b^2)*)}//Collect[#,g,FS]&*)
+(*%/.b->1//Collect[#,g,FS]&(*This is if some explicit bananaCT are used*)*)
+(**)
 
 
 (* ::Input:: *)
-(*(* NO GRAD AND THE 4 DIAGS I WAS MISSING	!!!*)*)
-(*RGeq2/. J->1/2 (-2+9 b-14 b^2)(*banana\[Gamma]MinusCT->1/\[Epsilon]}*)//Collect[#,g,FS]&*)
+(*(* WITH GRAD AND THE 4 DIAGS I WAS MISSING	!!!*)*)
+(*RGeq2/. J->1/2 (-5+10 b-12 b^2)(*banana\[Gamma]MinusCT->1/\[Epsilon]}*)//Collect[#,g,FS]&*)
 (*gstar2=Select[Flatten@SolveValues[%,g],#=!=0&];*)
 (**)
 (*gstar2=Series[gstar2,{\[Epsilon],0,loopOrder},Assumptions->b>0]//Expand*)
@@ -1115,7 +1185,7 @@ replaceRule={GradImmediateIntNotAllowed:>1,h->0,h2->0,H->1,H2->1,(*a2\[Rule]1-a-
 (*\[Epsilon]/3+(2 \[Epsilon]^2)/9*)
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*RG functions: \[CapitalGamma]\[Gamma]1 & Subscript[d, f]*)
 
 
@@ -1445,7 +1515,7 @@ replaceRule={GradImmediateIntNotAllowed:>1,h->0,h2->0,H->1,H2->1,(*a2\[Rule]1-a-
 (*(1-b) g+1/2 (-1+b) (2+3 b) g^2===%*)
 
 
-(* ::Subsubsection:: *)
+(* ::Subsubsection::Closed:: *)
 (*WITH WF REN*)
 
 
@@ -1752,7 +1822,7 @@ replaceRule={GradImmediateIntNotAllowed:>1,h->0,h2->0,H->1,H2->1,(*a2\[Rule]1-a-
 (*%/.b->1;*)
 
 
-(* ::Item::Closed:: *)
+(* ::Item:: *)
 (*b>1*)
 
 
@@ -2005,18 +2075,6 @@ replaceRule={GradImmediateIntNotAllowed:>1,h->0,h2->0,H->1,H2->1,(*a2\[Rule]1-a-
 (*\[Section]\[Section] TEST: R' on 2loop  O(n=-2) a.k.a. LERW (general b)*)
 
 
-(* ::Item:: *)
-(*Let me solve a putative system of eqs for the fix point*)
-
-
-(* ::Input:: *)
-(*Assuming[\[Epsilon]>0&&b>0,*)
-(*SolveValues[{b gt + 2 g==\[Epsilon],\[Epsilon] gt - (gt^2 4b -g^2 (2b -1))==0},{gt,g}]//FS];*)
-(*%/.{\[Epsilon]->Zeta[3],b->1}*)
-(*sol=Select[%%,(#[[1]]/.{\[Epsilon]->Zeta[3],b->1})>0&][[1]]*)
-(*%//Expand*)
-
-
 (* ::Text:: *)
 (*This is the really interesting check, since for b!=1, there is no cancellation with \[Gamma]Paolo, which means that one has to use two (maybe three) couplings*)
 
@@ -2093,7 +2151,7 @@ replaceRule={GradImmediateIntNotAllowed:>1,h->0,h2->0,H->1,H2->1,(*a2\[Rule]1-a-
 (*(*??????? FINITE ????????	!*)*)
 
 
-(* ::Title::Closed:: *)
+(* ::Title:: *)
 (*Plots*)
 
 
@@ -2136,7 +2194,7 @@ dfSLE=1+3/(4(2b+1));
 
 (* ::Input:: *)
 (*{dfRG1L,dfRG1Lsimp,dfRG2Lsimp,dfRG2Lsimp2,dfRG2LsimpWF,dfSLE};*)
-(*PPrint[{#,"  \!\(\*OverscriptBox[\(-\), \(b -> 0\)]\)>  "},#/.b->0/.\[Epsilon]->2]&/@{dfRG1L,dfRG1Lsimp,dfRG2Lsimp,dfRG2Lsimp2,dfRG2LsimpWF,dfSLE};*)
+(*PPrint[{#,"  \!\(\*OverscriptBox[\(-\), \(b -> 0\)]\)>  "},#/.b->0./.\[Epsilon]->2]&/@{dfRG1L,dfRG1Lsimp,dfRG2Lsimp,dfRG2Lsimp2,dfRG2LsimpWF,dfSLE};*)
 (**)
 (*Limit[{dfRG1L,dfRG1Lsimp,dfRG2Lsimp,dfRG2Lsimp2,dfRG2LsimpWF,dfSLE},b->\[Infinity]]//Quiet*)
 (*%/.\[Epsilon]->2*)
